@@ -1,7 +1,12 @@
-
 import { ApolloServer } from '@apollo/server';
 import { startStandaloneServer } from '@apollo/server/standalone';
 
+
+
+//need for using .env file
+import 'dotenv/config' 
+import dotenv from 'dotenv';
+dotenv.config();
 
 // A schema is a collection of type definitions (hence "typeDefs")
 // that together define the "shape" of queries that are executed against
@@ -22,39 +27,62 @@ const typeDefs = `#graphql
     books: [Book]
   }
 `;
-
 const books = [
-  {
-    title: 'The Awakening',
-    author: 'Kate Chopin',
-  },
-  {
-    title: 'City of Glass',
-    author: 'Paul Auster',
-  },
+    {
+        title: 'The Awakening',
+        author: 'Kate Chopin',
+    },
+    {
+        title: 'City of Glass',
+        author: 'Paul Auster',
+    },
 ];
-
 // Resolvers define how to fetch the types defined in your schema.
 // This resolver retrieves books from the "books" array above.
 const resolvers = {
-  Query: {
-    books: () => books,
-  },
+    Query: {
+        books: () => books,
+    },
 };
-
 // The ApolloServer constructor requires two parameters: your schema
 // definition and your set of resolvers.
 const server = new ApolloServer({
-  typeDefs,
-  resolvers,
+    typeDefs,
+    resolvers,
 });
-
 // Passing an ApolloServer instance to the `startStandaloneServer` function:
 //  1. creates an Express app
 //  2. installs your ApolloServer instance as middleware
 //  3. prepares your app to handle incoming requests
+
+
+
+
+var portVar = parseInt(<string>process.env.PORT, 10) || 3000
+//this purposfully uses different port from env file which has 4000 in it
+//good way of seeing if the backend can see it, will run on 3000 if it doesnt
+//api key can be stored in the env file
+
+
 const { url } = await startStandaloneServer(server, {
-  listen: { port: 4000 },
+    listen: { port: portVar },
+});
+console.log(`Server ready at: ${url}`);
+
+
+
+
+//New Prompt stuff
+
+import OpenAI from "openai";
+
+const openai = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY,
 });
 
-console.log(`Server ready at: ${url}`);
+import RunPrompt from "../src/openai.js";
+
+    
+await RunPrompt();
+
+
