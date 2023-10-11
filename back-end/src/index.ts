@@ -1,7 +1,6 @@
 import { ApolloServer } from '@apollo/server';
 import { startStandaloneServer } from '@apollo/server/standalone';
-
-
+import { PrismaClient } from '@prisma/client';
 
 //need for using .env file
 import 'dotenv/config' 
