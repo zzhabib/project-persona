@@ -7,7 +7,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Games {
-  GameID Int    @id @default(autoincrement())
-  Title  String @db.VarChar(255)
+model Game {
+  id Int    @id @default(autoincrement())
+  title  String @db.VarChar(255)
 }
