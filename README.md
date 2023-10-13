@@ -16,7 +16,7 @@ Welcome to Project Persona, our project for CSE 485. (Listed as "AI-Driven NPCs 
 - Justin Selgrad
 
 ## Instructor
-- Nahid UI Islam
+- Nahid Ul Islam
 
 ## Graders
 - Sadaf Shaik
