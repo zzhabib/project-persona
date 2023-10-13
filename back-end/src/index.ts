@@ -54,8 +54,18 @@ const server = new ApolloServer({
 //  2. installs your ApolloServer instance as middleware
 //  3. prepares your app to handle incoming requests
 
+const prisma = new PrismaClient()
+const relations = await prisma.relation.findMany({
+    include: {
+        Persona_Relation_targetPersonaIdToPersona: true,
+    },
+    where: {
+        sourcePersonaId: 2
+    },
+    
+})
 
-
+relations.map(r => r.Persona_Relation_targetPersonaIdToPersona)
 
 var portVar = parseInt(<string>process.env.PORT, 10) || 3000
 //this purposfully uses different port from env file which has 4000 in it

@@ -22,11 +22,11 @@ model Story {
 }
 
 model Persona {
-  id                                           Int         @id @default(autoincrement())
-  name                                         String
-  description                                  String
-  Relations_Relations_sourcePersonaIdToPersona Relations[] @relation("Relations_sourcePersonaIdToPersona")
-  Relations_Relations_targetPersonaIdToPersona Relations[] @relation("Relations_targetPersonaIdToPersona")
+  id                                         Int        @id @default(autoincrement())
+  name                                       String
+  description                                String
+  Relation_Relation_sourcePersonaIdToPersona Relation[] @relation("Relation_sourcePersonaIdToPersona")
+  Relation_Relation_targetPersonaIdToPersona Relation[] @relation("Relation_targetPersonaIdToPersona")
 }
 
 model Scene {
@@ -37,14 +37,14 @@ model Scene {
   story       Story  @relation(fields: [storyId], references: [id])
 }
 
-model Relations {
-  sourcePersonaId                            Int
-  targetPersonaId                            Int
-  description                                String[] @db.Char
-  Persona_Relations_sourcePersonaIdToPersona Persona  @relation("Relations_sourcePersonaIdToPersona", fields: [sourcePersonaId], references: [id], onDelete: Cascade, map: "sourcePersonaId_FK")
-  Persona_Relations_targetPersonaIdToPersona Persona  @relation("Relations_targetPersonaIdToPersona", fields: [targetPersonaId], references: [id], onDelete: Cascade, map: "targetPersonaId_FK")
+model Relation {
+  sourcePersonaId                           Int
+  targetPersonaId                           Int
+  description                               String[] @db.Char
+  Persona_Relation_sourcePersonaIdToPersona Persona  @relation("Relation_sourcePersonaIdToPersona", fields: [sourcePersonaId], references: [id], onDelete: Cascade, map: "sourcePersonaId_FK")
+  Persona_Relation_targetPersonaIdToPersona Persona  @relation("Relation_targetPersonaIdToPersona", fields: [targetPersonaId], references: [id], onDelete: Cascade, map: "targetPersonaId_FK")
 
-  @@id([sourcePersonaId, targetPersonaId])
+  @@id([sourcePersonaId, targetPersonaId], map: "Relations_pkey")
   @@index([sourcePersonaId], map: "fki_F")
   @@index([targetPersonaId], map: "fki_targetPersonaId_FK")
 }
