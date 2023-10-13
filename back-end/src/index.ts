@@ -1,18 +1,18 @@
 import { ApolloServer } from '@apollo/server';
 import { startStandaloneServer } from '@apollo/server/standalone';
 import { readFileSync } from 'fs';
-import { join } from 'path';
-import { resolvers } from './resolvers';
+import { resolvers } from './resolvers.js';
 import { db } from './database.js';
-import 'dotenv/config' 
 import dotenv from 'dotenv';
+import { createRequire } from 'module';
 
+const require = createRequire(import.meta.url);
 dotenv.config();
 
 const typeDefs = [
-    readFileSync(join(__dirname, 'types.graphql'), 'utf-8'),
-    readFileSync(join(__dirname, 'queries.graphql'), 'utf-8'),
-    readFileSync(join(__dirname, 'mutations.graphql'), 'utf-8')
+    readFileSync(require.resolve('./types.graphql')).toString('utf-8'),
+    readFileSync(require.resolve('./queries.graphql')).toString('utf-8'),
+    readFileSync(require.resolve('./mutations.graphql')).toString('utf-8'),
 ];
 
 const server = new ApolloServer({
