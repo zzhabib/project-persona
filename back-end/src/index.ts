@@ -10,9 +10,9 @@ const require = createRequire(import.meta.url);
 dotenv.config();
 
 const typeDefs = [
-    readFileSync(require.resolve('./types.graphql')).toString('utf-8'),
-    readFileSync(require.resolve('./queries.graphql')).toString('utf-8'),
-    readFileSync(require.resolve('./mutations.graphql')).toString('utf-8'),
+    readFileSync(require.resolve('./graphql/schemas/types.graphql')).toString('utf-8'),
+    readFileSync(require.resolve('./graphql/schemas/queries.graphql')).toString('utf-8'),
+    readFileSync(require.resolve('./graphql/schemas/mutations.graphql')).toString('utf-8'),
 ];
 
 const server = new ApolloServer({
