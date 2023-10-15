@@ -1,6 +1,9 @@
 import { DB } from 'kysely-codegen'
-import { Pool } from 'pg'
+import pkg from 'pg'
+const { Pool } = pkg
 import { Kysely, PostgresDialect } from 'kysely'
+import dotenv from 'dotenv';
+dotenv.config();
 
 const connectionString = process.env.DATABASE_URL;
 

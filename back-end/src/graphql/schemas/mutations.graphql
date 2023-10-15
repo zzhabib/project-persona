@@ -1,5 +1,4 @@
 type Mutation {
-  # Define your mutation fields here, for example:
   createPersona(name: String!, description: String!): Persona!
-  # ... add more mutations as needed
+  createUser(email: String!): User!
 }

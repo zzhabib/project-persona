@@ -1,10 +1,9 @@
 import { ApolloServer } from '@apollo/server';
 import { startStandaloneServer } from '@apollo/server/standalone';
 import { readFileSync } from 'fs';
-import { resolvers } from './resolvers.js';
-import { db } from './database.js';
-import dotenv from 'dotenv';
+import { userResolver } from './graphql/resolvers/UserResolver.js';
 import { createRequire } from 'module';
+import dotenv from 'dotenv';
 
 const require = createRequire(import.meta.url);
 dotenv.config();
@@ -17,7 +16,7 @@ const typeDefs = [
 
 const server = new ApolloServer({
     typeDefs,
-    resolvers,
+    resolvers: {...userResolver}
 });
 
 var portVar = parseInt(<string>process.env.PORT, 10) || 3000
