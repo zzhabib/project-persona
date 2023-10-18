@@ -1,4 +1,0 @@
-type Mutation {
-  createPersona(name: String!, description: String!): Persona!
-  createUser(email: String!): User!
-}

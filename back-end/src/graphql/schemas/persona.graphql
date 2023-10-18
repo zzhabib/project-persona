@@ -1,0 +1,12 @@
+type Persona {
+  id: Int!
+  story: Story!
+  name: String!
+  description: String!
+}
+
+type Relation {
+  sourcePersona: Persona!
+  targetPersona: Persona!
+  description: [String!]!
+}

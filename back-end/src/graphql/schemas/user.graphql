@@ -1,0 +1,13 @@
+type User {
+  id: Int!
+  email: String!
+  stories: [Story!]!
+}
+
+extend type Query {
+  allUsers: [User!]!
+}
+
+extend type Mutation {
+  createUser(email: String!): User!
+}

@@ -1,9 +1,0 @@
-type Query {
-  # Define your query fields here, for example:
-  allPersonas: [Persona!]!
-  allRelations: [Relation!]!
-  allScenes: [Scene!]!
-  allStories: [Story!]!
-  allUsers: [User!]!
-  # ... add more queries as needed
-}

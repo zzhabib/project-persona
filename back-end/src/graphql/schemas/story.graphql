@@ -1,0 +1,6 @@
+type Story {
+  id: Int!
+  ownerId: Int!
+  title: String!
+  personas: [Persona!]!
+}

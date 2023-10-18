@@ -1,0 +1,6 @@
+type Scene {
+  id: Int!
+  title: String!
+  description: String!
+  storyId: Int!
+}
