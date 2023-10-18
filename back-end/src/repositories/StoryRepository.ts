@@ -6,3 +6,13 @@ export async function getStoriesByUserId(userId: number) {
     .where('Story.ownerId', '=', userId)
     .execute()
 }
+
+export async function createStory(userId: number, title: string) {
+  return await db
+    .insertInto('Story')
+    .values({
+      ownerId: userId,
+      title: title,
+    })
+    .execute()
+}

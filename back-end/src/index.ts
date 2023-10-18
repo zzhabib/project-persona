@@ -2,6 +2,7 @@ import { ApolloServer } from '@apollo/server';
 import { startStandaloneServer } from '@apollo/server/standalone';
 import { readFileSync } from 'fs';
 import { userResolver } from './graphql/resolvers/UserResolver.js';
+import { storyResolver } from './graphql/resolvers/StoryResolver.js';
 import { createRequire } from 'module';
 import dotenv from 'dotenv';
 
@@ -16,9 +17,11 @@ const typeDefs = [
     readFileSync(require.resolve('./graphql/schemas/persona.graphql')).toString('utf-8'),
 ];
 
+const merge = require('lodash.merge')
+
 const server = new ApolloServer({
     typeDefs,
-    resolvers: {...userResolver}
+    resolvers: merge(userResolver, storyResolver)
 });
 
 var portVar = parseInt(<string>process.env.PORT, 10) || 3000

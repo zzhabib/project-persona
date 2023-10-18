@@ -13,9 +13,11 @@
   "type": "module",
   "dependencies": {
     "@apollo/server": "^4.9.3",
+    "@jenyus-org/graphql-utils": "^1.5.0",
     "dotenv": "^16.3.1",
     "graphql": "^16.8.1",
     "kysely": "^0.26.3",
+    "lodash.merge": "^4.6.2",
     "openai": "^4.11.1",
     "pg": "^8.11.3"
   },

@@ -1,7 +1,7 @@
 type User {
   id: Int!
   email: String!
-  stories: [Story!]!
+  stories: [Story!]
 }
 
 extend type Query {

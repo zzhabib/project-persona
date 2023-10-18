@@ -10,3 +10,17 @@ type Relation {
   targetPersona: Persona!
   description: [String!]!
 }
+
+# extend type Query {
+#   allStories(): [Story!]
+#   getStory(id: Int!): Story!
+# }
+
+# extend type Mutation {
+#   createStory(input: CreateStoryInput!): Story!
+# }
+
+# input CreateStoryInput {
+#   ownerId: Int!
+#   title: String!
+# }
