@@ -1,13 +1,17 @@
 import { AppDataSource } from "./data-source"
 import { User } from "./entity/User"
 
+import * as dotenv from "dotenv"
+
 AppDataSource.initialize().then(async () => {
 
     console.log("Inserting a new user into the database...")
     const user = new User()
-    user.firstName = "Timber"
-    user.lastName = "Saw"
-    user.age = 25
+    // user.firstName = "Timber"
+    // user.lastName = "Saw"
+    // user.age = 25
+    user.email = "testaddition@sample.com"
+    
     await AppDataSource.manager.save(user)
     console.log("Saved a new user with id: " + user.id)
 

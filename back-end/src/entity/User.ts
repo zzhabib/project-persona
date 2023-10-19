@@ -1,18 +1,22 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm"
+import {
+  Column,
+  Entity,
+  Index,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from "typeorm";
+import { Story } from "./Story";
 
-@Entity()
+@Index("User_email_key", ["email"], { unique: true })
+@Index("User_pkey", ["id"], { unique: true })
+@Entity("User", { schema: "public" })
 export class User {
+  @PrimaryGeneratedColumn({ type: "integer", name: "id" })
+  id: number;
 
-    @PrimaryGeneratedColumn()
-    id: number
+  @Column("text", { name: "email" })
+  email: string;
 
-    @Column()
-    firstName: string
-
-    @Column()
-    lastName: string
-
-    @Column()
-    age: number
-
+  @OneToMany(() => Story, (story) => story.owner)
+  stories: Story[];
 }

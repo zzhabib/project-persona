@@ -2,7 +2,7 @@
    "name": "back-end",
    "version": "1.0.0",
    "description": "",
-   "main": "index.js",
+   "main": "dist/index.js",
    "scripts": {
       "compile": "tsc && copyfiles -u 1 src/**/*.graphql dist/",
       "start": "ts-node src/index.ts",
@@ -11,24 +11,25 @@
    "keywords": [],
    "author": "",
    "license": "ISC",
-   "type": "module",
    "dependencies": {
       "@apollo/server": "^4.9.3",
       "@jenyus-org/graphql-utils": "^1.5.0",
       "dotenv": "^16.3.1",
       "graphql": "^16.8.1",
+      "graphql-scalars": "^1.22.4",
       "kysely": "^0.26.3",
       "lodash.merge": "^4.6.2",
       "openai": "^4.11.1",
       "pg": "^8.4.0",
       "reflect-metadata": "^0.1.13",
+      "type-graphql": "^2.0.0-beta.3",
       "typeorm": "0.3.17"
    },
    "devDependencies": {
       "@types/node": "^16.11.10",
       "copyfiles": "^2.4.1",
       "kysely-codegen": "^0.10.1",
-      "typescript": "4.5.2",
-      "ts-node": "10.7.0"
+      "ts-node": "^10.7.0",
+      "typescript": "4.5.2"
    }
 }
