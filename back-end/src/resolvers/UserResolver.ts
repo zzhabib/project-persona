@@ -4,16 +4,19 @@ import { AppDataSource } from "../data-source";
 
 @Resolver()
 export class UserResolver {
-  @Mutation(() => Boolean)
-  createUser(
+  @Mutation(() => User)
+  async createUser(
     @Arg('email', () => String) email: string
   ) {
-    console.log(email)
-    return true;
+    const user = await User.create({
+      email
+    }).save()
+
+    return user;
   }
 
-  @Query(() => String)
-  hello() {
-    return "Hello World"
+  @Query(() => [User])
+  async users() {
+    return User.find();
   }
 }
