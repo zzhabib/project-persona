@@ -1,32 +1,20 @@
-import { ApolloServer } from '@apollo/server';
-import { startStandaloneServer } from '@apollo/server/standalone';
-import { readFileSync } from 'fs';
-import { userResolver } from './graphql/resolvers/UserResolver.js';
-import { storyResolver } from './graphql/resolvers/StoryResolver.js';
-import { createRequire } from 'module';
-import dotenv from 'dotenv';
+import { AppDataSource } from "./data-source"
+import { User } from "./entity/User"
 
-const require = createRequire(import.meta.url);
-dotenv.config();
+AppDataSource.initialize().then(async () => {
 
-const typeDefs = [
-    readFileSync(require.resolve('./graphql/schemas/base.graphql')).toString('utf-8'),
-    readFileSync(require.resolve('./graphql/schemas/user.graphql')).toString('utf-8'),
-    readFileSync(require.resolve('./graphql/schemas/story.graphql')).toString('utf-8'),
-    readFileSync(require.resolve('./graphql/schemas/scene.graphql')).toString('utf-8'),
-    readFileSync(require.resolve('./graphql/schemas/persona.graphql')).toString('utf-8'),
-];
+    console.log("Inserting a new user into the database...")
+    const user = new User()
+    user.firstName = "Timber"
+    user.lastName = "Saw"
+    user.age = 25
+    await AppDataSource.manager.save(user)
+    console.log("Saved a new user with id: " + user.id)
 
-const merge = require('lodash.merge')
+    console.log("Loading users from the database...")
+    const users = await AppDataSource.manager.find(User)
+    console.log("Loaded users: ", users)
 
-const server = new ApolloServer({
-    typeDefs,
-    resolvers: merge(userResolver, storyResolver)
-});
+    console.log("Here you can setup and run express / fastify / any other framework.")
 
-var portVar = parseInt(<string>process.env.PORT, 10) || 3000
-
-const { url } = await startStandaloneServer(server, {
-    listen: { port: portVar },
-});
-console.log(`Server ready at: ${url}`);
+}).catch(error => console.log(error))
