@@ -1,24 +1,29 @@
-import { AppDataSource } from "./data-source"
-import { User } from "./entity/User"
+import { ApolloServer } from "@apollo/server"
+import { startStandaloneServer } from "@apollo/server/standalone";
+import { buildSchema } from "type-graphql"
+import { AppDataSource } from "./data-source";
+import * as dotenv from 'dotenv';
+import { UserResolver } from "./resolvers/UserResolver";
 
-import * as dotenv from "dotenv"
+dotenv.config();
 
-AppDataSource.initialize().then(async () => {
+(async () => {
+  await AppDataSource.initialize()
 
-    console.log("Inserting a new user into the database...")
-    const user = new User()
-    // user.firstName = "Timber"
-    // user.lastName = "Saw"
-    // user.age = 25
-    user.email = "testaddition@sample.com"
-    
-    await AppDataSource.manager.save(user)
-    console.log("Saved a new user with id: " + user.id)
+  const schema = await buildSchema({
+    resolvers: [UserResolver],
+  });
 
-    console.log("Loading users from the database...")
-    const users = await AppDataSource.manager.find(User)
-    console.log("Loaded users: ", users)
+  const server = new ApolloServer({
+    schema: schema,
+    introspection: true,
+    csrfPrevention: true
+  })
 
-    console.log("Here you can setup and run express / fastify / any other framework.")
+  const port = parseInt(<string>process.env.PORT, 10) || 3000
 
-}).catch(error => console.log(error))
+  const { url } = await startStandaloneServer(server, {
+    listen: { port: port },
+  });
+  console.log(`Server ready at: ${url}`);
+})();
