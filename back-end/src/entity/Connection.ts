@@ -1,10 +1,10 @@
-import { Column, Entity, Index, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm";
+import { BaseEntity, Column, Entity, Index, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm";
 import { Persona } from "./Persona";
 import { Field, Int, ObjectType } from "type-graphql";
 
 @ObjectType()
 @Entity()
-export class Connection {
+export class Connection extends BaseEntity {
   @PrimaryColumn()
   sourcePersonaId: number;
 

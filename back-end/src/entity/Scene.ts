@@ -1,4 +1,5 @@
 import {
+  BaseEntity,
   Column,
   Entity,
   Index,
@@ -11,7 +12,7 @@ import { Field, Int, ObjectType } from "type-graphql";
 
 @ObjectType()
 @Entity()
-export class Scene {
+export class Scene extends BaseEntity {
   @Field(() => Int)
   @PrimaryGeneratedColumn()
   id: number;
