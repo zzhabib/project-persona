@@ -22,9 +22,13 @@ export class Story extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Field(() => String)
+  @Field()
   @Column()
   title: string;
+
+  @Field()
+  @Column()
+  description: string;
 
   @Field(() => [Persona])
   @ManyToMany(() => Persona, (persona) => persona.stories)

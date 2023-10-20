@@ -4,6 +4,7 @@ import { buildSchema } from "type-graphql"
 import { AppDataSource } from "./data-source";
 import * as dotenv from 'dotenv';
 import { UserResolver } from "./resolvers/UserResolver";
+import { StoryResolver } from "./resolvers/StoryResolver";
 
 dotenv.config();
 
@@ -11,7 +12,7 @@ dotenv.config();
   await AppDataSource.initialize()
 
   const schema = await buildSchema({
-    resolvers: [UserResolver],
+    resolvers: [UserResolver, StoryResolver],
   });
 
   const server = new ApolloServer({
