@@ -25,17 +25,19 @@ export class Story {
   @Column()
   title: string;
 
+  @Field(() => [Persona])
   @ManyToMany(() => Persona, (persona) => persona.stories)
   @JoinTable()
   personas: Persona[];
 
+  @Field(() => [Scene])
   @OneToMany(() => Scene, (scene) => scene.story)
   scenes: Scene[];
 
+  @Field(() => [User])
   @ManyToOne(() => User, (user) => user.stories, {
     cascade: true
   })
-  
   @ManyToMany(() => User, (user) => user.stories)
   editors: [User];
 }

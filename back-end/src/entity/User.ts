@@ -22,6 +22,7 @@ export class User extends BaseEntity {
   @Column({ unique: true })
   email: string;
 
+  @Field(() => [Story])
   @ManyToMany(() => Story, story => story.editors, {
     cascade: true
   })
