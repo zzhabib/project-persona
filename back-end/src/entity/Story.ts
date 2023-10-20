@@ -3,6 +3,8 @@ import {
   Entity,
   Index,
   JoinColumn,
+  JoinTable,
+  ManyToMany,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -10,26 +12,30 @@ import {
 import { Persona } from "./Persona";
 import { Scene } from "./Scene";
 import { User } from "./User";
+import { Field, Int, ObjectType } from "type-graphql";
 
-@Index("Story_pkey", ["id"], { unique: true })
-@Entity("Story", { schema: "public" })
+@ObjectType()
+@Entity()
 export class Story {
-  @PrimaryGeneratedColumn({ type: "integer", name: "id" })
+  @Field(() => Int)
+  @PrimaryGeneratedColumn()
   id: number;
 
-  @Column("text", { name: "title" })
+  @Field(() => String)
+  @Column()
   title: string;
 
-  @OneToMany(() => Persona, (persona) => persona.story)
+  @ManyToMany(() => Persona, (persona) => persona.stories)
+  @JoinTable()
   personas: Persona[];
 
   @OneToMany(() => Scene, (scene) => scene.story)
   scenes: Scene[];
 
   @ManyToOne(() => User, (user) => user.stories, {
-    onDelete: "RESTRICT",
-    onUpdate: "CASCADE",
+    cascade: true
   })
-  @JoinColumn([{ name: "ownerId", referencedColumnName: "id" }])
-  owner: User;
+  
+  @ManyToMany(() => User, (user) => user.stories)
+  editors: [User];
 }

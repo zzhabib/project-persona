@@ -3,6 +3,8 @@ import {
   Column,
   Entity,
   Index,
+  JoinTable,
+  ManyToMany,
   OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
@@ -10,18 +12,19 @@ import { Field, Int, ObjectType } from "type-graphql"
 import { Story } from "./Story";
 
 @ObjectType()
-@Index("User_email_key", ["email"], { unique: true })
-@Index("User_pkey", ["id"], { unique: true })
-@Entity("User", { schema: "public" })
+@Entity()
 export class User extends BaseEntity {
   @Field(() => Int)
-  @PrimaryGeneratedColumn({ type: "integer", name: "id" })
+  @PrimaryGeneratedColumn()
   id: number;
 
   @Field()
-  @Column("text", { name: "email" })
+  @Column({ unique: true })
   email: string;
 
-  @OneToMany(() => Story, (story) => story.owner)
+  @ManyToMany(() => Story, story => story.editors, {
+    cascade: true
+  })
+  @JoinTable()
   stories: Story[];
 }

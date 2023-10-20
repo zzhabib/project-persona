@@ -3,7 +3,7 @@ import { DataSource } from "typeorm"
 import { User } from "./entity/User"
 import { Story } from "./entity/Story"
 import { Scene } from "./entity/Scene"
-import { Relation } from "./entity/Relation"
+import { Connection } from "./entity/Connection"
 import { Persona } from "./entity/Persona"
 
 import * as dotenv from "dotenv"
@@ -15,7 +15,7 @@ export const AppDataSource = new DataSource({
     url: connectionString,
     synchronize: true,
     logging: false,
-    entities: [User, Story, Scene, Relation, Persona],
+    entities: [User, Story, Scene, Connection, Persona],
     migrations: [],
     subscribers: [],
 })

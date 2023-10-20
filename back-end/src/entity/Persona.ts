@@ -3,39 +3,31 @@ import {
   Entity,
   Index,
   JoinColumn,
+  ManyToMany,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { Story } from "./Story";
-import { Relation } from "./Relation";
+import { Connection } from "./Connection";
 
-@Index("Persona_pkey", ["id"], { unique: true })
-@Index("fki_Story", ["storyId"], {})
-@Entity("Persona", { schema: "public" })
+@Entity()
 export class Persona {
-  @PrimaryGeneratedColumn({ type: "integer", name: "id" })
+  @PrimaryGeneratedColumn()
   id: number;
 
-  @Column("text", { name: "name" })
+  @Column()
   name: string;
 
-  @Column("text", { name: "description" })
+  @Column()
   description: string;
 
-  @PrimaryGeneratedColumn({ type: "integer", name: "storyId" })
-  storyId: number;
+  @ManyToMany(() => Story, (story) => story.personas)
+  stories: [Story];
 
-  @ManyToOne(() => Story, (story) => story.personas, {
-    onDelete: "CASCADE",
-    onUpdate: "CASCADE",
-  })
-  @JoinColumn([{ name: "storyId", referencedColumnName: "id" }])
-  story: Story;
+  @OneToMany(() => Connection, connection => connection.sourcePersona, { cascade: true })
+  initiatedConnections: [Connection];
 
-  @OneToMany(() => Relation, (relation) => relation.sourcePersona)
-  relations: Relation[];
-
-  @OneToMany(() => Relation, (relation) => relation.targetPersona)
-  relations2: Relation[];
+  @OneToMany(() => Connection, connection => connection.targetPersona, { cascade: true })
+  receivedConnections: [Connection];
 }

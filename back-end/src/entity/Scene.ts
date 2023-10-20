@@ -8,22 +8,19 @@ import {
 } from "typeorm";
 import { Story } from "./Story";
 
-@Index("Scene_pkey", ["id"], { unique: true })
-@Entity("Scene", { schema: "public" })
+@Entity()
 export class Scene {
-  @PrimaryGeneratedColumn({ type: "integer", name: "id" })
+  @PrimaryGeneratedColumn()
   id: number;
 
-  @Column("text", { name: "title" })
+  @Column()
   title: string;
 
-  @Column("text", { name: "description" })
+  @Column()
   description: string;
 
   @ManyToOne(() => Story, (story) => story.scenes, {
-    onDelete: "RESTRICT",
-    onUpdate: "CASCADE",
+    cascade: true
   })
-  @JoinColumn([{ name: "storyId", referencedColumnName: "id" }])
   story: Story;
 }
