@@ -32,7 +32,13 @@ export class StoryResolver {
       .execute()
     
     const insertedId = result.identifiers[0].id;
-    const story = await AppDataSource.getRepository(Story).findOne(insertedId);
+    const story = await AppDataSource
+      .getRepository(Story)
+      .findOne({
+        where: {
+          id: insertedId
+        }
+      })
 
     return story
   }
