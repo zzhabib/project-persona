@@ -74,6 +74,7 @@ export class StoryResolver {
     return story;
   }
 
+  @Mutation(() => Boolean)
   async updateStory(
     @Arg('id', () => Int) id: number,
     @Arg('input', () => StoryUpdateInput) input: StoryUpdateInput
@@ -114,7 +115,7 @@ export class StoryResolver {
       const addEditors = await User.findBy({ id: In(input.addEditorIds) });
       story.editors.push(...addEditors)
     }
-    if (input.removeSceneIds) {
+    if (input.removeEditorIds) {
       story.editors = story.editors.filter(e => !input.removeEditorIds.includes(e.id))
     }
 
