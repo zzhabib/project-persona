@@ -44,5 +44,5 @@ export class Story extends BaseEntity {
     cascade: true
   })
   @ManyToMany(() => User, (user) => user.stories)
-  editors: [User];
+  editors: User[];
 }
