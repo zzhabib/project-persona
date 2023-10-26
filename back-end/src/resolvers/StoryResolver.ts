@@ -5,9 +5,18 @@ import { AppDataSource } from "../data-source";
 @InputType()
 class StoryInput {
   @Field()
-  title?: string;
+  title: string;
 
   @Field()
+  description: string;
+}
+
+@InputType()
+class StoryUpdateInput {
+  @Field(() => String, { nullable: true })
+  title?: string;
+
+  @Field(() => String, { nullable: true })
   description?: string;
 }
 
@@ -15,8 +24,6 @@ class StoryInput {
 export class StoryResolver {
   @Mutation(() => Story)
   async createStory(@Arg('input', () => StoryInput) input: StoryInput) {
-    // TODO: currently this requires all values to be filled
-    
     const result = await AppDataSource
       .createQueryBuilder()
       .insert()
@@ -33,7 +40,7 @@ export class StoryResolver {
   @Mutation(() => Boolean)
   async updateStory(
     @Arg('id', () => Int) id: number,
-    @Arg('input', () => StoryInput) input: StoryInput
+    @Arg('input', () => StoryUpdateInput) input: StoryUpdateInput
   ) {
     await Story.update({ id }, input)
     return true
