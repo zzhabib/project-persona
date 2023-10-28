@@ -7,6 +7,8 @@ import { Connection } from "./entity/Connection"
 import { Persona } from "./entity/Persona"
 
 import * as dotenv from "dotenv"
+import { Role } from "./entity/Role"
+import { Action } from "./entity/Action"
 dotenv.config()
 const connectionString = process.env.DATABASE_URL;
 
@@ -15,7 +17,7 @@ export const AppDataSource = new DataSource({
     url: connectionString,
     synchronize: true,
     logging: false,
-    entities: [User, Story, Scene, Connection, Persona],
+    entities: [User, Story, Scene, Connection, Persona, Role, Action],
     migrations: [],
     subscribers: [],
 })

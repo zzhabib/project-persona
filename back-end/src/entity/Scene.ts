@@ -5,10 +5,12 @@ import {
   Index,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { Story } from "./Story";
 import { Field, Int, ObjectType } from "type-graphql";
+import { Role } from "./Role";
 
 @ObjectType()
 @Entity()
@@ -30,4 +32,10 @@ export class Scene extends BaseEntity {
     cascade: true
   })
   story: Story;
+
+  @Field(() => [Role])
+  @OneToMany(() => Role, (role) => role.scene, {
+    cascade: true
+  })
+  roles: Role[]
 }
