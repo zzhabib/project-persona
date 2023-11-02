@@ -11,6 +11,7 @@ import StoryPage from './pages/storyPage';
 import StoriesPage from './pages/storiesPage';
 import TestPage from './pages/testPage';
 import HomePage from './pages/homePage';
+import ScenesPage from './pages/scenesPage';
 
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
           <Route exact path='/home' element={<HomePage />} />
           <Route exact path='/stories' element={<StoriesPage />} />
           <Route exact path='/personas' element={<PersonasPage />} />
+          <Route exact path='/scenes' element={<ScenesPage />} />
           <Route exact path='/test' element={<TestPage />} />
          
             </Routes>
