@@ -24,6 +24,6 @@ export class Role extends BaseEntity {
   persona: Persona
 
   @Field(() => [Action])
-  @ManyToMany(() => Action)
+  @ManyToMany(() => Action, action => action.roles)
   actions: Action[]
 }
