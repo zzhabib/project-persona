@@ -17,28 +17,28 @@ class SceneInput {
   @Field()
   description: string
 
-  @Field(() => [RoleInput])
+  @Field(() => [RoleInput], { nullable: true })
   roleInputs?: RoleInput[]
 }
 
 @InputType()
 class SceneUpdateInput {
-  @Field(() => Int)
+  @Field(() => Int, { nullable: true })
   storyId?: number
 
-  @Field()
+  @Field({ nullable: true })
   title?: string
 
-  @Field()
+  @Field({ nullable: true })
   description?: string
 
-  @Field(() => [RoleInput])
+  @Field(() => [RoleInput], { nullable: true })
   addRoleInputs?: RoleInput[]
 
-  @Field(() => [RoleUpdateInput])
+  @Field(() => [RoleUpdateInput], { nullable: true })
   roleUpdateInputs?: RoleUpdateInput[]
 
-  @Field(() => [Int])
+  @Field(() => [Int], { nullable: true })
   removePersonaRoles?: number[]
 }
 
@@ -59,21 +59,22 @@ class RoleUpdateInput {
   @Field(() => Int)
   personaId: number
 
-  @Field()
+  @Field({ nullable: true })
   description?: string
 
-  @Field(() => [Int])
+  @Field(() => [Int], { nullable: true })
   addActionIds?: number[]
 
-  @Field(() => [Int])
+  @Field(() => [Int], { nullable: true })
   removeActionIds?: number[]
 }
 
-function createRolesFromInputs(roleInputs: RoleInput[]): Role[] {
+function createRolesFromInputs(roleInputs: RoleInput[], sceneId?: number): Role[] {
   return roleInputs.map(input => {
     const actions = input.actionIds.map(actionId => ({id: actionId}))
 
     return Role.create({
+      sceneId: sceneId,
       personaId: input.personaId,
       description: input.description,
       actions: actions
@@ -103,6 +104,9 @@ export class SceneResolver {
   ) {
     const scene = await Scene.findOne({
       where: { id: id },
+      relations: {
+        roles: true
+      }
     })
 
     const editFields = ['storyId', 'title', 'description'];
@@ -113,7 +117,7 @@ export class SceneResolver {
     });
 
     if (input.addRoleInputs) {
-      scene.roles.push(...createRolesFromInputs(input.addRoleInputs))
+      scene.roles.push(...createRolesFromInputs(input.addRoleInputs, id))
     }
 
     if (input.roleUpdateInputs) {
@@ -130,6 +134,7 @@ export class SceneResolver {
     }
 
     if (input.removePersonaRoles) {
+      scene.roles = scene.roles.filter(r => !input.removePersonaRoles.includes(r.personaId))
       await AppDataSource
         .getRepository(Role)
         .delete({
@@ -138,6 +143,7 @@ export class SceneResolver {
         })
     }
 
+    await scene.save()
     return true
   }
 
