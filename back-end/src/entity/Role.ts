@@ -1,5 +1,5 @@
 import { Field, ObjectType } from "type-graphql";
-import { BaseEntity, Entity, JoinColumn, ManyToMany, ManyToOne, OneToMany, PrimaryColumn } from "typeorm";
+import { BaseEntity, Column, Entity, JoinColumn, ManyToMany, ManyToOne, OneToMany, PrimaryColumn } from "typeorm";
 import { Persona } from "./Persona";
 import { Scene } from "./Scene";
 import { Action } from "./Action";
@@ -22,6 +22,10 @@ export class Role extends BaseEntity {
   @ManyToOne(() => Persona, { cascade: true })
   @JoinColumn({ name: 'personaId' })
   persona: Persona
+
+  @Field()
+  @Column()
+  description: string
 
   @Field(() => [Action])
   @ManyToMany(() => Action, action => action.roles)
