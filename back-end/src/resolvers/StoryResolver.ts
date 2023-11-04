@@ -1,4 +1,4 @@
-import { Resolver, Query, Mutation, Arg, InputType, Field, Int } from "type-graphql";
+import { Resolver, Query, Mutation, Arg, InputType, Field, Int, FieldResolver, Root } from "type-graphql";
 import { Story } from "../entity/Story";
 import { AppDataSource } from "../data-source";
 import { Persona } from "../entity/Persona";
@@ -51,8 +51,23 @@ class StoryUpdateInput {
   removeEditorIds?: number[];
 }
 
-@Resolver()
+@Resolver(Story)
 export class StoryResolver {
+  @FieldResolver(() => [Persona])
+  async personas(@Root() story: Story) {
+    return await story.personas
+  }
+
+  @FieldResolver(() => [Scene])
+  async scenes(@Root() story: Story) {
+    return await story.scenes
+  }
+
+  @FieldResolver(() => [User])
+  async editors(@Root() story: Story) {
+    return await story.editors
+  }
+
   @Mutation(() => Story)
   async createStory(@Arg('input', () => StoryInput) input: StoryInput) {
     const story = Story.create({
