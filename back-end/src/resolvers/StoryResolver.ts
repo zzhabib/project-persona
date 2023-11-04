@@ -1,4 +1,4 @@
-import { Resolver, Query, Mutation, Arg, InputType, Field, Int } from "type-graphql";
+import { Resolver, Query, Mutation, Arg, InputType, Field, Int, FieldResolver, Root } from "type-graphql";
 import { Story } from "../entity/Story";
 import { AppDataSource } from "../data-source";
 import { Persona } from "../entity/Persona";
@@ -51,8 +51,35 @@ class StoryUpdateInput {
   removeEditorIds?: number[];
 }
 
-@Resolver()
+@Resolver(Story)
 export class StoryResolver {
+  @FieldResolver(() => [Persona])
+  personas(@Root() story: Story): Promise<Persona[]> {
+    return AppDataSource.getRepository(Persona)
+      .createQueryBuilder('persona')
+      .leftJoinAndSelect('persona.stories', 'story')
+      .where('story.id = :storyId', { storyId: story.id })
+      .getMany();
+  }
+
+  @FieldResolver(() => [Scene])
+  scenes(@Root() story: Story): Promise<Scene[]> {
+    return AppDataSource.getRepository(Scene)
+      .createQueryBuilder('scene')
+      .innerJoinAndSelect('scene.story', 'story')
+      .where('story.id = :storyId', { storyId: story.id })
+      .getMany();
+  }
+
+  @FieldResolver(() => [User])
+  editors(@Root() story: Story): Promise<User[]> {
+    return AppDataSource.getRepository(User)
+      .createQueryBuilder('user')
+      .leftJoinAndSelect('user.stories', 'story')
+      .where('story.id = :storyId', { storyId: story.id })
+      .getMany();
+  }
+
   @Mutation(() => Story)
   async createStory(@Arg('input', () => StoryInput) input: StoryInput) {
     const story = Story.create({
@@ -133,24 +160,11 @@ export class StoryResolver {
   async getStory(@Arg('id', () => Int) id: number) {
     return await Story.findOne({
       where: { id: id },
-      relations: {
-        personas: true,
-        scenes: {
-          roles: true
-        },
-        editors: true,
-      }
     })
   }
 
   @Query(() => [Story])
   async allStories() {
-    return await Story.find({
-      relations: {
-        personas: true,
-        scenes: true,
-        editors: true
-      }
-    })
+    return await Story.find()
   }
 }

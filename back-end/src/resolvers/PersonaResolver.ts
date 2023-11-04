@@ -1,7 +1,8 @@
-import { Resolver, Query, Mutation, Arg, Field, Int, InputType } from "type-graphql";
+import { Resolver, Query, Mutation, Arg, Field, Int, InputType, FieldResolver, Root } from "type-graphql";
 import { AppDataSource } from "../data-source";
 import { Persona } from "../entity/Persona";
 import { Connection } from "../entity/Connection";
+import { Story } from "../entity/Story";
 
 @InputType()
 class ConnectionInput {
@@ -51,8 +52,35 @@ class PersonaUpdateInput {
   removeInitiatedConnectionIds?: number[]
 }
 
-@Resolver()
+@Resolver(Persona)
 export class PersonaResolver {
+  @FieldResolver(() => [Story])
+  stories(@Root() persona): Promise<Story[]> {
+    return AppDataSource.getRepository(Story)
+      .createQueryBuilder('story')
+      .leftJoinAndSelect('story.personas', 'persona')
+      .where('persona.id = :personaId', { personaId: persona.id })
+      .getMany();
+  }
+
+  @FieldResolver(() => [Connection])
+  initiatedConnections(@Root() persona): Promise<Connection[]> {
+    return AppDataSource.getRepository(Connection)
+      .createQueryBuilder('connection')
+      .innerJoinAndSelect('connection.sourcePersona', 'persona')
+      .where('persona.id = :personaId', { personaId: persona.id })
+      .getMany();
+  }
+
+  @FieldResolver(() => [Connection])
+  receivedConnections(@Root() persona): Promise<Connection[]> {
+    return AppDataSource.getRepository(Connection)
+      .createQueryBuilder('connection')
+      .innerJoinAndSelect('connection.targetPersona', 'persona')
+      .where('persona.id = :personaId', { personaId: persona.id })
+      .getMany();
+  }
+
   @Mutation(() => Persona)
   async createPersona(@Arg('input', () => PersonaInput) input: PersonaInput) {
     const persona = Persona.create({
@@ -134,14 +162,6 @@ export class PersonaResolver {
   async getPersona(@Arg('id', () => Int) id: number) {
     const persona = await Persona.findOne({
       where: { id: id },
-      relations: {
-        initiatedConnections: {
-          targetPersona: true,
-        },
-        receivedConnections: {
-          sourcePersona: true,
-        }
-      }
     })
 
     return persona
@@ -152,14 +172,6 @@ export class PersonaResolver {
   async getPersonaByName(@Arg('name', () => String) name: string) {
     const persona = await Persona.findOne({
       where: { name: name },
-      relations: {
-        initiatedConnections: {
-          targetPersona: true,
-        },
-        receivedConnections: {
-          sourcePersona: true,
-        }
-      }
     })
 
     return persona
@@ -167,11 +179,6 @@ export class PersonaResolver {
 
   @Query(() => [Persona])
   async allPersonas() {
-    return await Persona.find({
-      relations: {
-        initiatedConnections: true,
-        receivedConnections: true,
-      }
-    })
+    return await Persona.find({})
   }
 }

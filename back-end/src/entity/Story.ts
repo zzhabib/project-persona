@@ -30,16 +30,13 @@ export class Story extends BaseEntity {
   @Column()
   description: string;
 
-  @Field(() => [Persona])
   @ManyToMany(() => Persona, (persona) => persona.stories)
   @JoinTable()
   personas: Persona[];
 
-  @Field(() => [Scene])
   @OneToMany(() => Scene, (scene) => scene.story)
   scenes: Scene[];
 
-  @Field(() => [User])
   @ManyToOne(() => User, (user) => user.stories, {
     cascade: true
   })
