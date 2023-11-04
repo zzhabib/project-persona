@@ -129,8 +129,22 @@ export class StoryResolver {
     return true
   }
 
+  @Query(() => Story)
+  async getStory(@Arg('id', () => Int) id: number) {
+    return await Story.findOne({
+      where: { id: id },
+      relations: {
+        personas: true,
+        scenes: {
+          roles: true
+        },
+        editors: true,
+      }
+    })
+  }
+
   @Query(() => [Story])
-  async stories() {
+  async allStories() {
     return await Story.find({
       relations: {
         personas: true,

@@ -72,7 +72,7 @@ export class PersonaResolver {
       )
     }
 
-    persona.save();
+    await persona.save();
     return persona;
   }
 
@@ -135,8 +135,12 @@ export class PersonaResolver {
     const persona = await Persona.findOne({
       where: { id: id },
       relations: {
-        initiatedConnections: true,
-        receivedConnections: true
+        initiatedConnections: {
+          targetPersona: true,
+        },
+        receivedConnections: {
+          sourcePersona: true,
+        }
       }
     })
 

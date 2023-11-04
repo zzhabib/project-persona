@@ -19,6 +19,9 @@ export class Scene extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Column()
+  storyId: number;
+
   @Field()
   @Column()
   title: string;
@@ -31,6 +34,7 @@ export class Scene extends BaseEntity {
   @ManyToOne(() => Story, (story) => story.scenes, {
     cascade: true
   })
+  @JoinColumn({name: 'storyId'})
   story: Story;
 
   @Field(() => [Role])
