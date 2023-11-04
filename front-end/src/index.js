@@ -19,16 +19,9 @@ const client = new ApolloClient({
 });//connect to database
 
 
-
-
-
 root.render(
   <ApolloProvider client={client}>
     <App />
-
-
-
-
   </ApolloProvider>,
 );
 

@@ -4,6 +4,8 @@ import './App.css';
 import Navbar from './components/navBar';
 import { BrowserRouter as Router, Routes, Route }
   from 'react-router-dom';
+
+
     
 import PersonaPage from './pages/personaPage';
 import PersonasPage from './pages/personasPage';
