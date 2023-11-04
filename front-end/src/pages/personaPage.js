@@ -86,13 +86,7 @@ export default function PersonaPage({personaName}) {
 
     }//if this is for an existing data point we want to mutate that data point based on Id
     else {
-      const name = personaName;
-      const { loading, error, data } = useQuery(CREATE_PERSONA, {
-        variables: {
-          "name":  formData.name ,
-          "description":  formData.description 
-        }
-      });
+
 
 
     }//in this case it is making a new persona
