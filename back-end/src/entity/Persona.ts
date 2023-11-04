@@ -32,11 +32,9 @@ export class Persona extends BaseEntity {
   @ManyToMany(() => Story, (story) => story.personas)
   stories: [Story];
 
-  @Field(() => [Connection])
   @OneToMany(() => Connection, connection => connection.sourcePersona, { cascade: true })
   initiatedConnections: Connection[];
 
-  @Field(() => [Connection])
   @OneToMany(() => Connection, connection => connection.targetPersona, { cascade: true })
   receivedConnections: Connection[];
 }

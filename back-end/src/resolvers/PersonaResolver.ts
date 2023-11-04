@@ -51,7 +51,7 @@ class PersonaUpdateInput {
   removeInitiatedConnectionIds?: number[]
 }
 
-@Resolver()
+@Resolver(Persona)
 export class PersonaResolver {
   @Mutation(() => Persona)
   async createPersona(@Arg('input', () => PersonaInput) input: PersonaInput) {

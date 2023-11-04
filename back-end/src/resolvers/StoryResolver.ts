@@ -54,18 +54,30 @@ class StoryUpdateInput {
 @Resolver(Story)
 export class StoryResolver {
   @FieldResolver(() => [Persona])
-  async personas(@Root() story: Story) {
-    return await story.personas
+  personas(@Root() story: Story): Promise<Persona[]> {
+    return AppDataSource.getRepository(Persona)
+      .createQueryBuilder('persona')
+      .leftJoinAndSelect('persona.stories', 'story')
+      .where('story.id = :storyId', { storyId: story.id })
+      .getMany();
   }
 
   @FieldResolver(() => [Scene])
-  async scenes(@Root() story: Story) {
-    return await story.scenes
+  scenes(@Root() story: Story): Promise<Scene[]> {
+    return AppDataSource.getRepository(Scene)
+      .createQueryBuilder('scene')
+      .innerJoinAndSelect('scene.story', 'story')
+      .where('story.id = :storyId', { storyId: story.id })
+      .getMany();
   }
 
   @FieldResolver(() => [User])
-  async editors(@Root() story: Story) {
-    return await story.editors
+  editors(@Root() story: Story): Promise<User[]> {
+    return AppDataSource.getRepository(User)
+      .createQueryBuilder('user')
+      .leftJoinAndSelect('user.stories', 'story')
+      .where('story.id = :storyId', { storyId: story.id })
+      .getMany();
   }
 
   @Mutation(() => Story)
@@ -148,24 +160,11 @@ export class StoryResolver {
   async getStory(@Arg('id', () => Int) id: number) {
     return await Story.findOne({
       where: { id: id },
-      relations: {
-        personas: true,
-        scenes: {
-          roles: true
-        },
-        editors: true,
-      }
     })
   }
 
   @Query(() => [Story])
   async allStories() {
-    return await Story.find({
-      relations: {
-        personas: true,
-        scenes: true,
-        editors: true
-      }
-    })
+    return await Story.find()
   }
 }
