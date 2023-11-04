@@ -147,6 +147,24 @@ export class PersonaResolver {
     return persona
   }
 
+
+  @Query(() => Persona)
+  async getPersonaByName(@Arg('name', () => String) name: string) {
+    const persona = await Persona.findOne({
+      where: { name: name },
+      relations: {
+        initiatedConnections: {
+          targetPersona: true,
+        },
+        receivedConnections: {
+          sourcePersona: true,
+        }
+      }
+    })
+
+    return persona
+  }
+
   @Query(() => [Persona])
   async allPersonas() {
     return await Persona.find({

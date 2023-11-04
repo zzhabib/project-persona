@@ -7,13 +7,17 @@ import { BrowserRouter as Router, Routes, Route }
 
 
     
-import PersonaPage from './pages/personaPage';
+
 import PersonasPage from './pages/personasPage';
-import StoryPage from './pages/storyPage';
 import StoriesPage from './pages/storiesPage';
 import TestPage from './pages/testPage';
 import HomePage from './pages/homePage';
 import ScenesPage from './pages/scenesPage';
+
+
+
+
+
 
 
 function App() {
