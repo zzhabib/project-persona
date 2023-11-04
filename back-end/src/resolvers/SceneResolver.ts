@@ -1,4 +1,4 @@
-import { Resolver, Query, Mutation, Arg, InputType, Field, Int } from "type-graphql";
+import { Resolver, Query, Mutation, Arg, InputType, Field, Int, FieldResolver, Root } from "type-graphql";
 import { Scene } from "../entity/Scene";
 import { Story } from "../entity/Story";
 import { Role } from "../entity/Role";
@@ -82,8 +82,24 @@ function createRolesFromInputs(roleInputs: RoleInput[], sceneId?: number): Role[
   })
 }
 
-@Resolver()
+@Resolver(Scene)
 export class SceneResolver {
+  @FieldResolver(() => Story)
+  story(@Root() scene: Scene): Promise<Story> {
+    return AppDataSource.getRepository(Story)
+      .createQueryBuilder('story')
+      .where('story.id = :storyId', { storyId: scene.storyId })
+      .getOne();
+  }
+
+  @FieldResolver(() => [Role])
+  roles(@Root() scene: Scene): Promise<Role[]> {
+    return AppDataSource.getRepository(Role)
+      .createQueryBuilder('role')
+      .where('role.sceneId = :sceneId', { sceneId: scene.id })
+      .getMany();
+  }
+
   @Mutation(() => Scene)
   async createScene(@Arg('input', () => SceneInput) input: SceneInput) {
     const sceneRepository = AppDataSource.getRepository(Scene)
@@ -155,26 +171,13 @@ export class SceneResolver {
 
   @Query(() => [Scene])
   async allScenes() {
-    return await Scene.find({
-      relations: {
-        roles: {
-          persona: true,
-          actions: true
-        }
-      }
-    })
+    return await Scene.find()
   }
 
   @Query(() => Scene)
   async getScene(@Arg('id', () => Int) id: number) {
     return await Scene.findOne({
       where: { id },
-      relations: {
-        roles: {
-          persona: true,
-          actions: true
-        }
-      }
     })
   }
 }
