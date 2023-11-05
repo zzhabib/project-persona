@@ -7,6 +7,9 @@ import { UserResolver } from "./resolvers/UserResolver";
 import { StoryResolver } from "./resolvers/StoryResolver";
 import { PersonaResolver } from "./resolvers/PersonaResolver";
 import { SceneResolver } from "./resolvers/SceneResolver";
+import { ConnectionResolver } from "./resolvers/ConnectionResolver";
+import { RoleResolver } from "./resolvers/RoleResolver";
+import { ActionResolver } from "./resolvers/ActionResolver";
 
 dotenv.config();
 
@@ -14,7 +17,7 @@ dotenv.config();
   await AppDataSource.initialize()
 
   const schema = await buildSchema({
-    resolvers: [UserResolver, StoryResolver, PersonaResolver, SceneResolver],
+    resolvers: [UserResolver, StoryResolver, PersonaResolver, SceneResolver, ConnectionResolver, RoleResolver, ActionResolver],
   });
 
   const server = new ApolloServer({

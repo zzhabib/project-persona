@@ -13,21 +13,18 @@ export class Role extends BaseEntity {
   @PrimaryColumn()
   personaId: number
 
-  @Field(() => Scene)
-  @ManyToOne(() => Scene, (scene) => scene.roles)
-  @JoinColumn({ name: 'sceneId' })
-  scene: Scene
-
-  @Field(() => Persona)
-  @ManyToOne(() => Persona, { cascade: true })
-  @JoinColumn({ name: 'personaId' })
-  persona: Persona
-
   @Field()
   @Column()
   description: string
 
-  @Field(() => [Action])
+  @ManyToOne(() => Scene, (scene) => scene.roles)
+  @JoinColumn({ name: 'sceneId' })
+  scene: Scene
+
+  @ManyToOne(() => Persona, { cascade: true })
+  @JoinColumn({ name: 'personaId' })
+  persona: Persona
+
   @ManyToMany(() => Action, action => action.roles)
   actions: Action[]
 }
