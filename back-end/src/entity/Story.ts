@@ -14,6 +14,7 @@ import { Persona } from "./Persona";
 import { Scene } from "./Scene";
 import { User } from "./User";
 import { Field, Int, ObjectType } from "type-graphql";
+import { Action } from "./Action";
 
 @ObjectType()
 @Entity()
@@ -33,6 +34,9 @@ export class Story extends BaseEntity {
   @ManyToMany(() => Persona, (persona) => persona.stories)
   @JoinTable()
   personas: Persona[];
+
+  @OneToMany(() => Action, action => action.story)
+  actions: Action[];
 
   @OneToMany(() => Scene, (scene) => scene.story)
   scenes: Scene[];

@@ -5,6 +5,7 @@ import { Persona } from "../entity/Persona";
 import { Scene } from "../entity/Scene";
 import { User } from "../entity/User";
 import { In } from "typeorm";
+import { Action } from "../entity/Action";
 
 @InputType()
 class StoryInput {
@@ -53,6 +54,15 @@ class StoryUpdateInput {
 
 @Resolver(Story)
 export class StoryResolver {
+  @FieldResolver(() => [Action])
+  actions(@Root() story: Story): Promise<Action[]> {
+    return AppDataSource
+      .getRepository(Action)
+      .createQueryBuilder('action')
+      .where('action.storyId = :storyId', { storyId: story.id })
+      .getMany();
+  }
+
   @FieldResolver(() => [Persona])
   personas(@Root() story: Story): Promise<Persona[]> {
     return AppDataSource.getRepository(Persona)
