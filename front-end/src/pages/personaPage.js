@@ -14,6 +14,7 @@ query GetPersona($name: String!) {
   getPersonaByName(name: $name) {
     description
     name
+    id
   }
 }
 `;
@@ -26,6 +27,13 @@ mutation CreatePersona($input: PersonaInput!) {
   }
 }
 `;
+/*
+const EDIT_PERSONA  = gql`
+mutation 
+`;
+*/
+
+
 
 
 function AddPersona(name, description) {
@@ -53,17 +61,15 @@ export default function PersonaPage({ personaName }) {
     stories: [],
   });
   
-  console.log(personaName);
-  const name = personaName;
 
+  const name = personaName;
   const { loading, error, data } = useQuery(GET_EXISTING_STORIES, {
     variables: { name }
   });
-  
 
   const [createPersona] = useMutation(CREATE_PERSONA);
-   
-  console.log(data);
+
+  const [editPersona] = useMutation(EDIT_PERSONA);
 
 
   useEffect(() => {
@@ -91,6 +97,18 @@ export default function PersonaPage({ personaName }) {
 
     if (!loading && !error && data && data.getPersonaByName) {
     
+      await editPersona({
+        variables: {
+          input: {
+            name: formData.name,
+            description: formData.description,
+          },
+        },
+      });
+
+  
+      data.getPersonaByName.id
+
     }//if this is for an existing data point we want to mutate that data point based on Id
     else {
       await createPersona({

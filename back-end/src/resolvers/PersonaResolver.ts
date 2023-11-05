@@ -117,6 +117,16 @@ export class PersonaResolver {
     })
     if (!persona) throw new Error(`Persona with id '${id}' was not found.`)
 
+    //change name
+    if (input.name) {
+      persona.name = input.name
+    }
+    //change description
+    if (input.description) {
+      persona.description = input.description
+    }
+
+
     // Add initiated connections
     if (input.addInitiatedConnectionInputs) {
       const newConnections = input.addInitiatedConnectionInputs.map(
