@@ -16,7 +16,7 @@ export const AppDataSource = new DataSource({
     type: "postgres",
     url: connectionString,
     synchronize: true,
-    logging: false,
+    logging: true,
     entities: [User, Story, Scene, Connection, Persona, Role, Action],
     migrations: [],
     subscribers: [],
