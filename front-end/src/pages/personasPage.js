@@ -23,11 +23,6 @@ const PersonasPage = () => {
     return <p>Error: {error.message}</p>;
   }
 
-  const namesList = data.allPersonas.map((persona, index) => (
-    <div key={index}>
-      <div>{persona.name}</div>
-    </div>
-  ));
 
   return (
     <div>
@@ -42,7 +37,7 @@ const PersonasPage = () => {
       {data.allPersonas.map((persona, index) => (
         <div>
           <Popup key={index} trigger={<button>{persona.name}</button>} position="right center">
-          <PersonaPage personaName={persona.name} />
+            <PersonaPage personaName={persona.name} />
           </Popup>
         </div>
       ))

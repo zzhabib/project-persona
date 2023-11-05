@@ -2,7 +2,6 @@ import React from "react";
 import { useQuery , gql } from "@apollo/client";
 import { useState } from "react";
 import { useEffect } from "react";
-import Popup from "reactjs-popup";
 
 
 import { useMutation } from "@apollo/client";
@@ -35,22 +34,11 @@ const EDIT_PERSONA  = gql`
 `;
 
 
-
-
-
-function AddPersona(name, description) {
-  const { data } = useQuery(CREATE_PERSONA,
-    {
-      variables: {
-        description,
-        name
-      }
-    }
-  );
-
-  return data;
-
+const DELETE_PERSONA  = gql`
+mutation DeletePersona($deletePersonaId: Int!) {
+  deletePersona(id: $deletePersonaId)
 }
+`;
 
 
 
@@ -72,7 +60,7 @@ export default function PersonaPage({ personaName }) {
   const [createPersona] = useMutation(CREATE_PERSONA);
 
   const [editPersona] = useMutation(EDIT_PERSONA);
-
+  const [deletePersona] = useMutation(DELETE_PERSONA);
 
   useEffect(() => {
     if (!loading && !error && data && data.getPersonaByName) {
@@ -126,6 +114,20 @@ export default function PersonaPage({ personaName }) {
   };
 
 
+
+  const handleRemove = async (event) => {
+    await deletePersona({
+      variables: {
+        deletePersonaId:  data.getPersonaByName.id 
+      },
+    });
+
+
+    window.location.reload();
+  }
+
+
+
   return (
     <div>
         <form onSubmit={handleSubmit}>
@@ -138,7 +140,10 @@ export default function PersonaPage({ personaName }) {
           <label htmlFor="stories">Stories:</label>
           <textarea type="text" id="stories" name="stories" value={formData.stories} onChange={handleChange} />
 
-          <button type="submit">Submit</button>
+        <button type="submit">Submit</button>
+        <div>
+          {personaName && <button onClick={handleRemove}>Remove This Persona</button>}
+          </div>
         </form>
     </div>
 
