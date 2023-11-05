@@ -30,14 +30,12 @@ export class Scene extends BaseEntity {
   @Column()
   description: string;
 
-  @Field(() => Story)
   @ManyToOne(() => Story, (story) => story.scenes, {
     cascade: true
   })
   @JoinColumn({name: 'storyId'})
   story: Story;
 
-  @Field(() => [Role])
   @OneToMany(() => Role, (role) => role.scene, {
     cascade: true
   })
