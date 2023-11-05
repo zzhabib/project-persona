@@ -15,12 +15,10 @@ export class Connection extends BaseEntity {
   @Column()
   description: string;
 
-  @Field(() => Persona)
   @ManyToOne(() => Persona, (persona) => persona.initiatedConnections)
   @JoinColumn({ name: 'sourcePersonaId' })
   sourcePersona: Persona;
   
-  @Field(() => Persona)
   @ManyToOne(() => Persona, (persona) => persona.receivedConnections)
   @JoinColumn({ name: 'targetPersonaId' })
   targetPersona: Persona;
