@@ -87,8 +87,7 @@ export default function PersonaPage({ personaName }) {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-      
-    alert("Updated Data, please click somewhere else to close");
+  
 
     if (!loading && !error && data && data.getPersonaByName) {
     
@@ -102,9 +101,9 @@ export default function PersonaPage({ personaName }) {
           },
         },
       });
-
-
     }//in this case it is making a new persona
+
+    window.location.reload();
   };
 
 
