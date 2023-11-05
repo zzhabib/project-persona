@@ -18,3 +18,21 @@
   border-radius: 5px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
 }
+
+
+
+.remDiv {
+  display: flex;
+
+  justify-content: right;
+  align-items: right;
+  
+
+}
+
+
+.remBut {
+  color: red;
+  
+}
+

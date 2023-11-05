@@ -2,11 +2,8 @@ import React from "react";
 import { useQuery , gql } from "@apollo/client";
 import { useState } from "react";
 import { useEffect } from "react";
-
-
 import { useMutation } from "@apollo/client";
-
-
+import './pages.css';
 
 const GET_EXISTING_STORIES  = gql`
 query GetPersona($name: String!) {
@@ -18,6 +15,7 @@ query GetPersona($name: String!) {
 }
 `;
 
+
 const CREATE_PERSONA  = gql`
 mutation CreatePersona($input: PersonaInput!) {
   createPersona(input: $input) {
@@ -26,6 +24,7 @@ mutation CreatePersona($input: PersonaInput!) {
   }
 }
 `;
+
 
 const EDIT_PERSONA  = gql`
   mutation UpdatePersona($input: PersonaUpdateInput!, $updatePersonaId: Int!) {
@@ -41,9 +40,6 @@ mutation DeletePersona($deletePersonaId: Int!) {
 `;
 
 
-
-
-
 export default function PersonaPage({ personaName }) {
   const [formData, setFormData] = useState({
     name: "",
@@ -51,14 +47,12 @@ export default function PersonaPage({ personaName }) {
     stories: [],
   });
   
-
   const name = personaName;
   const { loading, error, data } = useQuery(GET_EXISTING_STORIES, {
     variables: { name }
   });
 
   const [createPersona] = useMutation(CREATE_PERSONA);
-
   const [editPersona] = useMutation(EDIT_PERSONA);
   const [deletePersona] = useMutation(DELETE_PERSONA);
 
@@ -75,18 +69,16 @@ export default function PersonaPage({ personaName }) {
   }, [loading, error, data, personaName]);
 
 
-  
   const handleChange = (event) => {
     const { name, value } = event.target;
     setFormData((prevFormData) => ({ ...prevFormData, [name]: value }));
   };//this is just constantly updating the data to handle it, so I think this stays the same
 
+
   const handleSubmit = async (event) => {
     event.preventDefault();
   
-
     if (!loading && !error && data && data.getPersonaByName) {
-    
       await editPersona({
         variables: {
           input: {
@@ -96,8 +88,6 @@ export default function PersonaPage({ personaName }) {
           updatePersonaId:  data.getPersonaByName.id 
         },
       });
-
-
     }//if this is for an existing data point we want to mutate that data point based on Id
     else {
       await createPersona({
@@ -114,7 +104,6 @@ export default function PersonaPage({ personaName }) {
   };
 
 
-
   const handleRemove = async (event) => {
     await deletePersona({
       variables: {
@@ -122,10 +111,8 @@ export default function PersonaPage({ personaName }) {
       },
     });
 
-
     window.location.reload();
   }
-
 
 
   return (
@@ -141,8 +128,8 @@ export default function PersonaPage({ personaName }) {
           <textarea type="text" id="stories" name="stories" value={formData.stories} onChange={handleChange} />
 
         <button type="submit">Submit</button>
-        <div>
-          {personaName && <button onClick={handleRemove}>Remove This Persona</button>}
+        <div className="remDiv">
+          {personaName && <button className="remBut" onClick={handleRemove} position="right center">Remove</button>}
           </div>
         </form>
     </div>
