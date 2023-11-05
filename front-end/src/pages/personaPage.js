@@ -27,11 +27,13 @@ mutation CreatePersona($input: PersonaInput!) {
   }
 }
 `;
-/*
+
 const EDIT_PERSONA  = gql`
-mutation 
+  mutation UpdatePersona($input: PersonaUpdateInput!, $updatePersonaId: Int!) {
+    updatePersona(input: $input, id: $updatePersonaId)
+  }
 `;
-*/
+
 
 
 
@@ -103,11 +105,10 @@ export default function PersonaPage({ personaName }) {
             name: formData.name,
             description: formData.description,
           },
+          updatePersonaId:  data.getPersonaByName.id 
         },
       });
 
-  
-      data.getPersonaByName.id
 
     }//if this is for an existing data point we want to mutate that data point based on Id
     else {
