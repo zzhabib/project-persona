@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { useMutation } from "@apollo/client";
 import './pages.css';
 
-const GET_EXISTING_STORIES  = gql`
+const GET_EXISTING_PERSONAS  = gql`
 query GetPersona($name: String!) {
   getPersonaByName(name: $name) {
     description
@@ -48,7 +48,7 @@ export default function PersonaPage({ personaName }) {
   });
   
   const name = personaName;
-  const { loading, error, data } = useQuery(GET_EXISTING_STORIES, {
+  const { loading, error, data } = useQuery(GET_EXISTING_PERSONAS, {
     variables: { name }
   });
 

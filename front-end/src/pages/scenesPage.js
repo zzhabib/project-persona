@@ -11,6 +11,7 @@ const GET_SCENES = gql`
 query AllScenes {
   allScenes {
     title
+    id
   }
 }
 `;
@@ -40,8 +41,8 @@ const ScenesPage = () => {
   
       {data.allScenes.map((scene, index) => (
         <div>
-          <Popup key={index} trigger={<button>{scene.name}</button>} position="right center">
-            <ScenePage sceneName={scene.name} />
+          <Popup key={index} trigger={<button>{scene.title}</button>} position="right center">
+            <ScenePage sceneId={scene.id} />
           </Popup>
         </div>
       ))}

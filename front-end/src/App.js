@@ -1,4 +1,5 @@
 
+
 import React from 'react';
 import './App.css';
 import Navbar from './components/navBar';
@@ -15,6 +16,7 @@ import HomePage from './pages/homePage';
 import ScenesPage from './pages/scenesPage';
 
 
+require('dotenv').config();
 
 
 

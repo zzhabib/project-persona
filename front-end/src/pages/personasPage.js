@@ -27,26 +27,20 @@ const PersonasPage = () => {
   return (
     <div>
       <h1>This is the Personas Page</h1>
+      
       <Popup trigger={<button> New Persona</button>} position="right center">
         <PersonaPage />
+      
       </Popup>
       <h2>Your Personas</h2>
-      
-          
-          
+  
       {data.allPersonas.map((persona, index) => (
         <div>
           <Popup key={index} trigger={<button>{persona.name}</button>} position="right center">
             <PersonaPage personaName={persona.name} />
           </Popup>
         </div>
-      ))
-      }
-      
-
-
-      
-
+      ))}
 
     </div>
   );
