@@ -11,10 +11,6 @@ import { ConnectionResolver } from "./resolvers/ConnectionResolver";
 import { RoleResolver } from "./resolvers/RoleResolver";
 import { ActionResolver } from "./resolvers/ActionResolver";
 
-
-import { RunPrompt } from "./prompt.js";
-
-
 dotenv.config();
 
 (async () => {
