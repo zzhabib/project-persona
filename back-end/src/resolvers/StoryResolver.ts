@@ -19,9 +19,6 @@ class StoryInput {
   personaIds?: number[];
 
   @Field(() => [Int], { nullable: true })
-  sceneIds?: number[];
-
-  @Field(() => [Int], { nullable: true })
   editorIds?: number[];
 }
 
@@ -38,12 +35,6 @@ class StoryUpdateInput {
 
   @Field(() => [Int], { nullable: true })
   removePersonaIds?: number[];
-
-  @Field(() => [Int], { nullable: true })
-  addSceneIds?: number[];
-
-  @Field(() => [Int], { nullable: true })
-  removeSceneIds?: number[];
 
   @Field(() => [Int], { nullable: true })
   addEditorIds?: number[];
@@ -100,9 +91,6 @@ export class StoryResolver {
     if (input.personaIds) {
       story.personas = await Persona.findBy({id: In(input.personaIds)})
     }
-    if (input.sceneIds) {
-      story.scenes = await Scene.findBy({id: In(input.sceneIds)})
-    }
     if (input.editorIds) {
       story.editors = await User.findBy({ id: In(input.editorIds) })
     }
@@ -136,15 +124,6 @@ export class StoryResolver {
     }
     if (input.removePersonaIds) {
       story.personas = story.personas.filter(p => !input.removePersonaIds.includes(p.id));
-    }
-    
-    // Add/remove scenes
-    if (input.addSceneIds) {
-      const addScenes = await Scene.findBy({ id: In(input.addSceneIds) });
-      story.scenes.push(...addScenes)
-    }
-    if (input.removeSceneIds) {
-      story.scenes = story.scenes.filter(s => !input.removeSceneIds.includes(s.id))
     }
 
     // Add/remove editors
