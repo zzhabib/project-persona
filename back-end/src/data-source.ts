@@ -1,14 +1,14 @@
 import "reflect-metadata"
 import { DataSource } from "typeorm"
-import { User } from "./entity/User"
-import { Story } from "./entity/Story"
-import { Scene } from "./entity/Scene"
-import { Connection } from "./entity/Connection"
-import { Persona } from "./entity/Persona"
+import { User } from "./entity/edit/User"
+import { Story } from "./entity/edit/Story"
+import { Scene } from "./entity/edit/Scene"
+import { Connection } from "./entity/edit/Connection"
+import { Persona } from "./entity/edit/Persona"
 
 import * as dotenv from "dotenv"
-import { Role } from "./entity/Role"
-import { Action } from "./entity/Action"
+import { Role } from "./entity/edit/Role"
+import { Action } from "./entity/edit/Action"
 dotenv.config()
 const connectionString = process.env.DATABASE_URL;
 

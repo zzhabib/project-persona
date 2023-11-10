@@ -1,7 +1,7 @@
 import { BaseEntity, Column, Entity, ManyToMany, ManyToOne, PrimaryGeneratedColumn, Timestamp } from "typeorm";
 import { Conversation } from "./Conversation";
-import { Persona } from "./Persona";
-import { Action } from "./Action";
+import { Persona } from "../edit/Persona";
+import { Action } from "../edit/Action";
 
 @Entity()
 export class Message extends BaseEntity {

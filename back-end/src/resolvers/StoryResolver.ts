@@ -1,11 +1,11 @@
 import { Resolver, Query, Mutation, Arg, InputType, Field, Int, FieldResolver, Root } from "type-graphql";
-import { Story } from "../entity/Story";
+import { Story } from "../entity/edit/Story";
 import { AppDataSource } from "../data-source";
-import { Persona } from "../entity/Persona";
-import { Scene } from "../entity/Scene";
-import { User } from "../entity/User";
+import { Persona } from "../entity/edit/Persona";
+import { Scene } from "../entity/edit/Scene";
+import { User } from "../entity/edit/User";
 import { In } from "typeorm";
-import { Action } from "../entity/Action";
+import { Action } from "../entity/edit/Action";
 
 @InputType()
 class StoryInput {
@@ -89,7 +89,7 @@ export class StoryResolver {
     });
 
     if (input.personaIds) {
-      story.personas = await Persona.findBy({id: In(input.personaIds)})
+      story.personas = await Persona.findBy({ id: In(input.personaIds) })
     }
     if (input.editorIds) {
       story.editors = await User.findBy({ id: In(input.editorIds) })

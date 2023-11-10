@@ -1,8 +1,8 @@
 import { Resolver, Query, Mutation, Arg, Field, Int, InputType, FieldResolver, Root } from "type-graphql";
 import { AppDataSource } from "../data-source";
-import { Persona } from "../entity/Persona";
-import { Connection } from "../entity/Connection";
-import { Story } from "../entity/Story";
+import { Persona } from "../entity/edit/Persona";
+import { Connection } from "../entity/edit/Connection";
+import { Story } from "../entity/edit/Story";
 
 @InputType()
 class ConnectionInput {

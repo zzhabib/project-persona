@@ -1,7 +1,7 @@
 import { Resolver, Query, Mutation, Arg, InputType, Field, Int, FieldResolver, Root } from "type-graphql";
-import { Scene } from "../entity/Scene";
-import { Story } from "../entity/Story";
-import { Role } from "../entity/Role";
+import { Scene } from "../entity/edit/Scene";
+import { Story } from "../entity/edit/Story";
+import { Role } from "../entity/edit/Role";
 import { AppDataSource } from "../data-source";
 
 @InputType()

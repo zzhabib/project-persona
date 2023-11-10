@@ -1,5 +1,5 @@
 import { Arg, Field, InputType, Int, Mutation, Resolver } from "type-graphql";
-import { Action } from "../entity/Action";
+import { Action } from "../entity/edit/Action";
 import { AppDataSource } from "../data-source";
 
 @InputType()
@@ -42,7 +42,7 @@ export class ActionResolver {
       .set(input)
       .where('id = :id', { id })
       .execute();
-    
+
     return result.affected > 0
   }
 

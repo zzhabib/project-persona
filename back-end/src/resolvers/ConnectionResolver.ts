@@ -1,6 +1,6 @@
 import { FieldResolver, Resolver, Root } from "type-graphql";
-import { Connection } from "../entity/Connection";
-import { Persona } from "../entity/Persona";
+import { Connection } from "../entity/edit/Connection";
+import { Persona } from "../entity/edit/Persona";
 import { AppDataSource } from "../data-source";
 
 @Resolver(Connection)

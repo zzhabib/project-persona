@@ -1,6 +1,6 @@
 import { BaseEntity, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { Scene } from "./Scene";
-import { Persona } from "./Persona";
+import { Scene } from "../edit/Scene";
+import { Persona } from "../edit/Persona";
 import { Player } from "./Player";
 import { Message } from "./Message";
 
@@ -15,7 +15,7 @@ export class Conversation extends BaseEntity {
   @ManyToOne(() => Persona, { cascade: true })
   persona: Persona
 
-  @ManyToOne(() => Player, player => player.conversations,{ cascade: true })
+  @ManyToOne(() => Player, player => player.conversations, { cascade: true })
   player: Player
 
   @OneToMany(() => Message, message => message.conversation)

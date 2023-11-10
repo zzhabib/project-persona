@@ -1,9 +1,9 @@
 import { Arg, Field, FieldResolver, InputType, Int, Mutation, Resolver, Root } from "type-graphql";
-import { Role } from "../entity/Role";
-import { Scene } from "../entity/Scene";
+import { Role } from "../entity/edit/Role";
+import { Scene } from "../entity/edit/Scene";
 import { AppDataSource } from "../data-source";
-import { Persona } from "../entity/Persona";
-import { Action } from "../entity/Action";
+import { Persona } from "../entity/edit/Persona";
+import { Action } from "../entity/edit/Action";
 
 @InputType()
 class RoleInput {
@@ -99,7 +99,7 @@ export class RoleResolver {
         })
         .execute();
     }
-    
+
     // Remove rows from cross-reference
     if (input.removeActionIds) {
       await AppDataSource
@@ -116,7 +116,7 @@ export class RoleResolver {
         })
         .execute();
     }
-    
+
     // insert Action cross-references
     if (input.addActionIds) {
       AppDataSource
@@ -130,7 +130,7 @@ export class RoleResolver {
         })))
         .execute();
     }
-    
+
     return true;
   }
 
