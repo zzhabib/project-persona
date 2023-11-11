@@ -9,7 +9,6 @@ import { Persona } from "./entity/edit/Persona"
 import { Role } from "./entity/edit/Role"
 import { Action } from "./entity/edit/Action"
 import { StorySession } from "./entity/play/StorySession"
-import { Conversation } from "./entity/play/Conversation"
 import { Message } from "./entity/play/Message"
 
 dotenv.config()
@@ -20,7 +19,7 @@ export const AppDataSource = new DataSource({
     url: connectionString,
     synchronize: true,
     logging: true,
-    entities: [User, Story, Scene, Connection, Persona, Role, Action, StorySession, Conversation, Message],
+    entities: [User, Story, Scene, Connection, Persona, Role, Action, StorySession, Message],
     migrations: [],
     subscribers: [],
 })

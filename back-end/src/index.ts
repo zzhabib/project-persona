@@ -18,14 +18,16 @@ dotenv.config();
   await AppDataSource.initialize()
 
   const schema = await buildSchema({
-    resolvers: [UserResolver,
-                StoryResolver,
-                PersonaResolver,
-                SceneResolver,
-                ConnectionResolver,
-                RoleResolver,
-                ActionResolver,
-                StorySessionResolver],
+    resolvers: [
+      UserResolver,
+      StoryResolver,
+      PersonaResolver,
+      SceneResolver,
+      ConnectionResolver,
+      RoleResolver,
+      ActionResolver,
+      StorySessionResolver
+    ],
   });
 
   const server = new ApolloServer({

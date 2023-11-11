@@ -1,21 +1,29 @@
 import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { Conversation } from "./Conversation";
 import { Persona } from "../edit/Persona";
 import { Action } from "../edit/Action";
 import { Field, Int, ObjectType } from "type-graphql";
+import { Scene } from "../edit/Scene";
 
+/**
+ * A message stated from one persona to another in a certain scene.
+ */
 @ObjectType()
 @Entity()
 export class Message extends BaseEntity {
+  // Primitive Fields
+
   @Field(() => Int)
   @PrimaryGeneratedColumn()
   id: number
 
   @Column()
-  conversationId: number
+  sceneId: number
 
   @Column()
-  fromPersonaId: number
+  senderId: number
+
+  @Column()
+  recipientId: number
 
   @Field(() => Date)
   @CreateDateColumn()
@@ -23,15 +31,21 @@ export class Message extends BaseEntity {
   
   @Field()
   @Column()
-  dialogue: string
-  
-  @ManyToOne(() => Conversation, conversation => conversation.messages, { cascade: true })
-  @JoinColumn({ name: 'conversationId' })
-  conversation: Conversation
+  text: string
+
+  // Relations
+
+  @ManyToOne(() => Scene, { cascade: true })
+  @JoinColumn({ name: 'sceneId' })
+  scene: Scene
 
   @ManyToOne(() => Persona, { cascade: true })
-  @JoinColumn({ name: 'fromPersonaId' })
-  fromPersona: Persona
+  @JoinColumn({ name: 'senderId' })
+  sender: Persona
+
+  @ManyToOne(() => Persona, { cascade: true })
+  @JoinColumn({ name: 'recipientId' })
+  recipient: Persona
 
   @ManyToMany(() => Action, { cascade: true })
   actions: Action[]
