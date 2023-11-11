@@ -3,6 +3,7 @@ import { Persona } from "../edit/Persona";
 import { Action } from "../edit/Action";
 import { Field, Int, ObjectType } from "type-graphql";
 import { Scene } from "../edit/Scene";
+import { StorySession } from "./StorySession";
 
 /**
  * A message stated from one persona to another in a certain scene.
@@ -15,6 +16,9 @@ export class Message extends BaseEntity {
   @Field(() => Int)
   @PrimaryGeneratedColumn()
   id: number
+
+  @Column()
+  storySessionId: number
 
   @Column()
   sceneId: number
@@ -34,6 +38,9 @@ export class Message extends BaseEntity {
   text: string
 
   // Relations
+  @ManyToOne(() => StorySession, storySession => storySession.messages, { cascade: true })
+  @JoinColumn({ name: 'storySessionId' })
+  storySession: StorySession
 
   @ManyToOne(() => Scene, { cascade: true })
   @JoinColumn({ name: 'sceneId' })

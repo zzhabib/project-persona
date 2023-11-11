@@ -11,6 +11,7 @@ import { ConnectionResolver } from "./resolvers/ConnectionResolver";
 import { RoleResolver } from "./resolvers/RoleResolver";
 import { ActionResolver } from "./resolvers/ActionResolver";
 import { StorySessionResolver } from "./resolvers/StorySessionResolver";
+import { MessageResolver } from "./resolvers/MessageResolver";
 
 dotenv.config();
 
@@ -26,7 +27,8 @@ dotenv.config();
       ConnectionResolver,
       RoleResolver,
       ActionResolver,
-      StorySessionResolver
+      StorySessionResolver,
+      MessageResolver
     ],
   });
 

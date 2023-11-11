@@ -2,10 +2,13 @@ import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColu
 import { Story } from "../edit/Story";
 import { User } from "../edit/User";
 import { Field, Int, ObjectType } from "type-graphql";
+import { Message } from "./Message";
 
 @ObjectType()
 @Entity()
 export class StorySession extends BaseEntity {
+  // Primitive Fields
+
   @Field(() => Int)
   @PrimaryGeneratedColumn()
   id: number
@@ -16,6 +19,8 @@ export class StorySession extends BaseEntity {
   @Column()
   userId: number
 
+  // Relations
+
   @ManyToOne(() => Story, { cascade: true })
   @JoinColumn({ name: 'storyId' })
   story: Story
@@ -23,4 +28,7 @@ export class StorySession extends BaseEntity {
   @ManyToOne(() => User, { cascade: true })
   @JoinColumn({ name: 'userId' })
   user: User
+
+  
+  messages: Message[]
 }
