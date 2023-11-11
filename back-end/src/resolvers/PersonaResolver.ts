@@ -75,7 +75,7 @@ export class PersonaResolver {
   }
 
   @Mutation(() => Persona)
-  async createPersona(@Arg('input', () => PersonaInput) input: PersonaInput) {
+  async createPersona(@Arg('input', () => PersonaInput) input: PersonaInput): Promise<Persona> {
     const persona = Persona.create(input);
 
     // Add connections

@@ -1,9 +1,15 @@
-import { Resolver, Query, Mutation, Arg } from "type-graphql";
+import { Resolver, Query, Mutation, Arg, FieldResolver, Root, Int } from "type-graphql";
 import { User } from "../entity/edit/User";
 import { AppDataSource } from "../data-source";
+import { StorySession } from "../entity/play/StorySession";
 
-@Resolver()
+@Resolver(User)
 export class UserResolver {
+  @FieldResolver(() => [StorySession])
+  async storySessions(@Root() user: User): Promise<StorySession[]> {
+    return StorySession.find({ where: { userId: user.id } })
+  }
+    
   @Mutation(() => User)
   async createUser(
     @Arg('email', () => String) email: string
@@ -15,12 +21,13 @@ export class UserResolver {
     return user;
   }
 
+  @Query(() => User)
+  async getUser(@Arg('id', () => Int) id: number): Promise<User> {
+    return User.findOne({ where: { id } })
+  }
+
   @Query(() => [User])
-  async users() {
-    return User.find({
-      relations: {
-        stories: true
-      }
-    });
+  async allUsers() {
+    return User.find();
   }
 }

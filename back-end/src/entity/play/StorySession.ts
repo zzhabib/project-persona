@@ -14,13 +14,13 @@ export class StorySession extends BaseEntity {
   storyId: number
 
   @Column()
-  playerId: number
+  userId: number
 
   @ManyToOne(() => Story, { cascade: true })
   @JoinColumn({ name: 'storyId' })
   story: Story
 
   @ManyToOne(() => User, { cascade: true })
-  @JoinColumn({ name: 'playerId' })
-  player: User
+  @JoinColumn({ name: 'userId' })
+  user: User
 }
