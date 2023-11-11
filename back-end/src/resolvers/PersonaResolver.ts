@@ -21,8 +21,8 @@ class PersonaInput {
   @Field()
   description: string
 
-  @Field(() => [Int], { nullable: true })
-  storyIds?: number
+  @Field(() => Int)
+  storyId: number
 
   @Field(() => [ConnectionInput], { nullable: true })
   initiatedConnectionInputs?: ConnectionInput[]
@@ -36,12 +36,6 @@ class PersonaUpdateInput {
   @Field({ nullable: true })
   description?: string
 
-  @Field(() => [Int], { nullable: true })
-  addStoryIds?: number
-
-  @Field(() => [Int], { nullable: true })
-  removeStoryIds?: number
-
   @Field(() => [ConnectionInput], { nullable: true })
   addInitiatedConnectionInputs?: ConnectionInput[]
 
@@ -54,13 +48,12 @@ class PersonaUpdateInput {
 
 @Resolver(Persona)
 export class PersonaResolver {
-  @FieldResolver(() => [Story])
-  stories(@Root() persona): Promise<Story[]> {
+  @FieldResolver(() => Story)
+  story(@Root() persona: Persona): Promise<Story> {
     return AppDataSource.getRepository(Story)
       .createQueryBuilder('story')
-      .leftJoinAndSelect('story.personas', 'persona')
-      .where('persona.id = :personaId', { personaId: persona.id })
-      .getMany();
+      .where('story.id = :storyId', { storyId: persona.storyId })
+      .getOne()
   }
 
   @FieldResolver(() => [Connection])
@@ -83,10 +76,7 @@ export class PersonaResolver {
 
   @Mutation(() => Persona)
   async createPersona(@Arg('input', () => PersonaInput) input: PersonaInput) {
-    const persona = Persona.create({
-      name: input.name,
-      description: input.description
-    });
+    const persona = Persona.create(input);
 
     // Add connections
     if (input.initiatedConnectionInputs) {
@@ -125,7 +115,6 @@ export class PersonaResolver {
     if (input.description) {
       persona.description = input.description
     }
-
 
     // Add initiated connections
     if (input.addInitiatedConnectionInputs) {

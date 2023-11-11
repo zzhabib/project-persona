@@ -31,8 +31,7 @@ export class Story extends BaseEntity {
   @Column()
   description: string;
 
-  @ManyToMany(() => Persona, (persona) => persona.stories)
-  @JoinTable()
+  @OneToMany(() => Persona, (persona) => persona.story)
   personas: Persona[];
 
   @OneToMany(() => Action, action => action.story)

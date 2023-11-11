@@ -20,6 +20,9 @@ export class Persona extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Column()
+  storyId: number
+
   @Field()
   @Column()
   name: string;
@@ -28,8 +31,9 @@ export class Persona extends BaseEntity {
   @Column()
   description: string;
 
-  @ManyToMany(() => Story, (story) => story.personas)
-  stories: Story[];
+  @ManyToOne(() => Story, (story) => story.personas, { cascade: true })
+  @JoinColumn({ name: 'storyId' })
+  story: Story;
 
   @OneToMany(() => Connection, connection => connection.sourcePersona, { cascade: true })
   initiatedConnections: Connection[];

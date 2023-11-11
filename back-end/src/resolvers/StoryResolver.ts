@@ -16,9 +16,6 @@ class StoryInput {
   description: string;
 
   @Field(() => [Int], { nullable: true })
-  personaIds?: number[];
-
-  @Field(() => [Int], { nullable: true })
   editorIds?: number[];
 }
 
@@ -29,12 +26,6 @@ class StoryUpdateInput {
 
   @Field(() => String, { nullable: true })
   description?: string;
-
-  @Field(() => [Int], { nullable: true })
-  addPersonaIds?: number[];
-
-  @Field(() => [Int], { nullable: true })
-  removePersonaIds?: number[];
 
   @Field(() => [Int], { nullable: true })
   addEditorIds?: number[];
@@ -58,8 +49,7 @@ export class StoryResolver {
   personas(@Root() story: Story): Promise<Persona[]> {
     return AppDataSource.getRepository(Persona)
       .createQueryBuilder('persona')
-      .leftJoinAndSelect('persona.stories', 'story')
-      .where('story.id = :storyId', { storyId: story.id })
+      .where('persona.storyId = :storyId', { storyId: story.id })
       .getMany();
   }
 
@@ -88,9 +78,6 @@ export class StoryResolver {
       description: input.description
     });
 
-    if (input.personaIds) {
-      story.personas = await Persona.findBy({ id: In(input.personaIds) })
-    }
     if (input.editorIds) {
       story.editors = await User.findBy({ id: In(input.editorIds) })
     }
@@ -116,15 +103,6 @@ export class StoryResolver {
 
     if (input.title) story.title = input.title;
     if (input.description) story.description = input.description;
-
-    // Add/remove personas
-    if (input.addPersonaIds) {
-      const addPersonas = await Persona.findBy({ id: In(input.addPersonaIds) });
-      story.personas.push(...addPersonas);
-    }
-    if (input.removePersonaIds) {
-      story.personas = story.personas.filter(p => !input.removePersonaIds.includes(p.id));
-    }
 
     // Add/remove editors
     if (input.addEditorIds) {
