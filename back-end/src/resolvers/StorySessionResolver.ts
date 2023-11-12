@@ -1,6 +1,8 @@
-import { Arg, Field, InputType, Int, Mutation, Query, Resolver } from "type-graphql";
+import { Arg, Field, FieldResolver, InputType, Int, Mutation, Query, Resolver, Root } from "type-graphql";
 import { StorySession } from "../entity/play/StorySession";
 import { AppDataSource } from "../data-source";
+import { Story } from "../entity/edit/Story";
+import { User } from "../entity/edit/User";
 
 @InputType()
 class StorySessionInput {
@@ -13,6 +15,16 @@ class StorySessionInput {
 
 @Resolver(StorySession)
 export class StorySessionResolver {
+  @FieldResolver(() => Story)
+  async story(@Root() storySession: StorySession): Promise<Story> {
+    return Story.findOne({ where: { id: storySession.storyId } })
+  }
+
+  @FieldResolver(() => User)
+  async user(@Root() storySession: StorySession): Promise<User> {
+    return User.findOne({ where: { id: storySession.userId }})
+  }
+
   @Mutation(() => StorySession)
   async createStorySession(@Arg('input', () => StorySessionInput) input: StorySessionInput): Promise<StorySession> {
     const storySessionRepository = AppDataSource.getRepository(StorySession)

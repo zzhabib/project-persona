@@ -1,4 +1,4 @@
-import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Story } from "../edit/Story";
 import { User } from "../edit/User";
 import { Field, Int, ObjectType } from "type-graphql";
@@ -29,6 +29,6 @@ export class StorySession extends BaseEntity {
   @JoinColumn({ name: 'userId' })
   user: User
 
-  
+  @OneToMany(() => Message, message => message.storySession)
   messages: Message[]
 }
