@@ -128,12 +128,14 @@ export class MessageResolver {
         const subquery = qb.subQuery()
           .select("message.senderId")
           .from(Message, "message")
-          .where("message.recipientId = :personaId", { personaId })
+          .where("message.storySessionId = :storySessionId", { storySessionId })
+          .andWhere("message.recipientId = :personaId", { personaId })
           .getQuery();
         const subquery2 = qb.subQuery()
           .select("message.recipientId")
           .from(Message, "message")
-          .where("message.senderId = :personaId", { personaId })
+          .where("message.storySessionId = :storySessionId", { storySessionId })
+          .andWhere("message.senderId = :personaId", { personaId })
           .getQuery();
         return "persona.id IN (" + subquery + " UNION " + subquery2 + ")";
       })
