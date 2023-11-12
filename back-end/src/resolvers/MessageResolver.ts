@@ -113,4 +113,33 @@ export class MessageResolver {
 
     return messages
   }
+
+  /**Given a persona, get the other personas that they have conversations with */
+  @Query(() => [Persona])
+  async getPersonaConversations(
+    @Arg('storySessionId', () => Int) storySessionId: number,
+    @Arg('personaId', () => Int) personaId: number
+  ): Promise<Persona[]> {
+
+    const distinctPersonas = await AppDataSource
+      .getRepository(Persona)
+      .createQueryBuilder("persona")
+      .where(qb => {
+        const subquery = qb.subQuery()
+          .select("message.senderId")
+          .from(Message, "message")
+          .where("message.recipientId = :personaId", { personaId })
+          .getQuery();
+        const subquery2 = qb.subQuery()
+          .select("message.recipientId")
+          .from(Message, "message")
+          .where("message.senderId = :personaId", { personaId })
+          .getQuery();
+        return "persona.id IN (" + subquery + " UNION " + subquery2 + ")";
+      })
+      .andWhere("persona.id != :personaId", { personaId })
+      .getMany();
+
+    return distinctPersonas
+  }
 }
