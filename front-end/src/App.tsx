@@ -9,7 +9,19 @@ import { ThemeProvider } from '@emotion/react'
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#252525',
+      main: '#57606f',
+      contrastText: '#f1f2f6',
+    },
+    secondary: {
+      main: '#2f3542',
+      contrastText: '#f1f2f6',
+    },
+    background: {
+      default: '#f0f0f0',
+      paper: '#ffffff',
+    },
+    text: {
+      primary: '#252525',
     },
   },
 });

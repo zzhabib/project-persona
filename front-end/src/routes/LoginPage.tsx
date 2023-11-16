@@ -1,6 +1,6 @@
 import { gql, useQuery } from "@apollo/client"
 import { GetUsersQuery, GetUsersQueryVariables, User } from "../gql/graphql";
-import { Box, Card, CardActionArea, CardContent, Typography } from "@mui/material";
+import { Box, Button, Card, CardActionArea, CardContent, Typography } from "@mui/material";
 import UserCard from "../components/UserCard";
 import CreateCard from "../components/CreateCard";
 
@@ -35,6 +35,14 @@ function LoginPage() {
       {data?.allUsers.map(u => {
         return <UserCard key={u.id} user={u}/>
       })}
+
+      <Button color="primary" variant="contained">
+        Primary Button
+      </Button>
+
+      <Button color="secondary" variant="contained">
+        Seconary Button
+      </Button>
 
       <CreateCard/>
     </Box>
