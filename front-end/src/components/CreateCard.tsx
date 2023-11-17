@@ -1,20 +1,82 @@
-import { Card, CardActionArea, CardContent, Typography } from "@mui/material"
+import React, { useState } from "react";
+import { Box, Card, CardActionArea, CardContent, IconButton, TextField, Typography } from "@mui/material"
+import ClearIcon from '@mui/icons-material/Clear';
+import CheckIcon from '@mui/icons-material/Check';
 
+interface CreateCardProps {
+  text?: string,
+  placeholder?: string,
+  onSubmit: (itemName: string) => void;
+}
 
-const CreateCard = () => {
+const CreateCard: React.FC<CreateCardProps> = ({
+  text = 'Create',
+  placeholder = 'Enter item name',
+  onSubmit = () => {}
+}) => {
+  const [isEditing, setIsEditing] = useState(false);
+  const [itemName, setItemName] = useState('');
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setItemName(event.target.value);
+  };
+
+  const handleCancel = () => {
+    setIsEditing(false);
+    setItemName('');
+  };
+
+  const handleAccept = () => {
+    onSubmit(itemName)
+    setIsEditing(false);
+    setItemName('');
+  };
+
+  const normalContent = <CardContent>
+    <Typography>
+      {text}
+    </Typography>
+  </CardContent>
+
+  const editContent = <CardContent>
+    <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+      <TextField
+        autoFocus
+        fullWidth
+        variant="standard"
+        value={itemName}
+        onChange={handleChange}
+        placeholder={placeholder}
+        InputProps={{
+          sx: { color: 'primary.contrastText' }
+        }}
+      />
+      <IconButton
+        onClick={handleCancel}
+        sx={{
+          color: theme => theme.palette.primary.contrastText
+        }}>
+        <ClearIcon />
+      </IconButton>
+      <IconButton
+        onClick={handleAccept}
+        sx  ={{
+          color: theme => theme.palette.primary.contrastText
+        }}>
+        <CheckIcon />
+      </IconButton>
+    </Box>
+  </CardContent>
+
   return <Card
+    color='primary'
     sx={{
-      // width: 250,
+      bgcolor: 'primary.main',
+      color: 'primary.contrastText',
       margin: '2px',
-      color: '#ffffff',
-      backgroundColor: '#3287a8'
     }}>
-    <CardActionArea onClick={() => { }}>
-      <CardContent>
-        <Typography>
-          Create Account
-        </Typography>
-      </CardContent>
+    <CardActionArea onClick={() => { if (!isEditing) setIsEditing(true) }}>
+      {isEditing ? (editContent) : (normalContent)}
     </CardActionArea>
   </Card>
 }

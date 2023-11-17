@@ -1,5 +1,5 @@
-import { gql, useQuery } from "@apollo/client"
-import { GetUsersQuery, GetUsersQueryVariables, User } from "../gql/graphql";
+import { gql, useMutation, useQuery } from "@apollo/client"
+import { CreateUserMutation, CreateUserMutationVariables, GetUsersQuery, GetUsersQueryVariables, User } from "../gql/graphql";
 import { Box, Button, Card, CardActionArea, CardContent, Typography } from "@mui/material";
 import UserCard from "../components/UserCard";
 import CreateCard from "../components/CreateCard";
@@ -13,8 +13,28 @@ const GET_USERS = gql`
   }
 `
 
+const CREATE_USER = gql`
+  mutation CreateUser($email: String!) {
+    createUser(email: $email) {
+      id
+      email
+    }
+  }
+
+`
+
 function LoginPage() {
   const { loading, error, data } = useQuery<GetUsersQuery, GetUsersQueryVariables>(GET_USERS);
+
+  const [createUser] = useMutation(CREATE_USER, {
+    refetchQueries: [
+      GET_USERS,
+    ],
+  });
+
+  const handleUserCreate = async (email: string) => {
+    await createUser({variables: { email }})
+  }
 
   return <>
     <Box
@@ -36,15 +56,11 @@ function LoginPage() {
         return <UserCard key={u.id} user={u}/>
       })}
 
-      <Button color="primary" variant="contained">
-        Primary Button
-      </Button>
-
-      <Button color="secondary" variant="contained">
-        Seconary Button
-      </Button>
-
-      <CreateCard/>
+      <CreateCard
+        placeholder="Email"
+        text="Create User"
+        onSubmit={handleUserCreate}
+      />
     </Box>
   </>
 }
