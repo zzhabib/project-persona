@@ -14,7 +14,7 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  */
 const documents = {
     "\n  query GetUsers {\n    allUsers {\n      id\n      email\n    }\n  }\n": types.GetUsersDocument,
-    "\n  mutation CreateUser($email: String!) {\n    createUser(email: $email) {\n      id\n      email\n    }\n  }\n\n": types.CreateUserDocument,
+    "\n  mutation CreateUser($email: String!) {\n    createUser(email: $email) {\n      id\n      email\n    }\n  }\n": types.CreateUserDocument,
 };
 
 /**
@@ -38,7 +38,7 @@ export function graphql(source: "\n  query GetUsers {\n    allUsers {\n      id\
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  mutation CreateUser($email: String!) {\n    createUser(email: $email) {\n      id\n      email\n    }\n  }\n\n"): (typeof documents)["\n  mutation CreateUser($email: String!) {\n    createUser(email: $email) {\n      id\n      email\n    }\n  }\n\n"];
+export function graphql(source: "\n  mutation CreateUser($email: String!) {\n    createUser(email: $email) {\n      id\n      email\n    }\n  }\n"): (typeof documents)["\n  mutation CreateUser($email: String!) {\n    createUser(email: $email) {\n      id\n      email\n    }\n  }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

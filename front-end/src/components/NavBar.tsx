@@ -1,11 +1,22 @@
-import React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import { IconButton } from '@mui/material';
+import { Button, IconButton } from '@mui/material';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../store';
+import { logout } from '../reducers/authReducer';
+import { useNavigate } from 'react-router';
 
 const NavBar = () => {
+  const navigate = useNavigate()
+  const dispatch = useDispatch<AppDispatch>()
+  const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn)
+
+  const handleLogout = () => {
+    dispatch(logout())
+    navigate('/')
+  }
+
   return (
     <AppBar position="static">
       <Toolbar>
@@ -15,7 +26,13 @@ const NavBar = () => {
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
           Project Persona
         </Typography>
-        {/* <Button color="inherit">Login</Button> */}
+
+        {isLoggedIn ? (<Button
+          color="inherit"
+          onClick={handleLogout}
+        >
+          Logout
+        </Button>) : null}
       </Toolbar>
     </AppBar>
   );

@@ -3,6 +3,10 @@ import { CreateUserMutation, CreateUserMutationVariables, GetUsersQuery, GetUser
 import { Box, Button, Card, CardActionArea, CardContent, Typography } from "@mui/material";
 import UserCard from "../components/UserCard";
 import CreateCard from "../components/CreateCard";
+import { useDispatch, useSelector } from "react-redux";
+import { login } from "../reducers/authReducer";
+import { AppDispatch, RootState } from "../store";
+import { useNavigate } from "react-router";
 
 const GET_USERS = gql`
   query GetUsers {
@@ -20,11 +24,13 @@ const CREATE_USER = gql`
       email
     }
   }
-
 `
 
 function LoginPage() {
   const { loading, error, data } = useQuery<GetUsersQuery, GetUsersQueryVariables>(GET_USERS);
+  const navigate = useNavigate()
+  const dispatch = useDispatch<AppDispatch>()
+  const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn)
 
   const [createUser] = useMutation(CREATE_USER, {
     refetchQueries: [
@@ -32,8 +38,16 @@ function LoginPage() {
     ],
   });
 
+  const handleUserLogin = (user: {id: number, email: string}) => {
+    dispatch(login(user))
+  }
+
   const handleUserCreate = async (email: string) => {
     await createUser({variables: { email }})
+  }
+
+  if (isLoggedIn) {
+    navigate('/stories')
   }
 
   return <>
@@ -53,7 +67,11 @@ function LoginPage() {
       </Typography>
 
       {data?.allUsers.map(u => {
-        return <UserCard key={u.id} user={u}/>
+        return <UserCard
+          key={u.id}
+          user={u}
+          onClick={() => {handleUserLogin(u)}}
+        />
       })}
 
       <CreateCard

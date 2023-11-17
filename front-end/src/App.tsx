@@ -5,6 +5,9 @@ import LoginPage from './routes/LoginPage'
 import NavBar from './components/NavBar'
 import { createTheme } from '@mui/material'
 import { ThemeProvider } from '@emotion/react'
+import StoriesPage from './routes/StoriesPage'
+import { Provider } from 'react-redux'
+import { store } from './store'
 
 const theme = createTheme({
   palette: {
@@ -27,16 +30,18 @@ const theme = createTheme({
 });
 
 function App() {
-
   return (
-    <ThemeProvider theme={theme}>
-      <NavBar/>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<LoginPage />} />
-        </Routes>
-      </BrowserRouter>
-    </ThemeProvider>
+    <Provider store={store}>
+      <ThemeProvider theme={theme}>
+        <BrowserRouter>
+          <NavBar />
+          <Routes>
+            <Route path="/" element={<LoginPage />} />
+            <Route path="/stories" element={<StoriesPage />} />
+          </Routes>
+        </BrowserRouter>
+      </ThemeProvider>
+    </Provider>
   )
 }
 
