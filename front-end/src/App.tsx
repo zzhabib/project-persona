@@ -8,6 +8,7 @@ import { ThemeProvider } from '@emotion/react'
 import StoriesPage from './routes/StoriesPage'
 import { Provider } from 'react-redux'
 import { store } from './store'
+import RequireAuth from './components/RequireAuth'
 
 const theme = createTheme({
   palette: {
@@ -37,7 +38,10 @@ function App() {
           <NavBar />
           <Routes>
             <Route path="/login" element={<LoginPage />} />
-            <Route path="/" element={<StoriesPage />} />
+
+            <Route path="/" element={<RequireAuth>
+              <StoriesPage />
+            </RequireAuth>} />
           </Routes>
         </BrowserRouter>
       </ThemeProvider>

@@ -53,8 +53,6 @@ function LoginPage() {
     await createUser({variables: { email }})
   }
 
-  
-
   return <>
     <Box
       sx={{
