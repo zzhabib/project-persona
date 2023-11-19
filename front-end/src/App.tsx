@@ -36,8 +36,8 @@ function App() {
         <BrowserRouter>
           <NavBar />
           <Routes>
-            <Route path="/" element={<LoginPage />} />
-            <Route path="/stories" element={<StoriesPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/" element={<StoriesPage />} />
           </Routes>
         </BrowserRouter>
       </ThemeProvider>

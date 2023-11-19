@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { login } from "../reducers/authReducer";
 import { AppDispatch, RootState } from "../store";
 import { useNavigate } from "react-router";
+import { useEffect } from "react";
 
 const GET_USERS = gql`
   query GetUsers {
@@ -38,6 +39,12 @@ function LoginPage() {
     ],
   });
 
+  useEffect(() => {
+    if (isLoggedIn) {
+      navigate('/')
+    }
+  }, [isLoggedIn, navigate])
+
   const handleUserLogin = (user: {id: number, email: string}) => {
     dispatch(login(user))
   }
@@ -46,9 +53,7 @@ function LoginPage() {
     await createUser({variables: { email }})
   }
 
-  if (isLoggedIn) {
-    navigate('/stories')
-  }
+  
 
   return <>
     <Box

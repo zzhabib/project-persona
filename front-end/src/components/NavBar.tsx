@@ -5,17 +5,27 @@ import { Button, IconButton } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../store';
 import { logout } from '../reducers/authReducer';
-import { useNavigate } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
+import { useEffect } from 'react';
 
 const NavBar = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch<AppDispatch>()
+  const location = useLocation();
   const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn)
+
+  // useEffect(() => {
+  //   if (location.pathname !== "/" && !isLoggedIn) {
+  //     navigate('/')
+  //   }
+  // }, [isLoggedIn, location.pathname])
 
   const handleLogout = () => {
     dispatch(logout())
     navigate('/')
   }
+
+  
 
   return (
     <AppBar position="static">
