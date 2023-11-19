@@ -1,17 +1,19 @@
 import React, { useState } from "react";
-import { Box, Card, CardActionArea, CardContent, IconButton, TextField, Typography } from "@mui/material"
+import { Box, Card, CardActionArea, CardContent, IconButton, SxProps, TextField, Theme, Typography } from "@mui/material"
 import ClearIcon from '@mui/icons-material/Clear';
 import CheckIcon from '@mui/icons-material/Check';
 
 interface CreateCardProps {
   text?: string,
   placeholder?: string,
+  sx?: SxProps<Theme>,
   onSubmit: (itemName: string) => void;
 }
 
 const CreateCard: React.FC<CreateCardProps> = ({
   text = 'Create',
   placeholder = 'Enter item name',
+  sx,
   onSubmit = () => {}
 }) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -60,7 +62,7 @@ const CreateCard: React.FC<CreateCardProps> = ({
       </IconButton>
       <IconButton
         onClick={handleAccept}
-        sx  ={{
+        sx ={{
           color: theme => theme.palette.primary.contrastText
         }}>
         <CheckIcon />
@@ -74,6 +76,7 @@ const CreateCard: React.FC<CreateCardProps> = ({
       bgcolor: 'primary.main',
       color: 'primary.contrastText',
       margin: '2px',
+      ...sx
     }}>
     <CardActionArea onClick={() => { if (!isEditing) setIsEditing(true) }}>
       {isEditing ? (editContent) : (normalContent)}
