@@ -12,7 +12,18 @@ const TypographyInput = styled('input')<TypographyInputProps>(({ theme, variant 
   outline: 'none',
   backgroundColor: 'transparent',
   padding: 0,
-  margin: 0,
+  margin: '0.5em',
+  marginLeft: 0,
+
+  ':hover': {
+    borderBottom: '1px solid',
+    borderColor: theme.palette.primary.main
+  },
+
+  ':focus': {
+    borderBottom: '2px solid',
+    borderBottomColor: theme.palette.primary.main,
+  }
 }));
 
 export default TypographyInput

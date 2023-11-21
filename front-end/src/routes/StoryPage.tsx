@@ -97,15 +97,23 @@ const StoryPage: React.FC = () => {
   const descriptionValue = updateInput.description != null ? updateInput.description : data?.getStory.description
 
   return <Container>
-    <Box display="flex">
+    <Box sx={{
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'center'
+    }}>
       <TypographyInput
         name="title"
         variant="h4"
+        placeholder="Story Title"
         value={titleValue}
         onChange={handleFieldChange}
       />
 
       <Button
+        sx={{
+          height: '3em'
+        }}
         variant="contained"
         disabled={!isDirty}
         onClick={handleSave}
