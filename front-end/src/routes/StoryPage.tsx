@@ -1,5 +1,5 @@
 import { gql, useMutation, useQuery } from "@apollo/client"
-import { Box, Button, Container, Divider, SxProps, Typography } from "@mui/material"
+import { Box, Button, Container, Divider, SxProps, TextField, Typography } from "@mui/material"
 import { useParams } from "react-router"
 import { GetStoryDetailsQuery, GetStoryDetailsQueryVariables, StoryUpdateInput, UpdateStoryMutation, UpdateStoryMutationVariables } from "../gql/graphql"
 import { Theme, useTheme } from "@emotion/react"
@@ -114,15 +114,15 @@ const StoryPage: React.FC = () => {
       </Button>
     </Box>
 
-    {/* <Typography
-      sx={sectionPadding}
-    >
-      {data?.getStory.description}
-    </Typography> */}
-
-    <TypographyInput
+    <TextField
+      label="Description"
       name="description"
-      variant="body1"
+      variant="outlined"
+      multiline
+      minRows={5}
+      maxRows={10}
+      fullWidth
+      sx={sectionPadding}
       value={descriptionValue}
       onChange={handleFieldChange}
     />
