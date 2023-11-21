@@ -7,7 +7,7 @@ interface CreateCardProps {
   text?: string,
   placeholder?: string,
   sx?: SxProps<Theme>,
-  onSubmit: (itemName: string) => void;
+  onSubmit?: (itemName: string) => void;
 }
 
 const CreateCard: React.FC<CreateCardProps> = ({

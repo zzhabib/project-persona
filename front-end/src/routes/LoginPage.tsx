@@ -1,7 +1,7 @@
 import { gql, useMutation, useQuery } from "@apollo/client"
 import { CreateUserMutation, CreateUserMutationVariables, GetUsersQuery, GetUsersQueryVariables, User } from "../gql/graphql";
 import { Box, Button, Card, CardActionArea, CardContent, Typography } from "@mui/material";
-import UserCard from "../components/UserCard";
+import IdentityCard from "../components/IdentityCard";
 import CreateCard from "../components/CreateCard";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../reducers/authReducer";
@@ -45,12 +45,12 @@ function LoginPage() {
     }
   }, [isLoggedIn, navigate])
 
-  const handleUserLogin = (user: {id: number, email: string}) => {
+  const handleUserLogin = (user: { id: number, email: string }) => {
     dispatch(login(user))
   }
 
   const handleUserCreate = async (email: string) => {
-    await createUser({variables: { email }})
+    await createUser({ variables: { email } })
   }
 
   return <>
@@ -70,10 +70,13 @@ function LoginPage() {
       </Typography>
 
       {data?.allUsers.map(u => {
-        return <UserCard
+        return <IdentityCard
           key={u.id}
-          user={u}
-          onClick={() => {handleUserLogin(u)}}
+          name={u.email}
+          sx={{
+            width: '20em'
+          }}
+          onClick={() => { handleUserLogin(u) }}
         />
       })}
 
