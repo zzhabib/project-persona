@@ -1,11 +1,11 @@
-import { Box, SxProps, Theme, Typography, styled } from "@mui/material";
+import { styled } from "@mui/material";
 import { Variant } from "@mui/material/styles/createTypography";
 
-interface StyledInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+interface TypographyInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   variant: Variant;
 }
 
-const StyledInput = styled('input')<StyledInputProps>(({ theme, variant }) => ({
+const TypographyInput = styled('input')<TypographyInputProps>(({ theme, variant }) => ({
   ...theme.typography[variant],
   width: '100%',
   border: 'none',
@@ -14,28 +14,5 @@ const StyledInput = styled('input')<StyledInputProps>(({ theme, variant }) => ({
   padding: 0,
   margin: 0,
 }));
-
-type TypographyInputProps = {
-  name: string
-  variant?: Variant
-  value?: string
-  onChange?: React.ChangeEventHandler<HTMLInputElement>
-}
-
-const TypographyInput: React.FC<TypographyInputProps> = ({
-  name,
-  variant = 'h4',
-  value = '',
-  onChange = () => { }
-}) => {
-
-  return <StyledInput
-    name={name}
-    variant={variant}
-    type="text"
-    value={value}
-    onChange={onChange}
-  />
-}
 
 export default TypographyInput

@@ -100,6 +100,7 @@ const StoryPage: React.FC = () => {
     <Box display="flex">
       <TypographyInput
         name="title"
+        variant="h4"
         value={titleValue}
         onChange={handleFieldChange}
       />
