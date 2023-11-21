@@ -9,6 +9,7 @@ import HomePage from './routes/HomePage'
 import { Provider } from 'react-redux'
 import { store } from './store'
 import RequireAuth from './components/RequireAuth'
+import StoryPage from './routes/StoryPage'
 
 const theme = createTheme({
   palette: {
@@ -39,9 +40,17 @@ function App() {
           <Routes>
             <Route path="/login" element={<LoginPage />} />
 
-            <Route path="/" element={<RequireAuth>
-              <HomePage />
-            </RequireAuth>} />
+            <Route path="/" element={
+              <RequireAuth>
+                <HomePage />
+              </RequireAuth>
+            } />
+
+            <Route path="/story/:storyId" element={
+              <RequireAuth>
+                <StoryPage />
+              </RequireAuth>
+            } />
           </Routes>
         </BrowserRouter>
       </ThemeProvider>

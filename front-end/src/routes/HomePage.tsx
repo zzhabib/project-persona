@@ -5,6 +5,7 @@ import { gql, useMutation, useQuery } from "@apollo/client"
 import { CreateStoryMutation, CreateStoryMutationVariables, GetUserStoriesQuery, GetUserStoriesQueryVariables, MutationCreateStoryArgs, StoryInput } from "../gql/graphql"
 import StoryCard from "../components/StoryCard"
 import CreateCard from "../components/CreateCard"
+import { useNavigate } from "react-router"
 
 const GET_USER_STORIES = gql`
   query GetUserStories($id: Int!) {
@@ -27,6 +28,7 @@ const CREATE_STORY = gql`
 `
 
 const HomePage: React.FC = () => {
+  const navigate = useNavigate()
   const user = useSelector((state: RootState) => state.auth.user)
   const [createStory] = useMutation<CreateStoryMutation, CreateStoryMutationVariables>(CREATE_STORY, {
     refetchQueries: [GET_USER_STORIES]
@@ -65,7 +67,15 @@ const HomePage: React.FC = () => {
         alignItems: 'center',
       }}
     >
-      {data?.getUser.stories.map(story => (<StoryCard key={story.id} story={story} />))}
+      {data?.getUser.stories.map(story => (
+        <StoryCard
+          key={story.id}
+          story={story}
+          onClick={() => {
+            navigate(`/story/${story.id}`)
+          }}
+        />
+      ))}
     </Box>
 
     <Box
