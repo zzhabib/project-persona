@@ -5,7 +5,7 @@ import LoginPage from './routes/LoginPage'
 import NavBar from './components/NavBar'
 import { createTheme } from '@mui/material'
 import { ThemeProvider } from '@emotion/react'
-import StoriesPage from './routes/StoriesPage'
+import HomePage from './routes/HomePage'
 import { Provider } from 'react-redux'
 import { store } from './store'
 import RequireAuth from './components/RequireAuth'
@@ -40,7 +40,7 @@ function App() {
             <Route path="/login" element={<LoginPage />} />
 
             <Route path="/" element={<RequireAuth>
-              <StoriesPage />
+              <HomePage />
             </RequireAuth>} />
           </Routes>
         </BrowserRouter>

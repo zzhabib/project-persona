@@ -26,7 +26,7 @@ const CREATE_STORY = gql`
   }
 `
 
-const StoriesPage: React.FC = () => {
+const HomePage: React.FC = () => {
   const user = useSelector((state: RootState) => state.auth.user)
   const [createStory] = useMutation<CreateStoryMutation, CreateStoryMutationVariables>(CREATE_STORY, {
     refetchQueries: [GET_USER_STORIES]
@@ -86,4 +86,4 @@ const StoriesPage: React.FC = () => {
   </>
 }
 
-export default StoriesPage
+export default HomePage
