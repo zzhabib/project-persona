@@ -1,10 +1,12 @@
-import { gql, useQuery } from "@apollo/client"
-import { Box, Container, Divider, SxProps, Typography } from "@mui/material"
+import { gql, useMutation, useQuery } from "@apollo/client"
+import { Box, Button, Container, Divider, SxProps, Typography } from "@mui/material"
 import { useParams } from "react-router"
-import { GetStoryDetailsQuery, GetStoryDetailsQueryVariables } from "../gql/graphql"
+import { GetStoryDetailsQuery, GetStoryDetailsQueryVariables, StoryUpdateInput, UpdateStoryMutation, UpdateStoryMutationVariables } from "../gql/graphql"
 import { Theme, useTheme } from "@emotion/react"
 import IdentityCard from "../components/IdentityCard"
 import CreateCard from "../components/CreateCard"
+import TypographyInput from "../components/TypographyInput"
+import { useState } from "react"
 
 type StoryPageParams = {
   storyId: string
@@ -32,6 +34,12 @@ const GET_STORY_DETAILS = gql`
   }
 `
 
+const UPDATE_STORY = gql`
+  mutation UpdateStory($input: StoryUpdateInput!, $updateStoryId: Int!) {
+    updateStory(input: $input, id: $updateStoryId)
+  }
+`
+
 const sectionPadding: SxProps<Theme> = {
   paddingTop: '0.5em',
   paddingBottom: '0.5em'
@@ -46,27 +54,77 @@ const StoryPage: React.FC = () => {
   const { storyId } = useParams<StoryPageParams>()
   const storyIdNumber = storyId ? parseInt(storyId, 10) : 0;
 
+  const [updateInput, setUpdateInput] = useState<StoryUpdateInput>({})
+
   const { loading, error, data } = useQuery<GetStoryDetailsQuery, GetStoryDetailsQueryVariables>(GET_STORY_DETAILS, {
-    variables: {id: storyIdNumber}
+    variables: { id: storyIdNumber }
   });
+
+  const [updateStory] = useMutation<UpdateStoryMutation, UpdateStoryMutationVariables>(UPDATE_STORY, {
+    refetchQueries: [GET_STORY_DETAILS]
+  })
+
+  const handleFieldChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
+    event.preventDefault()
+
+    setUpdateInput({
+      ...updateInput,
+      [event.target.name]: event.target.value
+    })
+  }
+
+  const handleSave: React.MouseEventHandler<HTMLButtonElement> = async (event) => {
+    event.preventDefault()
+
+    const result = await updateStory({
+      variables: {
+        updateStoryId: storyIdNumber,
+        input: updateInput
+      }
+    })
+
+    if (result.data?.updateStory) {
+      setUpdateInput({})
+    }
+  }
 
   if (loading) return <Typography>
     Loading...
   </Typography>
 
-  return <Container>
-    <Typography
-      variant="h4"
-      sx={sectionPadding}
-    >
-      {data?.getStory.title}
-    </Typography>
+  const isDirty = Object.keys(updateInput).length > 0
+  const titleValue = updateInput.title != null ? updateInput.title : data?.getStory.title
+  const descriptionValue = updateInput.description != null ? updateInput.description : data?.getStory.description
 
-    <Typography
+  return <Container>
+    <Box display="flex">
+      <TypographyInput
+        name="title"
+        value={titleValue}
+        onChange={handleFieldChange}
+      />
+
+      <Button
+        variant="contained"
+        disabled={!isDirty}
+        onClick={handleSave}
+      >
+        SAVE
+      </Button>
+    </Box>
+
+    {/* <Typography
       sx={sectionPadding}
     >
       {data?.getStory.description}
-    </Typography>
+    </Typography> */}
+
+    <TypographyInput
+      name="description"
+      variant="body1"
+      value={descriptionValue}
+      onChange={handleFieldChange}
+    />
 
     <Box
       sx={sectionPadding}
@@ -77,7 +135,7 @@ const StoryPage: React.FC = () => {
           key={p.id}
           name={p.name}
           sx={cardStyle}
-          onClick={() => {}} // todo: Navigate to the Persona's page 
+          onClick={() => { }} // todo: Navigate to the Persona's page 
         />
       ))}
       <CreateCard
