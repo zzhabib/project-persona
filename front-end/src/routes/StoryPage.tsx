@@ -200,18 +200,51 @@ const StoryPage: React.FC = () => {
 
 
   return <>
-        <Button
+   <Box
+      sx={{
+        width: '100%', // Full width
+        display: 'grid',
+        gridTemplateColumns: 'auto 1fr auto', // Three columns: left button, main content, right button
+        padding: '1em', // Adjust padding as needed
+        boxSizing: 'border-box',
+        alignItems: 'center', // Center items vertically
+      }}
+    >
+
+  <Button
         sx={{
           height: '3em',
+          width: '8em',
           marginTop: '1em',
-          marginLeft: '1em'
+          marginLeft: '1em',
         }}
         variant="contained"
         onClick={handleGoBack}
       >
         GO BACK
+  </Button>
+
+  <Button
+        sx={{
+          height: '3em',
+          width: '8em',
+          marginTop: '1em',
+          marginRight: '1em',
+          justifySelf: 'end'
+        }}
+        variant="contained"
+        disabled={!isDirty}
+        onClick={handleSave}
+      >
+        SAVE
       </Button>
+</Box>
+
+
   <Container>
+ 
+
+
     <Box sx={{
       display: 'flex',
       flexDirection: 'row',
@@ -225,16 +258,7 @@ const StoryPage: React.FC = () => {
         onChange={handleFieldChange}
       />
 
-      <Button
-        sx={{
-          height: '3em'
-        }}
-        variant="contained"
-        disabled={!isDirty}
-        onClick={handleSave}
-      >
-        SAVE
-      </Button>
+      
     </Box>
 
     <TextField

@@ -54,13 +54,13 @@ function App() {
               </RequireAuth>
             } />
 
-            <Route path="/persona/:Id" element={
+            <Route path="/persona/:personaId" element={
               <RequireAuth>
                 <PersonaPage />
               </RequireAuth>
             } />
 
-            <Route path="/scene/:Id" element={
+            <Route path="/scene/:sceneId" element={
               <RequireAuth>
                 <ScenePage />
               </RequireAuth>
