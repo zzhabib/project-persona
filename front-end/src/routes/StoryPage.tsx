@@ -6,7 +6,7 @@ import { Theme, useTheme } from "@emotion/react"
 import IdentityCard from "../components/IdentityCard"
 import CreateCard from "../components/CreateCard"
 import TypographyInput from "../components/TypographyInput"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useNavigate } from 'react-router-dom';
 
 type StoryPageParams = {
@@ -83,6 +83,12 @@ const StoryPage: React.FC = () => {
   };
 
 
+
+
+
+
+  
+
   const theme = useTheme()
   const { storyId } = useParams<StoryPageParams>()
   const storyIdNumber = storyId ? parseInt(storyId, 10) : 0;
@@ -92,13 +98,26 @@ const StoryPage: React.FC = () => {
 
 
 
-  const { loading, error, data } = useQuery<GetStoryDetailsQuery, GetStoryDetailsQueryVariables>(
+  const { loading, error, data, refetch } = useQuery<GetStoryDetailsQuery, GetStoryDetailsQueryVariables>(
     GET_STORY_DETAILS, {
       variables: { id: storyIdNumber }
     }
   );
 
 
+  useEffect(() => {
+    const fetchStoryDetails = async () => {
+      // Refetch the data when the component mounts
+      await refetch();
+    };
+
+    fetchStoryDetails();
+  }, [refetch, storyIdNumber]);
+
+
+
+
+  
 
 
 

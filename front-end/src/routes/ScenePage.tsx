@@ -153,8 +153,8 @@ const descValue = data?.getScene.description
 
     <Container>
       <TextField
-        label="Name"
-        name="Name"
+        label="Title"
+        name="Title"
         variant="outlined"
         multiline
         minRows={1}

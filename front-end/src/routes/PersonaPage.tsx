@@ -37,6 +37,17 @@ query GetPersona($getPersonaId: Int!) {
   }
 `
 
+const UPDATE_PERSONA = gql`
+mutation UpdatePersona($input: PersonaUpdateInput!, $updatePersonaId: Int!) {
+  updatePersona(input: $input, id: $updatePersonaId)
+  
+}
+`
+
+
+
+
+
 
 const sectionPadding: SxProps<Theme> = {
   paddingTop: '0.5em',
@@ -69,8 +80,10 @@ const PersonaPage: React.FC = () => {
     const { personaId } = useParams<PersonaPageParams>()
     const personaIdNumber = personaId ? parseInt(personaId, 10) : 0;
 
-    console.log(personaId)
-    //const [updateInput, setUpdateInput] = useState<PersonaUpdateInput>({})
+   
+    const [updateInput, setUpdateInput] = useState<PersonaUpdateInput>({
+
+    })
 
 
     const { loading, error, data } = useQuery<GetPersonaQuery>(
@@ -80,21 +93,51 @@ const PersonaPage: React.FC = () => {
         }
       })
 
-
+      const [updatePersona] = useMutation(UPDATE_PERSONA, {
+        refetchQueries: [GET_PERSONA_DATA]
+      })
 
     
+      const handleFieldChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
+        event.preventDefault()
+    
+        const { name, value } = event.target;
+
+        setUpdateInput({
+          ...updateInput,
+          [name]: value
+        })
+      }
+
+      const handleSave: React.MouseEventHandler<HTMLButtonElement> = async (event) => {
+        event.preventDefault()
+    
+        const result = await updatePersona({
+          variables: {
+            updatePersonaId: personaIdNumber,
+            input: updateInput
+          }
+        })
+    
+        if (result.data?.updatePersona) {
+          setUpdateInput({})
+        }
+      }
+
+
+
+
+
+
 
     if (loading) return <Typography>
     Loading...
   </Typography>
 
+  const isDirty = Object.keys(updateInput).length > 0
+  const nameValue = updateInput.name != null ? updateInput.name : data?.getPersona.name
+  const descValue = updateInput.description != null ? updateInput.description : data?.getPersona.description
 
-  const nameValue = data?.getPersona.name
-  const descValue = data?.getPersona.description
-
-
-
-  console.log(data)
 
 
   return <>
@@ -132,8 +175,8 @@ const PersonaPage: React.FC = () => {
           justifySelf: 'end'
         }}
         variant="contained"
-        //disabled={!isDirty}
-        //onClick={handleSave}
+        disabled={!isDirty}
+        onClick={handleSave}
       >
         SAVE
       </Button>
@@ -158,20 +201,20 @@ const PersonaPage: React.FC = () => {
     <Container>
       <TextField
         label="Name"
-        name="Name"
+        name="name"
         variant="outlined"
         multiline
         minRows={1}
         maxRows={1}
         sx={sectionPadding}
         value={nameValue}
-        //onChange={} // handleFieldChange for name
+        onChange={handleFieldChange} 
       />
 
       <Box>
           <TextField
               label="Description"
-              name="Description"
+              name="description"
               variant="outlined"
               multiline
               minRows={5}
@@ -179,7 +222,7 @@ const PersonaPage: React.FC = () => {
               fullWidth
               sx={sectionPadding}
               value={descValue}
-              //onChange={} // handleFieldChange for description
+              onChange={handleFieldChange} 
             />
       </Box>
     </Container>
