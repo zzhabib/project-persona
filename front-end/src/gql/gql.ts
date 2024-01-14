@@ -17,6 +17,7 @@ const documents = {
     "\n  mutation CreateStory($input: StoryInput!) {\n    createStory(input: $input) {\n      id\n    }\n  }\n": types.CreateStoryDocument,
     " \n  query GetUsers {\n    allUsers {\n      id\n      email\n    }\n  }\n": types.GetUsersDocument,
     "\n  mutation CreateUser($email: String!) {\n    createUser(email: $email) {\n      id\n      email\n    }\n  }\n": types.CreateUserDocument,
+    "\nquery GetPersona($getPersonaId: Int!) {\n    getPersona(id: $getPersonaId) {\n      name\n      description\n      initiatedConnections {\n        targetPersona {\n          name\n          id\n        }\n      }\n      receivedConnections {\n        sourcePersona {\n          name\n        }\n      }\n    }\n  }\n": types.GetPersonaDocument,
     "\n  query GetStoryDetails($id: Int!) {\n    getStory(id: $id) {\n      id\n      title\n      description\n\n      personas {\n        id\n        name\n        description\n      }\n\n      scenes {\n        id\n        title\n        description\n      }\n    }\n  }\n": types.GetStoryDetailsDocument,
     "\n  mutation UpdateStory($input: StoryUpdateInput!, $updateStoryId: Int!) {\n    updateStory(input: $input, id: $updateStoryId)\n  }\n": types.UpdateStoryDocument,
     "\n  mutation CreatePersona($input: PersonaInput!) {\n    createPersona(input: $input) {\n      name\n    }\n  }\n": types.CreatePersonaDocument,
@@ -53,6 +54,10 @@ export function graphql(source: " \n  query GetUsers {\n    allUsers {\n      id
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  mutation CreateUser($email: String!) {\n    createUser(email: $email) {\n      id\n      email\n    }\n  }\n"): (typeof documents)["\n  mutation CreateUser($email: String!) {\n    createUser(email: $email) {\n      id\n      email\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\nquery GetPersona($getPersonaId: Int!) {\n    getPersona(id: $getPersonaId) {\n      name\n      description\n      initiatedConnections {\n        targetPersona {\n          name\n          id\n        }\n      }\n      receivedConnections {\n        sourcePersona {\n          name\n        }\n      }\n    }\n  }\n"): (typeof documents)["\nquery GetPersona($getPersonaId: Int!) {\n    getPersona(id: $getPersonaId) {\n      name\n      description\n      initiatedConnections {\n        targetPersona {\n          name\n          id\n        }\n      }\n      receivedConnections {\n        sourcePersona {\n          name\n        }\n      }\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

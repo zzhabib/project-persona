@@ -7,6 +7,7 @@ import IdentityCard from "../components/IdentityCard"
 import CreateCard from "../components/CreateCard"
 import TypographyInput from "../components/TypographyInput"
 import { useState } from "react"
+import { useNavigate } from 'react-router-dom';
 
 type StoryPageParams = {
   storyId: string
@@ -73,6 +74,13 @@ const cardStyle: SxProps<Theme> = {
 }
 
 const StoryPage: React.FC = () => {
+  const navigate = useNavigate();
+
+  const handleGoBack = () => {
+    navigate(-1); 
+  };
+
+
   const theme = useTheme()
   const { storyId } = useParams<StoryPageParams>()
   const storyIdNumber = storyId ? parseInt(storyId, 10) : 0;
@@ -171,7 +179,19 @@ const StoryPage: React.FC = () => {
 
 
 
-  return <Container>
+  return <>
+        <Button
+        sx={{
+          height: '3em',
+          marginTop: '1em',
+          marginLeft: '1em'
+        }}
+        variant="contained"
+        onClick={handleGoBack}
+      >
+        GO BACK
+      </Button>
+  <Container>
     <Box sx={{
       display: 'flex',
       flexDirection: 'row',
@@ -219,7 +239,9 @@ const StoryPage: React.FC = () => {
           key={p.id}
           name={p.name}
           sx={cardStyle}
-          onClick={() => { }} // todo: Navigate to the Persona's page 
+          onClick={() => {
+            navigate(`/persona/${p.id}`)
+           }} // todo: Navigate to the Persona's page 
         />
       ))}
       <CreateCard
@@ -240,7 +262,9 @@ const StoryPage: React.FC = () => {
           key={s.id}
           name={s.title}
           sx={cardStyle}
-          onClick={() => { }} //todo: Navigate to the Scene's page
+          onClick={() => { 
+            navigate(`/scene/${s.id}`)
+          }} //todo: Navigate to the Scene's page
         />
 })}
       <CreateCard
@@ -251,6 +275,7 @@ const StoryPage: React.FC = () => {
       />
     </Box>
   </Container>
+  </>
 }
 
 export default StoryPage

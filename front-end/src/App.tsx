@@ -2,6 +2,8 @@ import { Route, Routes } from 'react-router'
 import './App.css'
 import { BrowserRouter } from 'react-router-dom'
 import LoginPage from './routes/LoginPage'
+import PersonaPage from './routes/PersonaPage'
+import ScenePage from './routes/ScenePage'
 import NavBar from './components/NavBar'
 import { createTheme } from '@mui/material'
 import { ThemeProvider } from '@emotion/react'
@@ -51,6 +53,19 @@ function App() {
                 <StoryPage />
               </RequireAuth>
             } />
+
+            <Route path="/persona/:Id" element={
+              <RequireAuth>
+                <PersonaPage />
+              </RequireAuth>
+            } />
+
+            <Route path="/scene/:Id" element={
+              <RequireAuth>
+                <ScenePage />
+              </RequireAuth>
+            } />
+
           </Routes>
         </BrowserRouter>
       </ThemeProvider>
