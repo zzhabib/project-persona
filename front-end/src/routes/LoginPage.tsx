@@ -9,7 +9,9 @@ import { AppDispatch, RootState } from "../store";
 import { useNavigate } from "react-router";
 import { useEffect } from "react";
 
-const GET_USERS = gql`
+
+//returns all users id and email
+const GET_USERS = gql` 
   query GetUsers {
     allUsers {
       id
@@ -18,6 +20,8 @@ const GET_USERS = gql`
   }
 `
 
+
+//creates new user with given id and email
 const CREATE_USER = gql`
   mutation CreateUser($email: String!) {
     createUser(email: $email) {
@@ -26,10 +30,10 @@ const CREATE_USER = gql`
     }
   }
 `
-
+// loads the login page
 function LoginPage() {
-  const { loading, error, data } = useQuery<GetUsersQuery, GetUsersQueryVariables>(GET_USERS);
-  const navigate = useNavigate()
+  const { loading, error, data } = useQuery<GetUsersQuery, GetUsersQueryVariables>(GET_USERS); // data variable (or error/loading) to get all users
+  const navigate = useNavigate()      //
   const dispatch = useDispatch<AppDispatch>()
   const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn)
 
@@ -87,6 +91,6 @@ function LoginPage() {
       />
     </Box>
   </>
-}
+}//basically a list of existing users and a button to create new
 
 export default LoginPage

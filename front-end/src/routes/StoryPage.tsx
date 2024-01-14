@@ -40,6 +40,29 @@ const UPDATE_STORY = gql`
   }
 `
 
+
+const CREATE_PERSONA = gql`
+  mutation CreatePersona($input: PersonaInput!) {
+    createPersona(input: $input) {
+      name
+    }
+  }
+`
+
+const CREATE_SCENE = gql`
+  mutation CreateScene($input: SceneInput!) {
+    createScene(input: $input) {
+      title
+    }
+  }
+`
+
+
+
+
+
+
+
 const sectionPadding: SxProps<Theme> = {
   paddingTop: '0.5em',
   paddingBottom: '0.5em'
@@ -96,6 +119,58 @@ const StoryPage: React.FC = () => {
   const titleValue = updateInput.title != null ? updateInput.title : data?.getStory.title
   const descriptionValue = updateInput.description != null ? updateInput.description : data?.getStory.description
 
+
+
+  const [createPersona] = useMutation(CREATE_PERSONA, {
+    refetchQueries: [
+      { query: GET_STORY_DETAILS, variables: { id: storyIdNumber } },
+    ],
+  });
+
+
+  const [createScene] = useMutation(CREATE_SCENE, {
+    refetchQueries: [
+      { query: GET_STORY_DETAILS, variables: { id: storyIdNumber } },
+    ],
+  });
+
+
+
+  const handlePersonaCreate = async (name: String) => {
+
+  const description = "";
+  const storyId = storyIdNumber;
+
+    const input = {
+      name,
+      storyId,
+      description
+      // Add other fields as needed
+    };
+    
+    await createPersona({ variables: { input } });
+  }
+
+
+  const handleSceneCreate = async (title: String) => {
+    
+    const description = "";
+    const storyId = storyIdNumber;
+
+
+    const input = {
+      title,
+      storyId,
+      description
+      // Add other fields as needed
+    };
+    
+    await createScene({ variables: { input } })
+  }
+
+
+
+
   return <Container>
     <Box sx={{
       display: 'flex',
@@ -151,6 +226,7 @@ const StoryPage: React.FC = () => {
         text="Create Persona"
         placeholder="Persona Name"
         sx={cardStyle}
+        onSubmit={handlePersonaCreate}
       />
     </Box>
 
@@ -158,18 +234,20 @@ const StoryPage: React.FC = () => {
       sx={sectionPadding}
     >
       <Typography variant="h6">Scenes</Typography>
-      {data?.getStory.scenes.map(s => (
-        <IdentityCard
+
+      {data?.getStory.scenes.map(s => {
+        return <IdentityCard
           key={s.id}
           name={s.title}
           sx={cardStyle}
           onClick={() => { }} //todo: Navigate to the Scene's page
         />
-      ))}
+})}
       <CreateCard
         text="Create Scene"
         placeholder="Scene Title"
         sx={cardStyle}
+        onSubmit={handleSceneCreate}
       />
     </Box>
   </Container>

@@ -61,10 +61,13 @@ const HomePage: React.FC = () => {
     </Typography>
     <Box
       sx={{
-        display: 'flex',
-        flexDirection: 'row',
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', // Adjust column width as needed
+        gap: 2, // Adjust the gap between items
         justifyContent: 'center',
         alignItems: 'center',
+        overflowY: 'auto', // Enable vertical scrolling
+        maxHeight: '500px', // Adjust the maximum height of the container
       }}
     >
       {data?.getUser.stories.map(story => (

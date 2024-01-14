@@ -15,10 +15,12 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
 const documents = {
     "\n  query GetUserStories($id: Int!) {\n    getUser(id: $id) {\n      stories {\n        id\n        title\n        description\n      }\n    }\n  }\n": types.GetUserStoriesDocument,
     "\n  mutation CreateStory($input: StoryInput!) {\n    createStory(input: $input) {\n      id\n    }\n  }\n": types.CreateStoryDocument,
-    "\n  query GetUsers {\n    allUsers {\n      id\n      email\n    }\n  }\n": types.GetUsersDocument,
+    " \n  query GetUsers {\n    allUsers {\n      id\n      email\n    }\n  }\n": types.GetUsersDocument,
     "\n  mutation CreateUser($email: String!) {\n    createUser(email: $email) {\n      id\n      email\n    }\n  }\n": types.CreateUserDocument,
     "\n  query GetStoryDetails($id: Int!) {\n    getStory(id: $id) {\n      id\n      title\n      description\n\n      personas {\n        id\n        name\n        description\n      }\n\n      scenes {\n        id\n        title\n        description\n      }\n    }\n  }\n": types.GetStoryDetailsDocument,
     "\n  mutation UpdateStory($input: StoryUpdateInput!, $updateStoryId: Int!) {\n    updateStory(input: $input, id: $updateStoryId)\n  }\n": types.UpdateStoryDocument,
+    "\n  mutation CreatePersona($input: PersonaInput!) {\n    createPersona(input: $input) {\n      name\n    }\n  }\n": types.CreatePersonaDocument,
+    "\n  mutation CreateScene($input: SceneInput!) {\n    createScene(input: $input) {\n      title\n    }\n  }\n": types.CreateSceneDocument,
 };
 
 /**
@@ -46,7 +48,7 @@ export function graphql(source: "\n  mutation CreateStory($input: StoryInput!) {
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query GetUsers {\n    allUsers {\n      id\n      email\n    }\n  }\n"): (typeof documents)["\n  query GetUsers {\n    allUsers {\n      id\n      email\n    }\n  }\n"];
+export function graphql(source: " \n  query GetUsers {\n    allUsers {\n      id\n      email\n    }\n  }\n"): (typeof documents)[" \n  query GetUsers {\n    allUsers {\n      id\n      email\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -59,6 +61,14 @@ export function graphql(source: "\n  query GetStoryDetails($id: Int!) {\n    get
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  mutation UpdateStory($input: StoryUpdateInput!, $updateStoryId: Int!) {\n    updateStory(input: $input, id: $updateStoryId)\n  }\n"): (typeof documents)["\n  mutation UpdateStory($input: StoryUpdateInput!, $updateStoryId: Int!) {\n    updateStory(input: $input, id: $updateStoryId)\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation CreatePersona($input: PersonaInput!) {\n    createPersona(input: $input) {\n      name\n    }\n  }\n"): (typeof documents)["\n  mutation CreatePersona($input: PersonaInput!) {\n    createPersona(input: $input) {\n      name\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation CreateScene($input: SceneInput!) {\n    createScene(input: $input) {\n      title\n    }\n  }\n"): (typeof documents)["\n  mutation CreateScene($input: SceneInput!) {\n    createScene(input: $input) {\n      title\n    }\n  }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};
