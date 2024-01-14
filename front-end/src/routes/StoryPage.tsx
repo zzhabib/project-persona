@@ -60,10 +60,6 @@ const CREATE_SCENE = gql`
 
 
 
-
-
-
-
 const sectionPadding: SxProps<Theme> = {
   paddingTop: '0.5em',
   paddingBottom: '0.5em'
@@ -73,11 +69,17 @@ const cardStyle: SxProps<Theme> = {
   width: '20em'
 }
 
+
+
+
+
+
+
 const StoryPage: React.FC = () => {
   const navigate = useNavigate();
 
   const handleGoBack = () => {
-    navigate(-1); 
+    navigate(-1);   
   };
 
 
@@ -87,9 +89,19 @@ const StoryPage: React.FC = () => {
 
   const [updateInput, setUpdateInput] = useState<StoryUpdateInput>({})
 
-  const { loading, error, data } = useQuery<GetStoryDetailsQuery, GetStoryDetailsQueryVariables>(GET_STORY_DETAILS, {
-    variables: { id: storyIdNumber }
-  });
+
+
+
+  const { loading, error, data } = useQuery<GetStoryDetailsQuery, GetStoryDetailsQueryVariables>(
+    GET_STORY_DETAILS, {
+      variables: { id: storyIdNumber }
+    }
+  );
+
+
+
+
+
 
   const [updateStory] = useMutation<UpdateStoryMutation, UpdateStoryMutationVariables>(UPDATE_STORY, {
     refetchQueries: [GET_STORY_DETAILS]
@@ -119,15 +131,6 @@ const StoryPage: React.FC = () => {
     }
   }
 
-  if (loading) return <Typography>
-    Loading...
-  </Typography>
-
-  const isDirty = Object.keys(updateInput).length > 0
-  const titleValue = updateInput.title != null ? updateInput.title : data?.getStory.title
-  const descriptionValue = updateInput.description != null ? updateInput.description : data?.getStory.description
-
-
 
   const [createPersona] = useMutation(CREATE_PERSONA, {
     refetchQueries: [
@@ -141,6 +144,23 @@ const StoryPage: React.FC = () => {
       { query: GET_STORY_DETAILS, variables: { id: storyIdNumber } },
     ],
   });
+
+
+
+
+
+
+
+  if (loading) return <Typography>
+    Loading...
+  </Typography>
+
+  const isDirty = Object.keys(updateInput).length > 0
+  const titleValue = updateInput.title != null ? updateInput.title : data?.getStory.title
+  const descriptionValue = updateInput.description != null ? updateInput.description : data?.getStory.description
+
+
+
 
 
 
