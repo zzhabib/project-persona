@@ -348,8 +348,8 @@ const StoryPage: React.FC = () => {
         onChange={handleFieldChange}
       />
 
-      <Grid container spacing={2}>
-        <Grid item xs={8}>
+      <Grid container spacing={4}>
+        <Grid item xs={4}>
           <Box
             sx={sectionPadding}
           >
@@ -372,7 +372,8 @@ const StoryPage: React.FC = () => {
               onSubmit={handlePersonaCreate}
             />
           </Box>
-
+          </Grid>
+          <Grid item xs={4}>
           <Box
             sx={sectionPadding}
           >
@@ -396,9 +397,8 @@ const StoryPage: React.FC = () => {
               onSubmit={handleSceneCreate}
             />
           </Box>
-        </Grid>
-
-        <Grid item xs={4}>
+          </Grid>
+          <Grid item xs={4}>
           <Box>
             <Typography variant="h6">Testing Sessions</Typography>
             {storySessions.data?.getUserStorySessions.map(s => (
@@ -419,6 +419,10 @@ const StoryPage: React.FC = () => {
               onSubmit={handleStorySessionCreate}
             />
           </Box>
+          </Grid>
+
+        <Grid item xs={4}>
+         
         </Grid>
       </Grid>      
     </Container>
