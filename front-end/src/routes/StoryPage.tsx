@@ -86,7 +86,6 @@ const StoryPage: React.FC = () => {
 
 
 
-
   
 
   const theme = useTheme()
@@ -179,7 +178,9 @@ const StoryPage: React.FC = () => {
   const descriptionValue = updateInput.description != null ? updateInput.description : data?.getStory.description
 
 
-
+  const handleContextMenu = (Id: string) => {
+    console.log(`Delete attempted`);
+  };
 
 
 
@@ -304,7 +305,8 @@ const StoryPage: React.FC = () => {
           sx={cardStyle}
           onClick={() => {
             navigate(`/persona/${p.id}`)
-           }} // todo: Navigate to the Persona's page 
+          }} 
+          onDoSomethingClick={handleContextMenu}
         />
       ))}
       <CreateCard
@@ -328,6 +330,7 @@ const StoryPage: React.FC = () => {
           onClick={() => { 
             navigate(`/scene/${s.id}`)
           }} //todo: Navigate to the Scene's page
+          onDoSomethingClick={handleContextMenu}
         />
 })}
       <CreateCard
