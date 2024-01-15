@@ -44,4 +44,12 @@ export class StorySessionResolver {
   async getStorySession(@Arg('id', () => Int) id: number): Promise<StorySession> {
     return StorySession.findOne({ where: { id } })
   }
+
+  @Query(() => [StorySession])
+  async getUserStorySessions(
+    @Arg('userId', () => Int) userId: number,
+    @Arg('storyId', () => Int) storyId: number
+  ): Promise<StorySession[]> {
+    return StorySession.find({ where: { userId, storyId } })
+  }
 }

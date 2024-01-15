@@ -1,13 +1,14 @@
 import { gql, useMutation, useQuery } from "@apollo/client"
-import { Box, Button, Container, Divider, SxProps, TextField, Typography } from "@mui/material"
+import { Box, Button, Container, Divider, Grid, SxProps, TextField, Typography } from "@mui/material"
 import { useParams } from "react-router"
-import { GetStoryDetailsQuery, GetStoryDetailsQueryVariables, StoryUpdateInput, UpdateStoryMutation, UpdateStoryMutationVariables } from "../gql/graphql"
+import { GetStoryDetailsQuery, GetStoryDetailsQueryVariables, GetUserStorySessionsQuery, GetUserStorySessionsQueryVariables, StoryUpdateInput, UpdateStoryMutation, UpdateStoryMutationVariables } from "../gql/graphql"
 import { Theme, useTheme } from "@emotion/react"
 import IdentityCard from "../components/IdentityCard"
 import CreateCard from "../components/CreateCard"
 import TypographyInput from "../components/TypographyInput"
 import { useState, useEffect } from "react"
 import { useNavigate } from 'react-router-dom';
+import { store } from "../store"
 
 type StoryPageParams = {
   storyId: string
@@ -30,6 +31,20 @@ const GET_STORY_DETAILS = gql`
         id
         title
         description
+      }
+    }
+  }
+`
+
+const GET_USER_STORY_SESSIONS = gql`
+  query GetUserStorySessions($storyId: Int!, $userId: Int!) {
+    getUserStorySessions(storyId: 1, userId: 1) {
+      id
+      story {
+        title
+      }
+      user {
+        email
       }
     }
   }
@@ -91,17 +106,9 @@ const cardStyle: SxProps<Theme> = {
 
 const StoryPage: React.FC = () => {
   const navigate = useNavigate();
-
   const handleGoBack = () => {
-    navigate(-1);   
+    navigate(-1);
   };
-
-
-
-
-
-  
-
   const theme = useTheme()
   const { storyId } = useParams<StoryPageParams>()
   const storyIdNumber = storyId ? parseInt(storyId, 10) : 0;
@@ -111,12 +118,17 @@ const StoryPage: React.FC = () => {
 
 
 
-  const { loading, error, data, refetch } = useQuery<GetStoryDetailsQuery, GetStoryDetailsQueryVariables>(
+  const { loading: storyLoading, error: storyError, data: storyData, refetch } = useQuery<GetStoryDetailsQuery, GetStoryDetailsQueryVariables>(
     GET_STORY_DETAILS, {
-      variables: { id: storyIdNumber }
-    }
+    variables: { id: storyIdNumber }
+  }
   );
 
+  const storySessions = useQuery<GetUserStorySessionsQuery, GetUserStorySessionsQueryVariables>(
+    GET_USER_STORY_SESSIONS, {
+    variables: { storyId: storyIdNumber, userId: store.getState().auth.user!.id }
+  }
+  );
 
   useEffect(() => {
     const fetchStoryDetails = async () => {
@@ -126,13 +138,6 @@ const StoryPage: React.FC = () => {
 
     fetchStoryDetails();
   }, [refetch, storyIdNumber]);
-
-
-
-
-  
-
-
 
 
   const [updateStory] = useMutation<UpdateStoryMutation, UpdateStoryMutationVariables>(UPDATE_STORY, {
@@ -189,83 +194,56 @@ const StoryPage: React.FC = () => {
     ],
   });
 
-
-
-
-  if (loading) return <Typography>
+  if (storyLoading) return <Typography>
     Loading...
   </Typography>
 
   const isDirty = Object.keys(updateInput).length > 0
-  const titleValue = updateInput.title != null ? updateInput.title : data?.getStory.title
-  const descriptionValue = updateInput.description != null ? updateInput.description : data?.getStory.description
+  const titleValue = updateInput.title != null ? updateInput.title : storyData?.getStory.title
+  const descriptionValue = updateInput.description != null ? updateInput.description : storyData?.getStory.description
 
-
-
-
-
-  const handlePersonaCreate = async (name: String) => {
-
-  const description = "";
-  const storyId = storyIdNumber;
-
+  const handlePersonaCreate = async (name: string) => {
+    const description = "";
+    const storyId = storyIdNumber;
     const input = {
       name,
       storyId,
       description
       // Add other fields as needed
     };
-    
+
     await createPersona({ variables: { input } });
   }
 
   const handlePersonaDelete = (Id: number) => {
-
     const response = deletePersona({
       variables: { deletePersonaId: Id },
     });
-
     console.log('Persona deleted successfully', response);
-
   };
 
   const handleSceneDelete = (Id: number) => {
-
     const response = deleteScene({
       variables: { deleteSceneId: Id },
     });
-
     console.log('Scene deleted successfully', response);
-
   };
 
-
-
-
-
-
-
-  const handleSceneCreate = async (title: String) => {
-    
+  const handleSceneCreate = async (title: string) => {
     const description = "";
     const storyId = storyIdNumber;
-
-
     const input = {
       title,
       storyId,
       description
       // Add other fields as needed
     };
-    
+
     await createScene({ variables: { input } })
   }
 
-
-
-
   return <>
-   <Box
+    <Box
       sx={{
         width: '100%', // Full width
         display: 'grid',
@@ -276,7 +254,7 @@ const StoryPage: React.FC = () => {
       }}
     >
 
-  <Button
+      <Button
         sx={{
           height: '3em',
           width: '8em',
@@ -287,9 +265,9 @@ const StoryPage: React.FC = () => {
         onClick={handleGoBack}
       >
         GO BACK
-  </Button>
+      </Button>
 
-  <Button
+      <Button
         sx={{
           height: '3em',
           width: '8em',
@@ -303,89 +281,113 @@ const StoryPage: React.FC = () => {
       >
         SAVE
       </Button>
-</Box>
+    </Box>
 
 
-  <Container>
- 
+    <Container>
+      <Box sx={{
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center'
+      }}>
+        <TypographyInput
+          name="title"
+          variant="h4"
+          placeholder="Story Title"
+          value={titleValue}
+          onChange={handleFieldChange}
+        />
 
 
-    <Box sx={{
-      display: 'flex',
-      flexDirection: 'row',
-      alignItems: 'center'
-    }}>
-      <TypographyInput
-        name="title"
-        variant="h4"
-        placeholder="Story Title"
-        value={titleValue}
+      </Box>
+
+      <TextField
+        label="Description"
+        name="description"
+        variant="outlined"
+        multiline
+        minRows={5}
+        maxRows={10}
+        fullWidth
+        sx={sectionPadding}
+        value={descriptionValue}
         onChange={handleFieldChange}
       />
 
-      
-    </Box>
+      <Grid container spacing={2}>
+        <Grid item xs={8}>
+          <Box
+            sx={sectionPadding}
+          >
+            <Typography variant="h6">Personas</Typography>
+            {storyData?.getStory.personas.map(p => (
+              <IdentityCard
+                key={p.id}
+                name={p.name}
+                sx={cardStyle}
+                onClick={() => {
+                  navigate(`/persona/${p.id}`)
+                }}
+                onDoSomethingClick={() => handlePersonaDelete(p.id)}
+              />
+            ))}
+            <CreateCard
+              text="Create Persona"
+              placeholder="Persona Name"
+              sx={cardStyle}
+              onSubmit={handlePersonaCreate}
+            />
+          </Box>
 
-    <TextField
-      label="Description"
-      name="description"
-      variant="outlined"
-      multiline
-      minRows={5}
-      maxRows={10}
-      fullWidth
-      sx={sectionPadding}
-      value={descriptionValue}
-      onChange={handleFieldChange}
-    />
+          <Box
+            sx={sectionPadding}
+          >
+            <Typography variant="h6">Scenes</Typography>
 
-    <Box
-      sx={sectionPadding}
-    >
-      <Typography variant="h6">Personas</Typography>
-      {data?.getStory.personas.map(p => (
-        <IdentityCard
-          key={p.id}
-          name={p.name}
-          sx={cardStyle}
-          onClick={() => {
-            navigate(`/persona/${p.id}`)
-          }} 
-          onDoSomethingClick={() => handlePersonaDelete(p.id)}
-        />
-      ))}
-      <CreateCard
-        text="Create Persona"
-        placeholder="Persona Name"
-        sx={cardStyle}
-        onSubmit={handlePersonaCreate}
-      />
-    </Box>
+            {storyData?.getStory.scenes.map(s => {
+              return <IdentityCard
+                key={s.id}
+                name={s.title}
+                sx={cardStyle}
+                onClick={() => {
+                  navigate(`/scene/${s.id}`)
+                }} //todo: Navigate to the Scene's page
+                onDoSomethingClick={() => handleSceneDelete(s.id)}
+              />
+            })}
+            <CreateCard
+              text="Create Scene"
+              placeholder="Scene Title"
+              sx={cardStyle}
+              onSubmit={handleSceneCreate}
+            />
+          </Box>
+        </Grid>
 
-    <Box
-      sx={sectionPadding}
-    >
-      <Typography variant="h6">Scenes</Typography>
-
-      {data?.getStory.scenes.map(s => {
-        return <IdentityCard
-          key={s.id}
-          name={s.title}
-          sx={cardStyle}
-          onClick={() => { 
-            navigate(`/scene/${s.id}`)
-          }} //todo: Navigate to the Scene's page
-          onDoSomethingClick={() => handleSceneDelete(s.id)}
-        />
-})}
-      <CreateCard
-        text="Create Scene"
-        placeholder="Scene Title"
-        sx={cardStyle}
-        onSubmit={handleSceneCreate}
-      />
-    </Box>
-  </Container>
+        <Grid item xs={4}>
+          <Box>
+            <Typography variant="h6">Testing Sessions</Typography>
+            {storySessions.data?.getUserStorySessions.map(s => (
+              <IdentityCard
+                key={s.id}
+                name={`Session ${s.id}`}
+                sx={cardStyle}
+                onClick={() => {
+                  navigate(`/storysession/${s.id}`)
+                }}
+                onDoSomethingClick={() => { console.log("to be implemented") }}
+              />
+            ))}
+            <CreateCard
+              text="Create Session"
+              placeholder=""
+              sx={cardStyle}
+              onSubmit={() => { console.log("to be implemented")}}
+            />
+          </Box>
+        </Grid>
+      </Grid>      
+    </Container>
   </>
 }
 
