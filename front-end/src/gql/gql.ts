@@ -20,6 +20,7 @@ const documents = {
     "\nquery GetPersona($getPersonaId: Int!) {\n    getPersona(id: $getPersonaId) {\n      name\n      description\n      initiatedConnections {\n        targetPersona {\n          name\n          id\n        }\n      }\n      receivedConnections {\n        sourcePersona {\n          name\n        }\n      }\n    }\n  }\n": types.GetPersonaDocument,
     "\nmutation UpdatePersona($input: PersonaUpdateInput!, $updatePersonaId: Int!) {\n  updatePersona(input: $input, id: $updatePersonaId)\n  \n}\n": types.UpdatePersonaDocument,
     "\nquery GetScene($getSceneId: Int!) {\n  getScene(id: $getSceneId) {\n    description\n    id\n    title\n    roles {\n      persona {\n        name\n      }\n    }\n  }\n}\n": types.GetSceneDocument,
+    "\nmutation UpdateScene($input: SceneUpdateInput!, $updateSceneId: Int!) {\n  updateScene(input: $input, id: $updateSceneId)\n}\n": types.UpdateSceneDocument,
     "\n  query GetStoryDetails($id: Int!) {\n    getStory(id: $id) {\n      id\n      title\n      description\n\n      personas {\n        id\n        name\n        description\n      }\n\n      scenes {\n        id\n        title\n        description\n      }\n    }\n  }\n": types.GetStoryDetailsDocument,
     "\n  mutation UpdateStory($input: StoryUpdateInput!, $updateStoryId: Int!) {\n    updateStory(input: $input, id: $updateStoryId)\n  }\n": types.UpdateStoryDocument,
     "\n  mutation CreatePersona($input: PersonaInput!) {\n    createPersona(input: $input) {\n      name\n    }\n  }\n": types.CreatePersonaDocument,
@@ -68,6 +69,10 @@ export function graphql(source: "\nmutation UpdatePersona($input: PersonaUpdateI
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\nquery GetScene($getSceneId: Int!) {\n  getScene(id: $getSceneId) {\n    description\n    id\n    title\n    roles {\n      persona {\n        name\n      }\n    }\n  }\n}\n"): (typeof documents)["\nquery GetScene($getSceneId: Int!) {\n  getScene(id: $getSceneId) {\n    description\n    id\n    title\n    roles {\n      persona {\n        name\n      }\n    }\n  }\n}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\nmutation UpdateScene($input: SceneUpdateInput!, $updateSceneId: Int!) {\n  updateScene(input: $input, id: $updateSceneId)\n}\n"): (typeof documents)["\nmutation UpdateScene($input: SceneUpdateInput!, $updateSceneId: Int!) {\n  updateScene(input: $input, id: $updateSceneId)\n}\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

@@ -7,7 +7,7 @@ import CreateCard from "../components/CreateCard"
 import TypographyInput from "../components/TypographyInput"
 import { useState } from "react"
 import { useNavigate } from 'react-router-dom';
-import { QueryGetSceneArgs, MutationUpdateSceneArgs, Get} from "../gql/graphql"
+import { QueryGetSceneArgs, MutationUpdateSceneArgs, SceneUpdateInput} from "../gql/graphql"
 
 type ScenePageParams = {
   sceneId: string
@@ -33,6 +33,15 @@ query GetScene($getSceneId: Int!) {
 }
 `
 
+
+const UPDATE_SCENE = gql`
+mutation UpdateScene($input: SceneUpdateInput!, $updateSceneId: Int!) {
+  updateScene(input: $input, id: $updateSceneId)
+}
+`
+
+
+
 const sectionPadding: SxProps<Theme> = {
   paddingTop: '0.5em',
   paddingBottom: '0.5em'
@@ -51,14 +60,12 @@ const navigate = useNavigate();
     navigate(-1); 
   };
 
-
-
-
-
   const { sceneId } = useParams<ScenePageParams>()
   const sceneIdNumber = sceneId ? parseInt(sceneId, 10) : 0;
 
+  const [updateInput, setUpdateInput] = useState<SceneUpdateInput>({
 
+  })
  
 
   const { loading, error, data } = useQuery(
@@ -68,8 +75,39 @@ const navigate = useNavigate();
       }
     })
 
+    const [updateScene] = useMutation(UPDATE_SCENE, {
+      refetchQueries: [GET_SCENE_DATA]
+    })
+
+  
+  
+  
+    const handleFieldChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
+      event.preventDefault()
+  
+      const { name, value } = event.target;
+
+      setUpdateInput({
+        ...updateInput,
+        [name]: value
+      })
+    }
 
 
+    const handleSave: React.MouseEventHandler<HTMLButtonElement> = async (event) => {
+      event.preventDefault()
+  
+      const result = await updateScene({
+        variables: {
+          updateSceneId: sceneIdNumber,
+          input: updateInput
+        }
+      })
+  
+      if (result.data?.updatePersona) {
+        setUpdateInput({})
+      }
+    }
   
 
   if (loading) return <Typography>
@@ -77,18 +115,9 @@ const navigate = useNavigate();
 </Typography>
 
 
-const nameValue = data?.getScene.title
-const descValue = data?.getScene.description
-
-
-
-
-
-
-
-
-
-
+const isDirty = Object.keys(updateInput).length > 0
+const nameValue = updateInput.title != null ? updateInput.title : data?.getScene.title
+const descValue = updateInput.description != null ? updateInput.description : data?.getScene.description
 
 
   return <>
@@ -125,8 +154,8 @@ const descValue = data?.getScene.description
           justifySelf: 'end'
         }}
         variant="contained"
-        //disabled={!isDirty}
-        //onClick={handleSave}
+        disabled={!isDirty}
+        onClick={handleSave}
       >
         SAVE
       </Button>
@@ -154,20 +183,20 @@ const descValue = data?.getScene.description
     <Container>
       <TextField
         label="Title"
-        name="Title"
+        name="title"
         variant="outlined"
         multiline
         minRows={1}
         maxRows={1}
         sx={sectionPadding}
         value={nameValue}
-        //onChange={} // handleFieldChange for name
+        onChange={handleFieldChange} // handleFieldChange for name
       />
 
       <Box>
           <TextField
               label="Description"
-              name="Description"
+              name="description"
               variant="outlined"
               multiline
               minRows={5}
@@ -175,7 +204,7 @@ const descValue = data?.getScene.description
               fullWidth
               sx={sectionPadding}
               value={descValue}
-              //onChange={} // handleFieldChange for description
+              onChange={handleFieldChange} // handleFieldChange for description
             />
       </Box>
     </Container>
