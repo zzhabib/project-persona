@@ -46,6 +46,7 @@ const GET_USER_STORY_SESSIONS = gql`
       user {
         email
       }
+      name
     }
   }
 `
@@ -263,10 +264,11 @@ const StoryPage: React.FC = () => {
     await createScene({ variables: { input } })
   }
 
-  const handleStorySessionCreate = async () => {
+  const handleStorySessionCreate = async (inName: string) => {
     const input: StorySessionInput = {
       storyId: storyIdNumber,
-      userId: store.getState().auth.user!.id
+      userId: store.getState().auth.user!.id,
+      name: inName
     }
     console.log(input)
     await createStorySession({ variables: { input }})
@@ -412,13 +414,13 @@ const StoryPage: React.FC = () => {
               text="Create Session"
               placeholder="Session Name"
               sx={cardStyle}
-              onSubmit={handleStorySessionCreate}
+              onSubmit={(value) => handleStorySessionCreate(value)}
             />
             <Box sx={{marginTop : '1em'}}>
             {storySessions.data?.getUserStorySessions.map(s => (
               <IdentityCard
                 key={s.id}
-                name={`Session ${s.id}`}
+                name={s.name}
                 sx={cardStyle}
                 onClick={() => {
                   navigate(`/storysession/${s.id}`)
