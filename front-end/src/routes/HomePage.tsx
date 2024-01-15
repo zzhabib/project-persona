@@ -50,6 +50,12 @@ const HomePage: React.FC = () => {
     })
   }
 
+
+  const handleContextMenu = (Id: string) => {
+    console.log(`Delete attempted`);
+  };
+
+
   return <>
     <Typography
       variant="h4"
@@ -77,6 +83,7 @@ const HomePage: React.FC = () => {
           onClick={() => {
             navigate(`/story/${story.id}`)
           }}
+          onDoSomethingClick={handleContextMenu}
         />
       ))}
     </Box>

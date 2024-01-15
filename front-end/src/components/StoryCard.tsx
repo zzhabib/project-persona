@@ -1,5 +1,7 @@
 import { Card, CardActionArea, CardContent, Typography } from "@mui/material"
-
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import React, { useState } from 'react';
 
 type StoryCardProps = {
   story: {
@@ -7,10 +9,26 @@ type StoryCardProps = {
     description: string
   },
   onClick: React.MouseEventHandler
+  onContextMenu?: (name: string, event: React.MouseEvent<HTMLDivElement>) => void;
+  onDoSomethingClick?: (Id: string) => void;
 }
 
 function StoryCard(props: StoryCardProps): JSX.Element {
-  return <Card
+  
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
+  const handleContextMenu = (event: React.MouseEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+
+  
+  return <Card onContextMenu={handleContextMenu}
     sx={{
       width: 200,
       height: 200,
@@ -35,6 +53,13 @@ function StoryCard(props: StoryCardProps): JSX.Element {
         </Typography>
       </CardContent>
     </CardActionArea>
+
+    <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
+        <MenuItem onClick={props.onDoSomethingClick}>
+          Delete
+        </MenuItem>
+      </Menu>
+
   </Card>
 }
 
