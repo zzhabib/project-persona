@@ -65,8 +65,11 @@ const DELETE_PERSONA = gql`
   }
 `
 
-
-
+const DELETE_SCENE = gql`
+  mutation DeleteScene($deleteSceneId: Int!) {
+    deleteScene(id: $deleteSceneId)
+  }
+`
 
 
 
@@ -180,6 +183,11 @@ const StoryPage: React.FC = () => {
     ],
   });
 
+  const [deleteScene] = useMutation(DELETE_SCENE, {
+    refetchQueries: [
+      { query: GET_STORY_DETAILS, variables: { id: storyIdNumber } },
+    ],
+  });
 
 
 
@@ -193,9 +201,6 @@ const StoryPage: React.FC = () => {
   const descriptionValue = updateInput.description != null ? updateInput.description : data?.getStory.description
 
 
-  const handleContextMenu = (Id: string) => {
-    console.log(`Delete attempted`);
-  };
 
 
 
@@ -223,6 +228,17 @@ const StoryPage: React.FC = () => {
     console.log('Persona deleted successfully', response);
 
   };
+
+  const handleSceneDelete = (Id: number) => {
+
+    const response = deleteScene({
+      variables: { deleteSceneId: Id },
+    });
+
+    console.log('Scene deleted successfully', response);
+
+  };
+
 
 
 
@@ -335,7 +351,7 @@ const StoryPage: React.FC = () => {
           onClick={() => {
             navigate(`/persona/${p.id}`)
           }} 
-          onDoSomethingClick={(query) => handlePersonaDelete(p.id)}
+          onDoSomethingClick={() => handlePersonaDelete(p.id)}
         />
       ))}
       <CreateCard
@@ -359,7 +375,7 @@ const StoryPage: React.FC = () => {
           onClick={() => { 
             navigate(`/scene/${s.id}`)
           }} //todo: Navigate to the Scene's page
-          onDoSomethingClick={handleContextMenu}
+          onDoSomethingClick={() => handleSceneDelete(s.id)}
         />
 })}
       <CreateCard
