@@ -33,3 +33,14 @@ If you are developing a production application, we recommend updating the config
 ---
 
 
+## Notes
+
+Scene, Persona, and Story all have create, edit, and delete working
+
+Except for story, the backend seems to not be allowing a story deletion
+
+
+
+
+Right now basically everything is names and descriptions, so we need to get actions, connections, and all that other fun stuff for inter character relationships.
+
