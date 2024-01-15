@@ -354,6 +354,13 @@ const StoryPage: React.FC = () => {
             sx={sectionPadding}
           >
             <Typography variant="h6">Personas</Typography>
+            <CreateCard
+              text="Create Persona"
+              placeholder="Persona Name"
+              sx={cardStyle}
+              onSubmit={handlePersonaCreate}
+            />
+            <Box sx={{marginTop : '1em'}}>
             {storyData?.getStory.personas.map(p => (
               <IdentityCard
                 key={p.id}
@@ -365,12 +372,8 @@ const StoryPage: React.FC = () => {
                 onDoSomethingClick={() => handlePersonaDelete(p.id)}
               />
             ))}
-            <CreateCard
-              text="Create Persona"
-              placeholder="Persona Name"
-              sx={cardStyle}
-              onSubmit={handlePersonaCreate}
-            />
+            </Box>
+            
           </Box>
           </Grid>
           <Grid item xs={4}>
@@ -378,7 +381,14 @@ const StoryPage: React.FC = () => {
             sx={sectionPadding}
           >
             <Typography variant="h6">Scenes</Typography>
+            <CreateCard
+              text="Create Scene"
+              placeholder="Scene Title"
+              sx={cardStyle}
+              onSubmit={handleSceneCreate}
+            />
 
+          <Box sx={{marginTop : '1em'}}>
             {storyData?.getStory.scenes.map(s => {
               return <IdentityCard
                 key={s.id}
@@ -390,17 +400,21 @@ const StoryPage: React.FC = () => {
                 onDoSomethingClick={() => handleSceneDelete(s.id)}
               />
             })}
-            <CreateCard
-              text="Create Scene"
-              placeholder="Scene Title"
-              sx={cardStyle}
-              onSubmit={handleSceneCreate}
-            />
+            
+            </Box>
+
           </Box>
           </Grid>
           <Grid item xs={4}>
           <Box>
             <Typography variant="h6">Testing Sessions</Typography>
+            <CreateCard
+              text="Create Session"
+              placeholder=""
+              sx={cardStyle}
+              onSubmit={handleStorySessionCreate}
+            />
+            <Box sx={{marginTop : '1em'}}>
             {storySessions.data?.getUserStorySessions.map(s => (
               <IdentityCard
                 key={s.id}
@@ -412,12 +426,9 @@ const StoryPage: React.FC = () => {
                 onDoSomethingClick={() => {handleStorySessionDelete(s.id)}}
               />
             ))}
-            <CreateCard
-              text="Create Session"
-              placeholder=""
-              sx={cardStyle}
-              onSubmit={handleStorySessionCreate}
-            />
+
+            </Box>
+            
           </Box>
           </Grid>
 
