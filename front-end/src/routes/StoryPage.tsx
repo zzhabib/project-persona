@@ -59,6 +59,17 @@ const CREATE_SCENE = gql`
 `
 
 
+const DELETE_PERSONA = gql`
+  mutation DeletePersona($deletePersonaId: Int!) {
+    deletePersona(id: $deletePersonaId)
+  }
+`
+
+
+
+
+
+
 
 const sectionPadding: SxProps<Theme> = {
   paddingTop: '0.5em',
@@ -163,7 +174,11 @@ const StoryPage: React.FC = () => {
     ],
   });
 
-
+  const [deletePersona] = useMutation(DELETE_PERSONA, {
+    refetchQueries: [
+      { query: GET_STORY_DETAILS, variables: { id: storyIdNumber } },
+    ],
+  });
 
 
 
@@ -198,6 +213,20 @@ const StoryPage: React.FC = () => {
     
     await createPersona({ variables: { input } });
   }
+
+  const handlePersonaDelete = (Id: number) => {
+
+    const response = deletePersona({
+      variables: { deletePersonaId: Id },
+    });
+
+    console.log('Persona deleted successfully', response);
+
+  };
+
+
+
+
 
 
   const handleSceneCreate = async (title: String) => {
@@ -306,7 +335,7 @@ const StoryPage: React.FC = () => {
           onClick={() => {
             navigate(`/persona/${p.id}`)
           }} 
-          onDoSomethingClick={handleContextMenu}
+          onDoSomethingClick={(query) => handlePersonaDelete(p.id)}
         />
       ))}
       <CreateCard

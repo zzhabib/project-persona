@@ -26,6 +26,7 @@ const documents = {
     "\n  mutation UpdateStory($input: StoryUpdateInput!, $updateStoryId: Int!) {\n    updateStory(input: $input, id: $updateStoryId)\n  }\n": types.UpdateStoryDocument,
     "\n  mutation CreatePersona($input: PersonaInput!) {\n    createPersona(input: $input) {\n      name\n    }\n  }\n": types.CreatePersonaDocument,
     "\n  mutation CreateScene($input: SceneInput!) {\n    createScene(input: $input) {\n      title\n    }\n  }\n": types.CreateSceneDocument,
+    "\n  mutation DeletePersona($deletePersonaId: Int!) {\n    deletePersona(id: $deletePersonaId)\n  }\n": types.DeletePersonaDocument,
 };
 
 /**
@@ -94,6 +95,10 @@ export function graphql(source: "\n  mutation CreatePersona($input: PersonaInput
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  mutation CreateScene($input: SceneInput!) {\n    createScene(input: $input) {\n      title\n    }\n  }\n"): (typeof documents)["\n  mutation CreateScene($input: SceneInput!) {\n    createScene(input: $input) {\n      title\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation DeletePersona($deletePersonaId: Int!) {\n    deletePersona(id: $deletePersonaId)\n  }\n"): (typeof documents)["\n  mutation DeletePersona($deletePersonaId: Int!) {\n    deletePersona(id: $deletePersonaId)\n  }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};
