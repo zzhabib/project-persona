@@ -13,6 +13,10 @@ export class StorySession extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number
 
+  @Field()
+  @Column()
+  name: string;
+
   @Column()
   storyId: number
 

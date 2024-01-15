@@ -11,6 +11,9 @@ class StorySessionInput {
 
   @Field(() => Int)
   userId: number
+
+  @Field()
+  name: string;
 }
 
 @Resolver(StorySession)
@@ -30,6 +33,7 @@ export class StorySessionResolver {
     const storySessionRepository = AppDataSource.getRepository(StorySession)
     const storySession = storySessionRepository.create(input)
 
+
     await storySessionRepository.insert(storySession)
     return storySession
   }
@@ -48,7 +52,7 @@ export class StorySessionResolver {
   @Query(() => [StorySession])
   async getUserStorySessions(
     @Arg('userId', () => Int) userId: number,
-    @Arg('storyId', () => Int) storyId: number
+    @Arg('storyId', () => Int) storyId: number,
   ): Promise<StorySession[]> {
     return StorySession.find({ where: { userId, storyId } })
   }
