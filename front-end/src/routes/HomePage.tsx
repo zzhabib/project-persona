@@ -2,7 +2,7 @@ import { Box, Typography } from "@mui/material"
 import { useSelector } from "react-redux"
 import { RootState } from "../store"
 import { gql, useMutation, useQuery } from "@apollo/client"
-import { CreateStoryMutation, CreateStoryMutationVariables, GetUserStoriesQuery, GetUserStoriesQueryVariables, MutationCreateStoryArgs, StoryInput } from "../gql/graphql"
+import { CreateStoryMutation, CreateStoryMutationVariables ,GetUserStoriesQuery, GetUserStoriesQueryVariables, MutationCreateStoryArgs, StoryInput, Mutation} from "../gql/graphql"
 import StoryCard from "../components/StoryCard"
 import CreateCard from "../components/CreateCard"
 import { useNavigate } from "react-router"
@@ -27,12 +27,32 @@ const CREATE_STORY = gql`
   }
 `
 
+const DELETE_STORY = gql`
+  mutation Mutation($deleteStoryId: Int!) {
+    deleteStory(id: $deleteStoryId)
+
+  }
+`
+
+
+
+
 const HomePage: React.FC = () => {
   const navigate = useNavigate()
   const user = useSelector((state: RootState) => state.auth.user)
+
+
   const [createStory] = useMutation<CreateStoryMutation, CreateStoryMutationVariables>(CREATE_STORY, {
     refetchQueries: [GET_USER_STORIES]
   })
+
+
+  const [deleteStory] = useMutation(DELETE_STORY, {
+    refetchQueries: [
+      { query: GET_USER_STORIES},
+    ],
+  });
+
 
   const { loading, error, data } = useQuery<GetUserStoriesQuery, GetUserStoriesQueryVariables>(GET_USER_STORIES, {
     variables: { id: user!.id }
@@ -51,8 +71,17 @@ const HomePage: React.FC = () => {
   }
 
 
-  const handleContextMenu = (Id: string) => {
-    console.log(`Delete attempted`);
+  const handleStoryDelete = (Id: number) => {
+    console.log(`Delete attempted ` + {Id});
+    console.log(Id);
+
+    const response = deleteStory({
+      variables: { deleteStoryId: Id },
+    });
+
+    // Handle the response as needed
+    console.log('Story deleted successfully', response);
+
   };
 
 
@@ -83,7 +112,7 @@ const HomePage: React.FC = () => {
           onClick={() => {
             navigate(`/story/${story.id}`)
           }}
-          onDoSomethingClick={handleContextMenu}
+          onDoSomethingClick={(query) => handleStoryDelete(story.id)}
         />
       ))}
     </Box>
