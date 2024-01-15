@@ -1,7 +1,7 @@
 import { gql, useMutation, useQuery } from "@apollo/client"
 import { Box, Button, Container, Divider, Grid, SxProps, TextField, Typography } from "@mui/material"
 import { useParams } from "react-router"
-import { GetStoryDetailsQuery, GetStoryDetailsQueryVariables, GetUserStorySessionsQuery, GetUserStorySessionsQueryVariables, StoryUpdateInput, UpdateStoryMutation, UpdateStoryMutationVariables } from "../gql/graphql"
+import { GetStoryDetailsQuery, GetStoryDetailsQueryVariables, GetUserStorySessionsQuery, GetUserStorySessionsQueryVariables, StorySessionInput, StoryUpdateInput, UpdateStoryMutation, UpdateStoryMutationVariables } from "../gql/graphql"
 import { Theme, useTheme } from "@emotion/react"
 import IdentityCard from "../components/IdentityCard"
 import CreateCard from "../components/CreateCard"
@@ -38,7 +38,7 @@ const GET_STORY_DETAILS = gql`
 
 const GET_USER_STORY_SESSIONS = gql`
   query GetUserStorySessions($storyId: Int!, $userId: Int!) {
-    getUserStorySessions(storyId: 1, userId: 1) {
+    getUserStorySessions(storyId: $storyId, userId: $userId) {
       id
       story {
         title
@@ -65,6 +65,14 @@ const CREATE_PERSONA = gql`
   }
 `
 
+const CREATE_STORY_SESSION = gql`
+  mutation CreateStorySession($input: StorySessionInput!) {
+    createStorySession(input: $input) {
+      id
+    }
+  }
+`
+
 const CREATE_SCENE = gql`
   mutation CreateScene($input: SceneInput!) {
     createScene(input: $input) {
@@ -72,7 +80,6 @@ const CREATE_SCENE = gql`
     }
   }
 `
-
 
 const DELETE_PERSONA = gql`
   mutation DeletePersona($deletePersonaId: Int!) {
@@ -86,8 +93,11 @@ const DELETE_SCENE = gql`
   }
 `
 
-
-
+const DELETE_STORY_SESSION = gql`
+  mutation DeleteStorySession($storySessionId: Int!) {
+    deleteStorySession(id: $storySessionId)
+  }
+`
 
 const sectionPadding: SxProps<Theme> = {
   paddingTop: '0.5em',
@@ -175,12 +185,17 @@ const StoryPage: React.FC = () => {
     ],
   });
 
-
   const [createScene] = useMutation(CREATE_SCENE, {
     refetchQueries: [
       { query: GET_STORY_DETAILS, variables: { id: storyIdNumber } },
     ],
   });
+
+  const [createStorySession] = useMutation(CREATE_STORY_SESSION, {
+    refetchQueries: [
+      { query: GET_USER_STORY_SESSIONS, variables: { storyId: storyIdNumber, userId: store.getState().auth.user!.id } }
+    ]
+  })
 
   const [deletePersona] = useMutation(DELETE_PERSONA, {
     refetchQueries: [
@@ -193,6 +208,12 @@ const StoryPage: React.FC = () => {
       { query: GET_STORY_DETAILS, variables: { id: storyIdNumber } },
     ],
   });
+
+  const [deleteStorySession] = useMutation(DELETE_STORY_SESSION, {
+    refetchQueries: [
+      { query: GET_USER_STORY_SESSIONS, variables: { storyId: storyIdNumber, userId: store.getState().auth.user!.id } }
+    ]
+  })
 
   if (storyLoading) return <Typography>
     Loading...
@@ -240,6 +261,19 @@ const StoryPage: React.FC = () => {
     };
 
     await createScene({ variables: { input } })
+  }
+
+  const handleStorySessionCreate = async () => {
+    const input: StorySessionInput = {
+      storyId: storyIdNumber,
+      userId: store.getState().auth.user!.id
+    }
+    console.log(input)
+    await createStorySession({ variables: { input }})
+  }
+
+  const handleStorySessionDelete = async (storySessionId: number) => {
+    await deleteStorySession({ variables: { storySessionId } })
   }
 
   return <>
@@ -375,14 +409,14 @@ const StoryPage: React.FC = () => {
                 onClick={() => {
                   navigate(`/storysession/${s.id}`)
                 }}
-                onDoSomethingClick={() => { console.log("to be implemented") }}
+                onDoSomethingClick={() => {handleStorySessionDelete(s.id)}}
               />
             ))}
             <CreateCard
               text="Create Session"
               placeholder=""
               sx={cardStyle}
-              onSubmit={() => { console.log("to be implemented")}}
+              onSubmit={handleStorySessionCreate}
             />
           </Box>
         </Grid>
