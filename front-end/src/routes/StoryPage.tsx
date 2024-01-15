@@ -406,11 +406,11 @@ const StoryPage: React.FC = () => {
           </Box>
           </Grid>
           <Grid item xs={4}>
-          <Box>
+          <Box sx={sectionPadding}>
             <Typography variant="h6">Testing Sessions</Typography>
             <CreateCard
               text="Create Session"
-              placeholder=""
+              placeholder="Session Name"
               sx={cardStyle}
               onSubmit={handleStorySessionCreate}
             />
