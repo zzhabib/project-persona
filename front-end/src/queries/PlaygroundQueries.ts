@@ -18,3 +18,16 @@ export const GET_STORY_SESSION = gql`
     }
   }
 `
+
+export const GET_CONVERSATION = gql`
+  query GetConversation($secondPersonaId: Int!, $firstPersonaId: Int!, $storySessionId: Int!) {
+    getConversation(secondPersonaId: $secondPersonaId, firstPersonaId: $firstPersonaId, storySessionId: $storySessionId) {
+      id
+      sender {
+        id
+      }
+      createdAt
+      text
+    }
+  }
+`
