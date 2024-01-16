@@ -1,38 +1,12 @@
 import { Box, Typography } from "@mui/material"
 import { useSelector } from "react-redux"
 import { RootState } from "../store"
-import { gql, useMutation, useQuery } from "@apollo/client"
-import { CreateStoryMutation, CreateStoryMutationVariables ,GetUserStoriesQuery, GetUserStoriesQueryVariables, MutationCreateStoryArgs, StoryInput, Mutation} from "../gql/graphql"
+import { useMutation, useQuery } from "@apollo/client"
+import { CreateStoryMutation, CreateStoryMutationVariables ,GetUserStoriesQuery, GetUserStoriesQueryVariables} from "../gql/graphql"
 import StoryCard from "../components/StoryCard"
 import CreateCard from "../components/CreateCard"
 import { useNavigate } from "react-router"
-
-const GET_USER_STORIES = gql`
-  query GetUserStories($id: Int!) {
-    getUser(id: $id) {
-      stories {
-        id
-        title
-        description
-      }
-    }
-  }
-`
-
-const CREATE_STORY = gql`
-  mutation CreateStory($input: StoryInput!) {
-    createStory(input: $input) {
-      id
-    }
-  }
-`
-
-const DELETE_STORY = gql`
-  mutation Mutation($deleteStoryId: Int!) {
-    deleteStory(id: $deleteStoryId)
-
-  }
-`
+import { GET_USER_STORIES, CREATE_STORY, DELETE_STORY } from "../queries/HomePageQueries"
 
 
 

@@ -1,71 +1,18 @@
-import { gql, useMutation, useQuery } from "@apollo/client"
-import { Box, Button, Container, Divider, SxProps, TextField, Typography } from "@mui/material"
+import { useMutation, useQuery } from "@apollo/client"
+import { Box, Button, Container, TextField, Typography } from "@mui/material"
 import { useParams } from "react-router"
 import IdentityCard from "../components/IdentityCard"
 import { useState } from "react"
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from "react-redux"
-import { GetPersonaQuery, PersonaUpdateInput, MutationUpdatePersonaArgs, Mutation } from "../gql/graphql"
-import { Theme, useTheme } from "@emotion/react"
+import { PersonaUpdateInput } from "../gql/graphql"
+import { cardStyle, sectionPadding } from "../styles/styles"
+import { GET_PERSONA_DATA, UPDATE_PERSONA } from "../queries/PersonaPageQueries"
+
 
 
 type PersonaPageParams = {
   personaId: string
 }
-
-
-
-
-// we need a query for name, description, initiated /recieved connections
-const GET_PERSONA_DATA = gql`
-query GetPersona($getPersonaId: Int!) {
-    getPersona(id: $getPersonaId) {
-      name
-      description
-      initiatedConnections {
-        targetPersona {
-          name
-          id
-        }
-      }
-      receivedConnections {
-        sourcePersona {
-          name
-        }
-      }
-    }
-  }
-`
-
-const UPDATE_PERSONA = gql`
-mutation UpdatePersona($input: PersonaUpdateInput!, $updatePersonaId: Int!) {
-  updatePersona(input: $input, id: $updatePersonaId)
-  
-}
-`
-
-
-
-
-
-
-const sectionPadding: SxProps<Theme> = {
-  paddingTop: '0.5em',
-  paddingBottom: '0.5em'
-}
-
-const cardStyle: SxProps<Theme> = {
-  width: '20em'
-}
-
-
-//going further down the rabbit hole with this, we
-// will basically have a list of initiated/recieved connections
-// they will be displayed by name ( dont need id for recieved since we cant do anything with it )
-// just want to show it
-
-// will need to make a query for creating initiated connections
-// but atm cannot find the backend hardware to do so
 
 
 
@@ -86,7 +33,7 @@ const PersonaPage: React.FC = () => {
     })
 
 
-    const { loading, error, data } = useQuery<GetPersonaQuery>(
+    const { loading, error, data } = useQuery(
       GET_PERSONA_DATA, {
         variables: { 
           getPersonaId: personaIdNumber
@@ -139,7 +86,7 @@ const PersonaPage: React.FC = () => {
   const descValue = updateInput.description != null ? updateInput.description : data?.getPersona.description
 
 
-
+  
   return <>
 
     <Box
@@ -225,6 +172,33 @@ const PersonaPage: React.FC = () => {
               onChange={handleFieldChange} 
             />
       </Box>
+
+      <Box>
+          {/* need like a new kind of create card here that gets all other personas in story for search list*/ }
+          <Typography
+      variant="h4"
+      sx={{
+        padding: '10px',
+        textAlign: 'center'
+      }}>
+      Connections
+    </Typography>
+
+        {data?.getPersona.initiatedConnections.map(connection => (
+        <IdentityCard
+          key={connection.targetPersona.id}
+          name={connection.targetPersona.name}
+          sx={cardStyle}
+          onClick={() => {
+            //navigate(`/persona/${personaId}/connections/${connection.targetPersona.id}`)
+          }}
+          //onDoSomethingClick={}
+        />
+      ))}
+      </Box>
+
+
+
     </Container>
 
 

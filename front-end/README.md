@@ -33,14 +33,23 @@ If you are developing a production application, we recommend updating the config
 ---
 
 
-## Notes
+## Ntd
 
-Scene, Persona, and Story all have create, edit, and delete working
+- role page - basically build out a page so that we can get to a specific role and edit it , this might also involve adding a role id
 
-Except for story, the backend seems to not be allowing a story deletion
+- connection page, need a page where we can edit connnection data 
+
+both the above pages I think will work a little differently to the basic layout that we have for the hom, story, persona, and scene pages
+
+
+- the story page needs to get the mutations implemented, I think this is doable without changing the backend (although the connections are gonna be a little complicated)
 
 
 
 
-Right now basically everything is names and descriptions, so we need to get actions, connections, and all that other fun stuff for inter character relationships.
 
+---
+
+
+
+As this goes on, I would be interested in having the app "compile" the prompt like it is a regular expression. This might make it easier to build out, and would allow the prompt to automatically adjust to the relavant data being provided, like an action section can either be nothing, or if there are actions, it goes into a specific place in relation to a character. would also be interesting if we were going to do this because it would be a great way to cram more story data in a meaningful way into the prompt automatically

@@ -1,55 +1,17 @@
-import { gql, useMutation, useQuery } from "@apollo/client"
-import { Box, Button, Container, Divider, SxProps, TextField, Typography } from "@mui/material"
+import { useMutation, useQuery } from "@apollo/client"
+import { Box, Button, Container, TextField, Typography } from "@mui/material"
 import { useParams } from "react-router"
-import { Theme, useTheme } from "@emotion/react"
-import IdentityCard from "../components/IdentityCard"
-import CreateCard from "../components/CreateCard"
-import TypographyInput from "../components/TypographyInput"
 import { useState } from "react"
 import { useNavigate } from 'react-router-dom';
-import { QueryGetSceneArgs, MutationUpdateSceneArgs, SceneUpdateInput} from "../gql/graphql"
+import { SceneUpdateInput} from "../gql/graphql"
+import { GET_SCENE_DATA, UPDATE_SCENE } from "../queries/ScenePageQueries"
+import { sectionPadding } from "../styles/styles"
+
 
 type ScenePageParams = {
   sceneId: string
 }
 
-//this will let us list the scene title and description, as well as give
-//us the names of the character, might need a roleid to make easier
-// so we will need to make actions list on a role page
-
-
-const GET_SCENE_DATA = gql`
-query GetScene($getSceneId: Int!) {
-  getScene(id: $getSceneId) {
-    description
-    id
-    title
-    roles {
-      persona {
-        name
-      }
-    }
-  }
-}
-`
-
-
-const UPDATE_SCENE = gql`
-mutation UpdateScene($input: SceneUpdateInput!, $updateSceneId: Int!) {
-  updateScene(input: $input, id: $updateSceneId)
-}
-`
-
-
-
-const sectionPadding: SxProps<Theme> = {
-  paddingTop: '0.5em',
-  paddingBottom: '0.5em'
-}
-
-const cardStyle: SxProps<Theme> = {
-  width: '20em'
-}
 
 
 

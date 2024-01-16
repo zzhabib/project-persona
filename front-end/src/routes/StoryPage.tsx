@@ -1,115 +1,20 @@
-import { gql, useMutation, useQuery } from "@apollo/client"
-import { Box, Button, Container, Divider, Grid, SxProps, TextField, Typography } from "@mui/material"
+import { useMutation, useQuery } from "@apollo/client"
+import { Box, Button, Container, Grid, TextField, Typography } from "@mui/material"
 import { useParams } from "react-router"
 import { GetStoryDetailsQuery, GetStoryDetailsQueryVariables, GetUserStorySessionsQuery, GetUserStorySessionsQueryVariables, StorySessionInput, StoryUpdateInput, UpdateStoryMutation, UpdateStoryMutationVariables } from "../gql/graphql"
-import { Theme, useTheme } from "@emotion/react"
 import IdentityCard from "../components/IdentityCard"
 import CreateCard from "../components/CreateCard"
 import TypographyInput from "../components/TypographyInput"
 import { useState, useEffect } from "react"
 import { useNavigate } from 'react-router-dom';
 import { store } from "../store"
+import { cardStyle, sectionPadding } from "../styles/styles"
+import { GET_STORY_DETAILS, GET_USER_STORY_SESSIONS, UPDATE_STORY, CREATE_PERSONA, CREATE_STORY_SESSION, CREATE_SCENE, DELETE_PERSONA, DELETE_SCENE, DELETE_STORY_SESSION } from "../queries/StoryPageQueries"
+
 
 type StoryPageParams = {
   storyId: string
 }
-
-const GET_STORY_DETAILS = gql`
-  query GetStoryDetails($id: Int!) {
-    getStory(id: $id) {
-      id
-      title
-      description
-
-      personas {
-        id
-        name
-        description
-      }
-
-      scenes {
-        id
-        title
-        description
-      }
-    }
-  }
-`
-
-const GET_USER_STORY_SESSIONS = gql`
-  query GetUserStorySessions($storyId: Int!, $userId: Int!) {
-    getUserStorySessions(storyId: $storyId, userId: $userId) {
-      id
-      story {
-        title
-      }
-      user {
-        email
-      }
-      name
-    }
-  }
-`
-
-const UPDATE_STORY = gql`
-  mutation UpdateStory($input: StoryUpdateInput!, $updateStoryId: Int!) {
-    updateStory(input: $input, id: $updateStoryId)
-  }
-`
-
-
-const CREATE_PERSONA = gql`
-  mutation CreatePersona($input: PersonaInput!) {
-    createPersona(input: $input) {
-      name
-    }
-  }
-`
-
-const CREATE_STORY_SESSION = gql`
-  mutation CreateStorySession($input: StorySessionInput!) {
-    createStorySession(input: $input) {
-      id
-    }
-  }
-`
-
-const CREATE_SCENE = gql`
-  mutation CreateScene($input: SceneInput!) {
-    createScene(input: $input) {
-      title
-    }
-  }
-`
-
-const DELETE_PERSONA = gql`
-  mutation DeletePersona($deletePersonaId: Int!) {
-    deletePersona(id: $deletePersonaId)
-  }
-`
-
-const DELETE_SCENE = gql`
-  mutation DeleteScene($deleteSceneId: Int!) {
-    deleteScene(id: $deleteSceneId)
-  }
-`
-
-const DELETE_STORY_SESSION = gql`
-  mutation DeleteStorySession($storySessionId: Int!) {
-    deleteStorySession(id: $storySessionId)
-  }
-`
-
-const sectionPadding: SxProps<Theme> = {
-  paddingTop: '0.5em',
-  paddingBottom: '0.5em'
-}
-
-const cardStyle: SxProps<Theme> = {
-  width: '20em'
-}
-
-
 
 
 
@@ -120,7 +25,7 @@ const StoryPage: React.FC = () => {
   const handleGoBack = () => {
     navigate(-1);
   };
-  const theme = useTheme()
+
   const { storyId } = useParams<StoryPageParams>()
   const storyIdNumber = storyId ? parseInt(storyId, 10) : 0;
 

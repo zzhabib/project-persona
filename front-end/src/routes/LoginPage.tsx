@@ -1,6 +1,6 @@
-import { gql, useMutation, useQuery } from "@apollo/client"
-import { CreateUserMutation, CreateUserMutationVariables, GetUsersQuery, GetUsersQueryVariables, User } from "../gql/graphql";
-import { Box, Button, Card, CardActionArea, CardContent, Typography } from "@mui/material";
+import { useMutation, useQuery } from "@apollo/client"
+import { GetUsersQuery, GetUsersQueryVariables } from "../gql/graphql";
+import { Box, Typography } from "@mui/material";
 import IdentityCard from "../components/IdentityCard";
 import CreateCard from "../components/CreateCard";
 import { useDispatch, useSelector } from "react-redux";
@@ -8,28 +8,9 @@ import { login } from "../reducers/authReducer";
 import { AppDispatch, RootState } from "../store";
 import { useNavigate } from "react-router";
 import { useEffect } from "react";
+import { GET_USERS, CREATE_USER } from "../queries/LoginPageQueries";
 
 
-//returns all users id and email
-const GET_USERS = gql` 
-  query GetUsers {
-    allUsers {
-      id
-      email
-    }
-  }
-`
-
-
-//creates new user with given id and email
-const CREATE_USER = gql`
-  mutation CreateUser($email: String!) {
-    createUser(email: $email) {
-      id
-      email
-    }
-  }
-`
 // loads the login page
 function LoginPage() {
   const { loading, error, data } = useQuery<GetUsersQuery, GetUsersQueryVariables>(GET_USERS); // data variable (or error/loading) to get all users

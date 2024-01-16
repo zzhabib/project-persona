@@ -2640,7 +2640,7 @@
                 "ofType": null
               }
             },
-            "defaultValue": null,
+            "defaultValue": "\"No Name\"",
             "isDeprecated": false,
             "deprecationReason": null
           },
