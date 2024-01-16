@@ -12,7 +12,7 @@ class StorySessionInput {
   @Field(() => Int)
   userId: number
 
-  @Field()
+  @Field(() => String, { defaultValue: 'No Name' })
   name: string;
 }
 

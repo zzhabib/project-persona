@@ -15,3 +15,38 @@ Note - You might need to run
 npm install -g nodemon
 
 Not sure why but nodemon wouldnt install with npm i for me
+
+
+
+
+
+
+
+----
+
+
+## Side By Side
+
+
+Outgoing left side connection
+
+Incoming on the right hand side
+
+
+
+
+
+
+
+
+integrate the connection stuff into the react router
+
+
+when we have the connection popup come up, change url
+
+pass in props to the component
+
+props : {
+  initiatedpersonaId,
+  recievedpersonaId,
+}
