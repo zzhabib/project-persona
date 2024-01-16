@@ -14,7 +14,7 @@ export class StorySession extends BaseEntity {
   id: number
 
   @Field()
-  @Column()
+  @Column({default: 'Untitled Session'})
   name: string;
 
   @Column()
