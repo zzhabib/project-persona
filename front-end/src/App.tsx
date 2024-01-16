@@ -32,6 +32,18 @@ const theme = createTheme({
       primary: '#252525',
     },
   },
+  components: {
+    MuiListItemButton: {
+      styleOverrides: {
+        root: {
+          '&.Mui-selected': {
+            color: '#f1f2f6', // Change this to the color you want
+            backgroundColor: '#57606f', // Change this to the color you want
+          },
+        },
+      }
+    }
+  }
 });
 
 function App() {
