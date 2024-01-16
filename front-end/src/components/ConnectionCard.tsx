@@ -1,80 +1,106 @@
-import React from 'react';
-import IdentityCard from './IdentityCard'; // Import your IdentityCard component
-import { Theme } from "@emotion/react"
-import { SxProps } from "@mui/material"
+import { Card, CardActionArea, CardContent, SxProps, Theme, Typography } from "@mui/material";
+
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import React, { useState } from 'react';
 
 
-
-interface Connection {
-  targetPersona: {
-    id: string;
-    name: string;
-  };
-  type: string;
-}
-
-interface YourComponentProps {
-  data: {
-    getPersona: {
-      initiatedConnections: Connection[];
-      receivedConnections: Connection[];
-    };
-  };
-  personaId: string;
+type ConnectionCardProps = {
+  initiatedConnection: boolean,
+  recievedConnnection: boolean,
+  personaId: number,
+  otherPersonaId: number,
+  otherPersonaName: string,
+  sx?: SxProps<Theme>,
+  onClick?: React.MouseEventHandler
+  onContextMenu?: (name: string, event: React.MouseEvent<HTMLDivElement>) => void;
+  onDoSomethingClick?: (Id: string) => void;
 }
 
 
-const cardStyle: SxProps<Theme> = {
-    width: '20em'
-  }
+
+
+const ConnectionCard: React.FC<ConnectionCardProps> = ({
+  initiatedConnection,
+  recievedConnnection,
+  personaId,
+  otherPersonaId,
+  otherPersonaName,
+  sx,
+  onClick = () => { },
+  onDoSomethingClick
+}) => {
+
+
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
+  const handleContextMenu = (event: React.MouseEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+ 
+
+
+
+
+
+  return <>
   
-  
+  <Card
+    sx={{
+      margin: '2px',
+      ...sx
+    }} onContextMenu={handleContextMenu}>
+    <CardActionArea onClick={onClick}>
+      <CardContent>
+          <Typography>
+            
+          {initiatedConnection && (
+                <div
+                  style={{
+                    width: '20px',
+                    height: '20px',
+                    backgroundColor: 'blue',
+                    marginRight: '5px',
+                  }}
+                />
+              )}
+              {recievedConnnection && (
+                <div
+                  style={{
+                    width: '20px',
+                    height: '20px',
+                    backgroundColor: 'red',
+                    marginRight: '5px',
+                  }}
+                />
+              )}
+          {otherPersonaName}
+        </Typography>
+      </CardContent>
+      </CardActionArea>
+      
 
 
+      <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
+        <MenuItem onClick={onDoSomethingClick}>
+          Delete
+        </MenuItem>
 
-const ConnectionCard: React.FC<YourComponentProps> = ({ data }) => {
-  // Assuming data contains initiatedConnections and receivedConnections arrays
+      </Menu>
 
-  // Combine initiated and received connections into a single array
-  const allConnections: Connection[] = [
-    ...data?.getPersona.initiatedConnections.map(connection => ({ ...connection, type: 'initiated' })),
-    ...data?.getPersona.receivedConnections.map(connection => ({ ...connection, type: 'received' })),
-  ];
+    </Card>
+    
+    </>
+}
 
-  // Create a set to keep track of unique persona IDs
-  const uniquePersonas = new Set<string>();
+ConnectionCard.defaultProps = {
+  onClick: () => { }
+}
 
-  return (
-    <div>
-      {allConnections.map(connection => {
-        // Check if the persona ID is already in the set, skip if duplicate
-        if (uniquePersonas.has(connection.targetPersona.id)) {
-          return null;
-        }
-
-        // Add persona ID to the set to avoid duplicates
-        uniquePersonas.add(connection.targetPersona.id);
-
-        return (
-          <IdentityCard
-            key={?props}
-            name={connection.targetPersona.name}
-            sx={cardStyle}
-          >
-            {/* Red square for initiated connections */}
-            {connection.type === 'initiated' && (
-              <div style={{ backgroundColor: 'red', width: '10px', height: '10px' }} />
-            )}
-
-            {/* Blue square for received connections */}
-            {connection.type === 'received' && (
-              <div style={{ backgroundColor: 'blue', width: '10px', height: '10px' }} />
-            )}
-          </IdentityCard>
-        );
-      })}
-    </div>
-  );
-};
-
-export default ConnectionCard;
+export default ConnectionCard

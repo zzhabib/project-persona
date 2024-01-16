@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { PersonaUpdateInput } from "../gql/graphql"
 import { cardStyle, sectionPadding } from "../styles/styles"
 import { GET_PERSONA_DATA, UPDATE_PERSONA } from "../queries/PersonaPageQueries"
+import ConnectionCard from "../components/ConnectionCard"
 
 
 
@@ -185,9 +186,13 @@ const PersonaPage: React.FC = () => {
     </Typography>
 
         {data?.getPersona.initiatedConnections.map(connection => (
-        <IdentityCard
-          key={connection.targetPersona.id}
-          name={connection.targetPersona.name}
+        <ConnectionCard
+            key={connection.targetPersona.id}
+            personaId={personaIdNumber}
+            otherPersonaName={connection.targetPersona.name}
+            otherPersonaId={connection.targetPersona.Id}
+            initiatedConnection={false}
+            recievedConnnection= {true}
           sx={cardStyle}
           onClick={() => {
             //navigate(`/persona/${personaId}/connections/${connection.targetPersona.id}`)
