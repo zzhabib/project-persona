@@ -328,7 +328,7 @@ const StoryPage: React.FC = () => {
                 name={s.name}
                 sx={cardStyle}
                 onClick={() => {
-                  navigate(`/storysession/${s.id}`)
+                  navigate(`/playground/${s.id}`)
                 }}
                 onDoSomethingClick={() => {handleStorySessionDelete(s.id)}}
               />

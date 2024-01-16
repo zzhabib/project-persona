@@ -12,6 +12,7 @@ import { Provider } from 'react-redux'
 import { store } from './store'
 import RequireAuth from './components/RequireAuth'
 import StoryPage from './routes/StoryPage'
+import Playground from './routes/Playground'
 
 const theme = createTheme({
   palette: {
@@ -63,6 +64,12 @@ function App() {
             <Route path="/scene/:sceneId" element={
               <RequireAuth>
                 <ScenePage />
+              </RequireAuth>
+            } />
+
+            <Route path="/playground/:storySessionId" element={
+              <RequireAuth>
+                <Playground />
               </RequireAuth>
             } />
 
