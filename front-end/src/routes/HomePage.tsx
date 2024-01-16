@@ -2,7 +2,6 @@ import { Box, Typography } from "@mui/material"
 import { useSelector } from "react-redux"
 import { RootState } from "../store"
 import { useMutation, useQuery } from "@apollo/client"
-import { CreateStoryMutation, CreateStoryMutationVariables ,GetUserStoriesQuery, GetUserStoriesQueryVariables} from "../gql/graphql"
 import StoryCard from "../components/StoryCard"
 import CreateCard from "../components/CreateCard"
 import { useNavigate } from "react-router"
@@ -16,7 +15,7 @@ const HomePage: React.FC = () => {
   const user = useSelector((state: RootState) => state.auth.user)
 
 
-  const [createStory] = useMutation<CreateStoryMutation, CreateStoryMutationVariables>(CREATE_STORY, {
+  const [createStory] = useMutation(CREATE_STORY, {
     refetchQueries: [GET_USER_STORIES]
   })
 
@@ -28,7 +27,7 @@ const HomePage: React.FC = () => {
   });
 
 
-  const { loading, error, data } = useQuery<GetUserStoriesQuery, GetUserStoriesQueryVariables>(GET_USER_STORIES, {
+  const { loading, error, data } = useQuery(GET_USER_STORIES, {
     variables: { id: user!.id }
   })
 

@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from "@apollo/client"
 import { Box, Button, Container, Grid, TextField, Typography } from "@mui/material"
 import { useParams } from "react-router"
-import { GetStoryDetailsQuery, GetStoryDetailsQueryVariables, GetUserStorySessionsQuery, GetUserStorySessionsQueryVariables, StorySessionInput, StoryUpdateInput, UpdateStoryMutation, UpdateStoryMutationVariables } from "../gql/graphql"
+import { StorySessionInput, StoryUpdateInput } from "../gql/graphql"
 import IdentityCard from "../components/IdentityCard"
 import CreateCard from "../components/CreateCard"
 import TypographyInput from "../components/TypographyInput"
@@ -34,13 +34,13 @@ const StoryPage: React.FC = () => {
 
 
 
-  const { loading: storyLoading, error: storyError, data: storyData, refetch } = useQuery<GetStoryDetailsQuery, GetStoryDetailsQueryVariables>(
+  const { loading: storyLoading, data: storyData, refetch } = useQuery(
     GET_STORY_DETAILS, {
     variables: { id: storyIdNumber }
   }
   );
 
-  const storySessions = useQuery<GetUserStorySessionsQuery, GetUserStorySessionsQueryVariables>(
+  const storySessions = useQuery(
     GET_USER_STORY_SESSIONS, {
     variables: { storyId: storyIdNumber, userId: store.getState().auth.user!.id }
   }
@@ -56,7 +56,7 @@ const StoryPage: React.FC = () => {
   }, [refetch, storyIdNumber]);
 
 
-  const [updateStory] = useMutation<UpdateStoryMutation, UpdateStoryMutationVariables>(UPDATE_STORY, {
+  const [updateStory] = useMutation(UPDATE_STORY, {
     refetchQueries: [GET_STORY_DETAILS]
   })
 
