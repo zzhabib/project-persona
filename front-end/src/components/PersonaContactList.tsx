@@ -4,6 +4,9 @@ import { Theme, makeStyles } from '@mui/material/styles';
 import { useQuery } from '@apollo/client';
 
 type PersonaContactListProps = {
+  selectedFromPersonaId: number,
+  selectedTargetPersonaId: number,
+  onChange: (changeType: 'from' | 'target', newId: number) => void
   personas: {
     id: number;
     name: string;
@@ -11,16 +14,20 @@ type PersonaContactListProps = {
 }
 
 const PersonaContactList: React.FC<PersonaContactListProps> = ({
+  selectedFromPersonaId,
+  selectedTargetPersonaId,
+  onChange,
   personas
 }) => {
-  const [fromPersonaId, setFromPersonaId] = useState<string>("");
-  const [targetPersonaId, setTargetPersonaId] = useState<string>("");
+  const fromPersonaId = selectedFromPersonaId.toString();
+  const targetPersonaId = selectedTargetPersonaId.toString();
 
   const handleFromPersonaChange = (event: SelectChangeEvent) => {
+    const newFromPersonaId = parseInt(event.target.value as string);
     if (event.target.value == targetPersonaId) {
-      setTargetPersonaId("");
+      onChange('target', -1)
     }
-    setFromPersonaId(event.target.value);
+    onChange('from', newFromPersonaId);
   };
 
   const otherPersonas = personas.filter((persona) => persona.id !== parseInt(fromPersonaId));
@@ -47,7 +54,7 @@ const PersonaContactList: React.FC<PersonaContactListProps> = ({
             selected={targetPersonaId === persona.id.toString()}
             key={persona.id}
             onClick={() => {
-              setTargetPersonaId(persona.id.toString());
+              onChange('target', persona.id);
             }}
           >
             <ListItemText primary={persona.name} />
