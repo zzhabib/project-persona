@@ -24,13 +24,27 @@ const Playground = () => {
   }
 
   return (
-    <Box display="flex" height="100vh">
-      <PersonaContactList
-        selectedFromPersonaId={selectedFromPersonaId}
-        selectedTargetPersonaId={selectedTargetPersonaId}
-        onChange={handlePersonaChange}
-        personas={personas}
-      />
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'row',
+        maxHeight: '100%',
+        width: '100%',
+        border: '1px solid #ccc',
+      }}
+    >
+      <Box
+        sx={{
+          maxWidth: '200px'
+        }}
+      >
+        <PersonaContactList
+          selectedFromPersonaId={selectedFromPersonaId}
+          selectedTargetPersonaId={selectedTargetPersonaId}
+          onChange={handlePersonaChange}
+          personas={personas}
+        />
+      </Box>
       <PersonaConversation
         storySessionId={storySessionId}
         fromPersonaId={selectedFromPersonaId}

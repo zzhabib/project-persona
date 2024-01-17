@@ -1,7 +1,9 @@
 import { useQuery } from "@apollo/client";
-import { Box, Typography } from "@mui/material";
+import { Box, Button, TextField, Typography } from "@mui/material";
 import { GET_CONVERSATION } from "../../queries/PlaygroundQueries";
 import { GetConversationQuery, GetConversationQueryVariables } from "../../gql/graphql";
+import ChatBubble from "./ChatBubble";
+import { useState } from "react";
 
 type PersonaConversationProps = {
   storySessionId: number;
@@ -21,14 +23,54 @@ const PersonaConversation: React.FC<PersonaConversationProps> = ({
       firstPersonaId: fromPersonaId,
       secondPersonaId: targetPersonaId
     }
-   });
+  });
+
+  const [message, setMessage] = useState('');
+  const handleSendMessage = () => {
+
+  }
 
   return <Box>
-    <Typography variant="h6" align="center">Conversation</Typography>
-    <Box>
+    {/* <Typography variant="h6" align="center">Conversation</Typography> */}
+    <Box
+      sx={{
+        width: '100%',
+        maxHeight: '50%',
+        overflowY: 'auto',
+        border: '1px solid #ccc',
+      }}
+    >
       {data?.getConversation?.map((message) => (
-        <Typography key={message.id}>{message.text}</Typography>
+        <ChatBubble
+          key={message.id}
+          senderName={message.sender.name}
+          text={message.text}
+        />
       ))}
+    </Box>
+
+    {/* Message Box */}
+    <Box
+      sx={{
+        display: "flex",
+        alignItems: "center"
+      }}
+    >
+      <TextField
+        value={message}
+        multiline
+        rows={2}
+        onChange={(e) => setMessage(e.target.value)}
+        label="Type a message"
+        variant="outlined"
+        fullWidth
+      />
+      <Button
+        variant="contained"
+        onClick={handleSendMessage}
+      >
+        Send
+      </Button>
     </Box>
   </Box>
 }

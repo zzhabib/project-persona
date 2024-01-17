@@ -25,6 +25,7 @@ export const GET_CONVERSATION = gql`
       id
       sender {
         id
+        name
       }
       createdAt
       text
