@@ -1,7 +1,5 @@
 import React, { MouseEventHandler, useState } from 'react';
 import { Box, Typography, Select, MenuItem, List, ListItem, ListItemText, SelectChangeEvent, ListItemButton } from '@mui/material';
-import { Theme, makeStyles } from '@mui/material/styles';
-import { useQuery } from '@apollo/client';
 
 type PersonaContactListProps = {
   selectedFromPersonaId: number,
@@ -47,20 +45,28 @@ const PersonaContactList: React.FC<PersonaContactListProps> = ({
           </MenuItem>
         ))}
       </Select>
-      <Typography variant="h6">Chat with:</Typography>
-      <List>
-        {otherPersonas.map((persona) => (
-          <ListItemButton
-            selected={targetPersonaId === persona.id.toString()}
-            key={persona.id}
-            onClick={() => {
-              onChange('target', persona.id);
-            }}
-          >
-            <ListItemText primary={persona.name} />
-          </ListItemButton>
-        ))}
-      </List>
+
+
+      {fromPersonaId === '-1' ? (
+        null
+      ) : (
+        <>
+          <Typography variant="h6">Chat with:</Typography>
+          <List>
+            {otherPersonas.map((persona) => (
+              <ListItemButton
+                selected={targetPersonaId === persona.id.toString()}
+                key={persona.id}
+                onClick={() => {
+                  onChange('target', persona.id);
+                }}
+              >
+                <ListItemText primary={persona.name} />
+              </ListItemButton>
+            ))}
+          </List>
+        </>
+      )}
     </Box>
   );
 };

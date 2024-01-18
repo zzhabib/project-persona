@@ -70,8 +70,6 @@ const PersonaConversation: React.FC<PersonaConversationProps> = ({
 
   useEffect(() => {
     if (messagesContainerRef.current) {
-      console.log('scrolling')
-      // messagesContainerRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
       messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
     }
   }, [messages, sendingMessage]);
@@ -107,8 +105,7 @@ const PersonaConversation: React.FC<PersonaConversationProps> = ({
     ...(sendingMessage ? [sendingMessage] : [])
   ];
 
-  return <Box>
-    {/* <Typography variant="h6" align="center">Conversation</Typography> */}
+  return <>
     <Box
       ref={messagesContainerRef}
       sx={{
@@ -135,6 +132,7 @@ const PersonaConversation: React.FC<PersonaConversationProps> = ({
       }}
     >
       <Select
+        label="Scene"
         value={selectedSceneId}
         onChange={(e) => setSelectedSceneId(parseInt(e.target.value as string))}
       >
@@ -163,7 +161,7 @@ const PersonaConversation: React.FC<PersonaConversationProps> = ({
         Send
       </Button>
     </Box>
-  </Box>
+  </>
 }
 
 export default PersonaConversation;
