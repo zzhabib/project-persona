@@ -33,12 +33,13 @@ const Playground = () => {
       sx={{
         display: 'flex',
         flexDirection: 'row',
-        maxHeight: '90%',
-        width: '100vh',
+        height: 'calc(100vh - 64px)',
+        width: '100vw',
         margin: 0,
         padding: 0,
         border: '1px solid #ccc',
         overflow: 'hidden',
+        boxSizing: 'border-box',
       }}
     >
       <Box
@@ -58,7 +59,11 @@ const Playground = () => {
       <Box
         sx={{
           flexGrow: 1,
-          padding: '1rem',
+          // padding: '1rem',
+          border: '1px solid #ccc',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
         }}
       >
         {selectedFromPersonaId === -1 || selectedTargetPersonaId === -1 ? (

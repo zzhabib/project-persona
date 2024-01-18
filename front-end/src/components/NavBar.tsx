@@ -18,7 +18,12 @@ const NavBar = () => {
   }
 
   return (
-    <AppBar position="static">
+    <AppBar
+      position="static"
+      sx={{
+        zIndex: (theme) => theme.zIndex.drawer + 1,
+      }}
+    >
       <Toolbar>
         <IconButton edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
           <img src="/pp-icon.png" alt="Project Persona" style={{ height: '40px' }} />

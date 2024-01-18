@@ -109,10 +109,12 @@ const PersonaConversation: React.FC<PersonaConversationProps> = ({
     <Box
       ref={messagesContainerRef}
       sx={{
-        width: '100%',
-        maxHeight: '50%',
+        flexGrow: 1,
         overflowY: 'auto',
         border: '1px solid #ccc',
+        padding: '0.5rem',
+        display: 'flex',
+        flexDirection: 'column',
       }}
     >
       {allMessages.map((message) => (
@@ -120,6 +122,12 @@ const PersonaConversation: React.FC<PersonaConversationProps> = ({
           key={message.id}
           senderName={message.sender.name}
           text={message.text}
+          sx={{
+            alignSelf: message.sender.id === fromPersonaId ? 'flex-end' : 'flex-start',
+            backgroundColor: message.sender.id === fromPersonaId ? '#57606f' : '#eee',
+            color: message.sender.id === fromPersonaId ? '#f1f2f6' : '#252525',
+            borderRadius: message.sender.id === fromPersonaId ? '1rem 1rem 0 1rem' : '1rem 1rem 1rem 0',
+          }}
         />
       ))}
     </Box>
@@ -128,18 +136,26 @@ const PersonaConversation: React.FC<PersonaConversationProps> = ({
     <Box
       sx={{
         display: "flex",
-        alignItems: "center"
+        alignItems: "center",
+        padding: '0.5rem',
       }}
     >
       <Select
-        label="Scene"
+        name="Scene"
         value={selectedSceneId}
         onChange={(e) => setSelectedSceneId(parseInt(e.target.value as string))}
+        sx={{
+          fontSize: '0.8rem',
+          maxWidth: '200px',
+        }}
       >
         {scenes.map((scene) => (
           <MenuItem
             key={scene.id}
             value={scene.id}
+            sx={{
+              fontSize: '0.8rem',
+            }}
           >
             {scene.title}
           </MenuItem>
@@ -149,6 +165,7 @@ const PersonaConversation: React.FC<PersonaConversationProps> = ({
         value={messageText}
         multiline
         rows={2}
+        maxRows={4}
         onChange={(e) => setMessageText(e.target.value)}
         label="Type a message"
         variant="outlined"
