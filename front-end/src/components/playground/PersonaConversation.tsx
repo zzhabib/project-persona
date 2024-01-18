@@ -3,7 +3,7 @@ import { Box, Button, MenuItem, Select, TextField, Typography } from "@mui/mater
 import { CREATE_USER_MESSAGE, GET_CONVERSATION } from "../../queries/PlaygroundQueries";
 import { CreateUserMessageMutation, CreateUserMessageMutationVariables, GetConversationQuery, GetConversationQueryVariables } from "../../gql/graphql";
 import ChatBubble from "./ChatBubble";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface ConversationMessage {
   id: number;
@@ -36,6 +36,7 @@ const PersonaConversation: React.FC<PersonaConversationProps> = ({
   scenes
 }) => {
 
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
   const [messages, setMessages] = useState<ConversationMessage[]>([]);
   const [selectedSceneId, setSelectedSceneId] = useState(scenes[0]?.id ?? -1);
   const [messageText, setMessageText] = useState('');
@@ -66,6 +67,14 @@ const PersonaConversation: React.FC<PersonaConversationProps> = ({
       setMessages(data.getConversation);
     }
   }, [data]);
+
+  useEffect(() => {
+    if (messagesContainerRef.current) {
+      console.log('scrolling')
+      // messagesContainerRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
+      messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
+    }
+  }, [messages, sendingMessage]);
 
   const handleSendMessage = () => {
     createMessage().then((response) => {
@@ -101,6 +110,7 @@ const PersonaConversation: React.FC<PersonaConversationProps> = ({
   return <Box>
     {/* <Typography variant="h6" align="center">Conversation</Typography> */}
     <Box
+      ref={messagesContainerRef}
       sx={{
         width: '100%',
         maxHeight: '50%',
