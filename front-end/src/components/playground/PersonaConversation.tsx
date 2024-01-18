@@ -111,7 +111,6 @@ const PersonaConversation: React.FC<PersonaConversationProps> = ({
       sx={{
         flexGrow: 1,
         overflowY: 'auto',
-        border: '1px solid #ccc',
         padding: '0.5rem',
         display: 'flex',
         flexDirection: 'column',

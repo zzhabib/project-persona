@@ -1,6 +1,6 @@
 import React from 'react';
 import { useParams } from "react-router";
-import { Box, List, ListItem, Divider, Typography, ListItemButton, MenuItem, Select } from '@mui/material';
+import { Box, List, ListItem, Divider, Typography, ListItemButton, MenuItem, Select, Paper } from '@mui/material';
 import PersonaContactList from '../components/playground/PersonaContactList';
 import { useQuery } from '@apollo/client';
 import { GET_STORY_SESSION } from '../queries/PlaygroundQueries';
@@ -37,16 +37,17 @@ const Playground = () => {
         width: '100vw',
         margin: 0,
         padding: 0,
-        border: '1px solid #ccc',
         overflow: 'hidden',
         boxSizing: 'border-box',
       }}
     >
-      <Box
+      <Paper
+        elevation={4}
         sx={{
           minWidth: '200px',
           maxWidth: '200px',
           padding: '1rem',
+          overflow: 'auto',
         }}
       >
         <PersonaContactList
@@ -55,15 +56,16 @@ const Playground = () => {
           onChange={handlePersonaChange}
           personas={personas}
         />
-      </Box>
+      </Paper>
+
       <Box
         sx={{
           flexGrow: 1,
-          // padding: '1rem',
-          border: '1px solid #ccc',
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
+          maxWidth: '1000px',
+          margin: '0 auto',
         }}
       >
         {selectedFromPersonaId === -1 || selectedTargetPersonaId === -1 ? (
