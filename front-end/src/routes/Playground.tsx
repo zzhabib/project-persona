@@ -76,7 +76,9 @@ const Playground = () => {
               opacity: 0.5,
             }}
           >
-            Select personas to chat
+            {
+              scenes.length === 0 ? 'Please create a scene in order to use the playground' : 'Select personas to chat'
+            }
           </Typography>
         ) : (
           <PersonaConversation

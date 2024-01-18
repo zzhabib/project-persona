@@ -46,7 +46,6 @@ const PersonaContactList: React.FC<PersonaContactListProps> = ({
         ))}
       </Select>
 
-
       {fromPersonaId === '-1' ? (
         null
       ) : (
