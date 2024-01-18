@@ -33,15 +33,19 @@ const Playground = () => {
       sx={{
         display: 'flex',
         flexDirection: 'row',
-        maxHeight: '100%',
-        width: '100%',
+        maxHeight: '90%',
+        width: '100vh',
+        margin: 0,
+        padding: 0,
         border: '1px solid #ccc',
+        overflow: 'hidden',
       }}
     >
       <Box
         sx={{
-            maxWidth: '200px',
-            overflow: 'hidden'
+          minWidth: '200px',
+          maxWidth: '200px',
+          padding: '1rem',
         }}
       >
         <PersonaContactList
