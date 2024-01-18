@@ -1,9 +1,9 @@
-import { useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { Box, Button, MenuItem, Select, TextField, Typography } from "@mui/material";
-import { GET_CONVERSATION } from "../../queries/PlaygroundQueries";
-import { GetConversationQuery, GetConversationQueryVariables } from "../../gql/graphql";
+import { CREATE_USER_MESSAGE, GET_CONVERSATION } from "../../queries/PlaygroundQueries";
+import { CreateUserMessageMutation, CreateUserMessageMutationVariables, GetConversationQuery, GetConversationQueryVariables } from "../../gql/graphql";
 import ChatBubble from "./ChatBubble";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface ConversationMessage {
   id: number;
@@ -35,8 +35,13 @@ const PersonaConversation: React.FC<PersonaConversationProps> = ({
   targetPersonaId,
   scenes
 }) => {
-  
-  const { data, error, loading } = useQuery<GetConversationQuery, GetConversationQueryVariables>(GET_CONVERSATION, { 
+
+  const [messages, setMessages] = useState<ConversationMessage[]>([]);
+  const [selectedSceneId, setSelectedSceneId] = useState(scenes[0]?.id ?? -1);
+  const [messageText, setMessageText] = useState('');
+  const [sendingMessage, setSendingMessage] = useState<ConversationMessage | undefined>();
+
+  const { data, error, loading } = useQuery<GetConversationQuery, GetConversationQueryVariables>(GET_CONVERSATION, {
     variables: {
       storySessionId: storySessionId,
       firstPersonaId: fromPersonaId,
@@ -44,11 +49,34 @@ const PersonaConversation: React.FC<PersonaConversationProps> = ({
     }
   });
 
-  const [selectedSceneId, setSelectedSceneId] = useState(scenes[0].id ?? -1);
-  const [messageText, setMessageText] = useState('');
-  const [sendingMessage, setSendingMessage] = useState<ConversationMessage | undefined>();
+  const [createMessage] = useMutation<CreateUserMessageMutation, CreateUserMessageMutationVariables>(CREATE_USER_MESSAGE, {
+    variables: {
+      input: {
+        senderId: fromPersonaId,
+        recipientId: targetPersonaId,
+        text: messageText,
+        sceneId: selectedSceneId,
+        storySessionId: storySessionId
+      }
+    }
+  })
+
+  useEffect(() => {
+    if (data?.getConversation) {
+      setMessages(data.getConversation);
+    }
+  }, [data]);
 
   const handleSendMessage = () => {
+    createMessage().then((response) => {
+      if (!response.data) return;
+      setMessages([
+        ...messages,
+        response.data?.createUserMessage.userMessage,
+        response.data.createUserMessage.replyMessage
+      ])
+      setSendingMessage(undefined);
+    })
     setSendingMessage({
       id: -1,
       createdAt: new Date(),
@@ -65,8 +93,8 @@ const PersonaConversation: React.FC<PersonaConversationProps> = ({
     setMessageText('')
   }
 
-  const messages: ConversationMessage[] = [
-    ...(data?.getConversation ?? []),
+  const allMessages: ConversationMessage[] = [
+    ...messages,
     ...(sendingMessage ? [sendingMessage] : [])
   ];
 
@@ -80,7 +108,7 @@ const PersonaConversation: React.FC<PersonaConversationProps> = ({
         border: '1px solid #ccc',
       }}
     >
-      {messages.map((message) => (
+      {allMessages.map((message) => (
         <ChatBubble
           key={message.id}
           senderName={message.sender.name}

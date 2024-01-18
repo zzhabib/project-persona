@@ -41,7 +41,7 @@ export const GET_CONVERSATION = gql`
   }
 `
 
-export const SEND_MESSAGE = gql`
+export const CREATE_USER_MESSAGE = gql`
   mutation CreateUserMessage($input: UserMessageInput!) {
     createUserMessage(input: $input) {
       userMessage {
