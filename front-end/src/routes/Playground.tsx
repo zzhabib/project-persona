@@ -12,8 +12,13 @@ const Playground = () => {
   const [selectedFromPersonaId, setSelectedFromPersonaId] = React.useState(-1);
   const [selectedTargetPersonaId, setSelectedTargetPersonaId] = React.useState(-1);
   
-  const { data, loading, error } = useQuery<GetStorySessionQuery, GetStorySessionQueryVariables>(GET_STORY_SESSION, { variables: { storySessionId: storySessionId } })
+  const { data, loading, error } = useQuery<GetStorySessionQuery, GetStorySessionQueryVariables>(GET_STORY_SESSION, {
+    variables: {
+      storySessionId: storySessionId 
+    }
+  })
   const personas = data?.getStorySession?.story?.personas ?? [];
+  const scenes = data?.getStorySession?.story?.scenes ?? [];
 
   const handlePersonaChange = (changeType: 'from' | 'target', newId: number) => {
     if (changeType === 'from') {
@@ -49,6 +54,7 @@ const Playground = () => {
         storySessionId={storySessionId}
         fromPersonaId={selectedFromPersonaId}
         targetPersonaId={selectedTargetPersonaId}
+        scenes={scenes}
       />
     </Box>
   );
