@@ -73,15 +73,29 @@ initiatedConnections(
   return queryBuilder.getMany();
 }
 
-  @FieldResolver(() => [Connection])
-  receivedConnections(@Root() persona): Promise<Connection[]> {
-    return AppDataSource.getRepository(Connection)
-      .createQueryBuilder('connection')
-      .innerJoinAndSelect('connection.targetPersona', 'persona')
-      .where('persona.id = :personaId', { personaId: persona.id })
-      .getMany();
+@FieldResolver(() => [Connection])
+receivedConnections(
+  @Root() persona: Persona,
+  @Arg("sourcePersonaId", () => Int, { nullable: true }) sourcePersonaId?: number
+): Promise<Connection[]> {
+  const queryBuilder = AppDataSource.getRepository(Connection)
+    .createQueryBuilder('connection')
+    .innerJoinAndSelect('connection.targetPersona', 'persona')
+    .where('persona.id = :personaId', { personaId: persona.id });
+
+  if (sourcePersonaId !== undefined) {
+    queryBuilder.andWhere('connection.sourcePersonaId = :sourcePersonaId', { sourcePersonaId });
   }
 
+  return queryBuilder.getMany();
+}
+
+
+
+
+
+
+  
   @Mutation(() => Persona)
   async createPersona(@Arg('input', () => PersonaInput) input: PersonaInput): Promise<Persona> {
     const persona = Persona.create(input);

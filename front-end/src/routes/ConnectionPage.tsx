@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Typography } from '@mui/material';
 import { useParams } from 'react-router-dom';
-import { GET_CONNECTION } from '../queries/ConnectionPageQueries';
+import { GET_INITIATED_CONNECTION, GET_RECEIVED_CONNECTION } from '../queries/ConnectionPageQueries';
 import { useQuery } from '@apollo/client';
 import BackButton from '../components/BackButton';
 
@@ -25,7 +25,7 @@ const ConnectionPage: React.FC = () => {
 
 
     const { loading, error, data } = useQuery(
-        GET_CONNECTION, {
+        GET_INITIATED_CONNECTION, {
           variables: { 
             targetPersonaId: personaIdNumber,
             getPersonaId: connectionIdNumber
@@ -33,15 +33,26 @@ const ConnectionPage: React.FC = () => {
     })
     
 
-    const { loading2, error2, data2 } = useQuery(
-        GET_CONNECTION, {
+    const g2 = useQuery(
+        GET_RECEIVED_CONNECTION, {
           variables: { 
-            targetPersonaId: connectionIdNumber,
-            getPersonaId: personaIdNumber
+            getPersonaId : connectionIdNumber,
+             sourcePersonaId : personaIdNumber
           }
-        })
-  
+    })
     
+    const data2 = g2.data
+  
+    const initiatedPersonaName = data?.getPersona.initiatedConnections[0]?.targetPersona?.name ?? null;
+    const initiatedPersonaDesc = data?.getPersona.initiatedConnections[0]?.description ?? null;
+
+
+    const targetPersonaName = data2?.getPersona.receivedConnections[0]?.sourcePersona?.name ?? null;
+    const targetPersonaDesc = data2?.getPersona.receivedConnections[0]?.description ?? null;
+
+    
+    console.log(data2)
+
 
 
   return (
@@ -53,15 +64,15 @@ const ConnectionPage: React.FC = () => {
       {/* First Column */}
       <Box flex="1" border="1px solid gray" padding="16px">
         <Typography variant="h6">Source</Typography>
-        <Box>{data?.getPersona.initiatedConnections[0].targetPersona.name}</Box>
-        <Box>{data?.getPersona.initiatedConnections[0].description}</Box>
+        <Box>{initiatedPersonaName}</Box>
+        <Box>{initiatedPersonaDesc}</Box>
       </Box>
 
       {/* Second Column */}
       <Box flex="1" border="1px solid gray" padding="16px">
         <Typography variant="h6">Target</Typography>
-        <Box>{data2?.getPersona.initiatedConnections[0].targetPersona.name}</Box>
-        <Box>{data2?.getPersona.initiatedConnections[0].description}</Box>
+        <Box>{targetPersonaName}</Box>
+        <Box>{targetPersonaDesc}</Box>
       </Box>
     </Box>
     </Box>
