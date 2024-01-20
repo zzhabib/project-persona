@@ -20,6 +20,9 @@ const ChatBubble: React.FC<ChatBubbleProps> = ({
         alignSelf: 'flex-end',
         backgroundColor: '#eee',
         borderRadius: '1rem 1rem 1rem 0',
+        wordWrap: 'break-word',  // Allow long words to break and wrap onto the next line
+        wordBreak: 'break-word',  // Break words at arbitrary points to prevent overflow
+        height: 'auto', 
         ...sx
       }}
     >

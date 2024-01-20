@@ -106,6 +106,9 @@ const PersonaConversation: React.FC<PersonaConversationProps> = ({
   ];
 
   return <>
+  <Box 
+    sx={{
+      minHeight: '80vh'}}>
     <Box
       ref={messagesContainerRef}
       sx={{
@@ -113,7 +116,9 @@ const PersonaConversation: React.FC<PersonaConversationProps> = ({
         overflowY: 'auto',
         padding: '0.5rem',
         display: 'flex',
-        flexDirection: 'column',
+        minHeight: '63vh',
+        maxHeight: '63vh',
+        flexDirection: 'column'
       }}
     >
       {allMessages.map((message) => (
@@ -135,6 +140,8 @@ const PersonaConversation: React.FC<PersonaConversationProps> = ({
     <Box
       sx={{
         display: "flex",
+        flexDirection: 'bottom',
+        mb: 'auto',
         alignItems: "center",
         padding: '0.5rem',
       }}
@@ -154,6 +161,11 @@ const PersonaConversation: React.FC<PersonaConversationProps> = ({
             value={scene.id}
             sx={{
               fontSize: '0.8rem',
+              height: '3em',
+              width: '8em',
+              marginTop: '1em',
+              marginLeft: '1em',
+
             }}
           >
             {scene.title}
@@ -162,19 +174,32 @@ const PersonaConversation: React.FC<PersonaConversationProps> = ({
       </Select>
       <TextField
         value={messageText}
+        sx={{
+          height: '3em',
+          marginTop: '1em',
+          marginLeft: '1em',
+        }}
         multiline
-        rows={2}
         onChange={(e) => setMessageText(e.target.value)}
         label="Type a message"
+        rows={3}
         variant="outlined"
         fullWidth
       />
       <Button
         variant="contained"
+        sx={{
+          height: '3em',
+          width: '8em',
+          marginTop: '1em',
+          marginLeft: '1em',
+        }}
         onClick={handleSendMessage}
       >
         Send
       </Button>
+    </Box>
+
     </Box>
   </>
 }

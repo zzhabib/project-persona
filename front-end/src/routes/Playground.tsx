@@ -89,6 +89,7 @@ const Playground = () => {
           maxWidth: '1000px',
           margin: '0 auto',
           overflow: 'auto',
+          height: '85vh'
         }}
       >
         {selectedFromPersonaId === -1 || selectedTargetPersonaId === -1 ? (
