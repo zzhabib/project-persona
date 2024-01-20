@@ -2,11 +2,10 @@ import { useMutation, useQuery } from "@apollo/client"
 import { Box, Button, Container, TextField, Typography } from "@mui/material"
 import { useParams } from "react-router"
 import { useState } from "react"
-import { useNavigate } from 'react-router-dom';
 import { SceneUpdateInput} from "../gql/graphql"
 import { GET_SCENE_DATA, UPDATE_SCENE } from "../queries/ScenePageQueries"
 import { sectionPadding } from "../styles/styles"
-
+import BackButton from "../components/BackButton";
 
 type ScenePageParams = {
   sceneId: string
@@ -16,11 +15,6 @@ type ScenePageParams = {
 
 
 const ScenePage: React.FC = () => {
-const navigate = useNavigate();
-
-  const handleGoBack = () => {
-    navigate(-1); 
-  };
 
   const { sceneId } = useParams<ScenePageParams>()
   const sceneIdNumber = sceneId ? parseInt(sceneId, 10) : 0;
@@ -93,19 +87,14 @@ const descValue = updateInput.description != null ? updateInput.description : da
         alignItems: 'center', // Center items vertically
       }}
     >
-        <Button
+        <BackButton
         sx={{
           height: '3em',
           width: '8em',
           marginTop: '1em',
           marginLeft: '1em',
 
-        }}
-        variant="contained"
-        onClick={handleGoBack}
-        >
-          GO BACK
-        </Button>
+        }}/>
 
         <Button
         sx={{

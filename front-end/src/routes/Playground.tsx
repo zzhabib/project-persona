@@ -6,6 +6,9 @@ import { useQuery } from '@apollo/client';
 import { GET_STORY_SESSION } from '../queries/PlaygroundQueries';
 import { GetStorySessionQuery, GetStorySessionQueryVariables, QueryGetStorySessionArgs } from '../gql/graphql';
 import PersonaConversation from '../components/playground/PersonaConversation';
+import BackButton from '../components/BackButton';
+
+
 
 const Playground = () => {
   const storySessionId = parseInt(useParams().storySessionId ?? '');
@@ -33,23 +36,42 @@ const Playground = () => {
       sx={{
         display: 'flex',
         flexDirection: 'row',
-        height: 'calc(100vh - 64px)',
-        width: '100vw',
+        width: '90vw',
         margin: 0,
         padding: 0,
         overflow: 'hidden',
+        maxHeight: '85vh',
         boxSizing: 'border-box',
       }}
     >
+          
+      <Box sx={{
+        display: 'flex',
+        flexDirection: 'column',
+      }}
+      >
+
+      <BackButton
+        sx={{
+          height: '3em',
+          width: '8em',
+          marginTop: '1em',
+          marginLeft: '1em'
+        }} />
       <Paper
         elevation={4}
         sx={{
+          marginTop: '1em',
+          marginLeft: '1em',
           minWidth: '200px',
           maxWidth: '200px',
           padding: '1rem',
           overflow: 'auto',
         }}
       >
+
+  
+
         <PersonaContactList
           selectedFromPersonaId={selectedFromPersonaId}
           selectedTargetPersonaId={selectedTargetPersonaId}
@@ -57,7 +79,7 @@ const Playground = () => {
           personas={personas}
         />
       </Paper>
-
+      </Box>
       <Box
         sx={{
           flexGrow: 1,
@@ -66,6 +88,7 @@ const Playground = () => {
           justifyContent: 'center',
           maxWidth: '1000px',
           margin: '0 auto',
+          overflow: 'auto',
         }}
       >
         {selectedFromPersonaId === -1 || selectedTargetPersonaId === -1 ? (
@@ -74,6 +97,7 @@ const Playground = () => {
             sx={{
               textAlign: 'center',
               opacity: 0.5,
+              overflow: 'hidden',
             }}
           >
             {
@@ -85,7 +109,7 @@ const Playground = () => {
             storySessionId={storySessionId}
             fromPersonaId={selectedFromPersonaId}
             targetPersonaId={selectedTargetPersonaId}
-            scenes={scenes}
+              scenes={scenes}
           />
         )}
       </Box>

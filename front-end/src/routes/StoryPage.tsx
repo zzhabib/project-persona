@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import { store } from "../store"
 import { cardStyle, sectionPadding } from "../styles/styles"
 import { GET_STORY_DETAILS, GET_USER_STORY_SESSIONS, UPDATE_STORY, CREATE_PERSONA, CREATE_STORY_SESSION, CREATE_SCENE, DELETE_PERSONA, DELETE_SCENE, DELETE_STORY_SESSION } from "../queries/StoryPageQueries"
+import BackButton from "../components/BackButton"
 
 
 type StoryPageParams = {
@@ -22,10 +23,7 @@ type StoryPageParams = {
 
 const StoryPage: React.FC = () => {
   const navigate = useNavigate();
-  const handleGoBack = () => {
-    navigate(-1);
-  };
-
+  
   const { storyId } = useParams<StoryPageParams>()
   const storyIdNumber = storyId ? parseInt(storyId, 10) : 0;
 
@@ -195,18 +193,14 @@ const StoryPage: React.FC = () => {
       }}
     >
 
-      <Button
+      <BackButton
         sx={{
           height: '3em',
           width: '8em',
           marginTop: '1em',
           marginLeft: '1em',
-        }}
-        variant="contained"
-        onClick={handleGoBack}
-      >
-        GO BACK
-      </Button>
+        }}/>
+
 
       <Button
         sx={{

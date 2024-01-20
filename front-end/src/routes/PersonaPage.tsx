@@ -3,13 +3,13 @@ import { Box, Button, Container, TextField, Typography } from "@mui/material"
 import { useParams } from "react-router"
 import IdentityCard from "../components/IdentityCard"
 import { useState } from "react"
-import { useNavigate } from 'react-router-dom';
+
 import { PersonaUpdateInput } from "../gql/graphql"
 import { cardStyle, sectionPadding } from "../styles/styles"
 import { GET_PERSONA_DATA, UPDATE_PERSONA } from "../queries/PersonaPageQueries"
 import ConnectionCard from "../components/ConnectionCard"
 
-
+import BackButton from "../components/BackButton"
 
 type PersonaPageParams = {
   personaId: string
@@ -19,12 +19,7 @@ type PersonaPageParams = {
 
 
 const PersonaPage: React.FC = () => {
-    const navigate = useNavigate();
-
-    const handleGoBack = () => {
-        navigate(-1); 
-    };
-
+  
     const { personaId } = useParams<PersonaPageParams>()
     const personaIdNumber = personaId ? parseInt(personaId, 10) : 0;
 
@@ -100,20 +95,7 @@ const PersonaPage: React.FC = () => {
         alignItems: 'center', // Center items vertically
       }}
     >
-        <Button
-        sx={{
-          height: '3em',
-          width: '8em',
-          marginTop: '1em',
-          marginLeft: '1em',
-
-        }}
-        variant="contained"
-        onClick={handleGoBack}
-        >
-          GO BACK
-        </Button>
-
+        <BackButton/>
         <Button
         sx={{
           height: '3em',

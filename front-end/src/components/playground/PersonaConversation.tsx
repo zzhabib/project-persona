@@ -164,7 +164,6 @@ const PersonaConversation: React.FC<PersonaConversationProps> = ({
         value={messageText}
         multiline
         rows={2}
-        maxRows={4}
         onChange={(e) => setMessageText(e.target.value)}
         label="Type a message"
         variant="outlined"
