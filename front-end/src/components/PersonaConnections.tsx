@@ -2,6 +2,8 @@ import React from 'react';
 import { Box } from "@mui/material";
 import ConnectionCard from "../components/ConnectionCard";
 import { cardStyle } from "../styles/styles";
+import { useNavigate } from 'react-router';
+
 
 type PersonaConnectionsProps = {
   initiatedConnections: Array<{ targetPersona: { id: number; name: string } }>;
@@ -10,7 +12,8 @@ type PersonaConnectionsProps = {
 };
 
 const PersonaConnections: React.FC<PersonaConnectionsProps> = ({ initiatedConnections, receivedConnections, personaId }) => {
-  const combineConnectionsData = () => {
+    const navigate = useNavigate()
+    const combineConnectionsData = () => {
     const combinedConnections: { [name: string]: { id: number; initiatedConnection: boolean; receivedConnection: boolean } } = {};
 
     // Map initiated connections
@@ -56,7 +59,7 @@ const PersonaConnections: React.FC<PersonaConnectionsProps> = ({ initiatedConnec
           recievedConnnection={connection.receivedConnection}
           sx={cardStyle}
           onClick={() => {
-            // navigate(`/persona/${personaId}/connections/${connection.targetPersona.id}`)
+             navigate(`/persona/${personaId}/connections/${connection.id}`)
           }}
           // onDoSomethingClick={}
         />

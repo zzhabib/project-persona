@@ -61,8 +61,9 @@ const ConnectionCard: React.FC<ConnectionCardProps> = ({
           <Typography>
             
           {initiatedConnection && (
-                <div
-                  style={{
+                <span
+                style={{
+                  display: 'inline-block',
                     width: '20px',
                     height: '20px',
                     backgroundColor: 'blue',
@@ -71,8 +72,9 @@ const ConnectionCard: React.FC<ConnectionCardProps> = ({
                 />
               )}
               {recievedConnnection && (
-                <div
-                  style={{
+                <span
+                style={{
+                  display: 'inline-block',
                     width: '20px',
                     height: '20px',
                     backgroundColor: 'red',

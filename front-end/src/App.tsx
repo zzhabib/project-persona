@@ -4,6 +4,7 @@ import { BrowserRouter } from 'react-router-dom'
 import LoginPage from './routes/LoginPage'
 import PersonaPage from './routes/PersonaPage'
 import ScenePage from './routes/ScenePage'
+import ConnectionPage from './routes/ConnectionPage'
 import NavBar from './components/NavBar'
 import { createTheme } from '@mui/material'
 import { ThemeProvider } from '@emotion/react'
@@ -84,7 +85,14 @@ function App() {
                 <Playground />
               </RequireAuth>
             } />
+            
 
+            <Route path="/persona/:personaId/connections/:connectionId" element={
+              <RequireAuth>
+                <ConnectionPage />
+              </RequireAuth>
+            } />
+              
           </Routes>
         </BrowserRouter>
       </ThemeProvider>
