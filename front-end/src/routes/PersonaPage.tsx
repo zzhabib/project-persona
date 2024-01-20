@@ -1,61 +1,16 @@
 import { useMutation, useQuery } from "@apollo/client"
 import { Box, Button, Container, TextField, Typography } from "@mui/material"
 import { useParams } from "react-router"
-import IdentityCard from "../components/IdentityCard"
 import { useState } from "react"
-
 import { PersonaUpdateInput } from "../gql/graphql"
-import { cardStyle, sectionPadding } from "../styles/styles"
+import { sectionPadding } from "../styles/styles"
 import { GET_PERSONA_DATA, UPDATE_PERSONA } from "../queries/PersonaPageQueries"
-import ConnectionCard from "../components/ConnectionCard"
-
 import BackButton from "../components/BackButton"
+import PersonaConnections from "../components/PersonaConnections"
 
 type PersonaPageParams = {
   personaId: string
 }
-
-
-const combineConnectionsData = (
-  initiatedConnections: Array<{ targetPersona: { id: number; name: string } }>,
-  receivedConnections: Array<{ sourcePersona: { id: number; name: string } }>
-) => {
-  const combinedConnections: { [name: string]: { id: number; initiatedConnection: boolean; receivedConnection: boolean } } = {};
-
-  // Map initiated connections
-  initiatedConnections.forEach(connection => {
-    const { id, name } = connection.targetPersona;
-    if (!combinedConnections[name]) {
-      combinedConnections[name] = { id, initiatedConnection: true, receivedConnection: false };
-    } else {
-      combinedConnections[name].initiatedConnection = true;
-    }
-  });
-
-  // Map received connections
-  receivedConnections.forEach(connection => {
-    const { id, name } = connection.sourcePersona;
-    if (!combinedConnections[name]) {
-      combinedConnections[name] = { id, initiatedConnection: false, receivedConnection: true };
-    } else {
-      combinedConnections[name].receivedConnection = true;
-    }
-  });
-
-  // Convert the combinedConnections object into an array
-  const combinedConnectionsArray = Object.keys(combinedConnections).map(name => ({
-    name,
-    ...combinedConnections[name],
-  }));
-
-  return combinedConnectionsArray;
-};
-
-
-
-
-
-
 
 const PersonaPage: React.FC = () => {
   
@@ -106,34 +61,7 @@ const PersonaPage: React.FC = () => {
         }
       }
 
-
-
-
-      console.log(data);
-
-
-
-
-      
-
-
-      const combinedConnectionsData = combineConnectionsData(
-        data?.getPersona.initiatedConnections || [],
-        data?.getPersona.receivedConnections || []
-      );
-
-      
-
-
-      
-
-
-
-
-
-
-
-
+  
 
     if (loading) return <Typography>
     Loading...
@@ -229,21 +157,11 @@ const PersonaPage: React.FC = () => {
       Connections
     </Typography>
 
-        {combinedConnectionsData.map(connection => (
-        <ConnectionCard
-            key={connection.name}
-            personaId={personaIdNumber}
-            otherPersonaName={connection.name}
-            otherPersonaId={connection.id}
-            initiatedConnection={connection.initiatedConnection}
-            recievedConnnection= {connection.receivedConnection}
-          sx={cardStyle}
-          onClick={() => {
-            //navigate(`/persona/${personaId}/connections/${connection.targetPersona.id}`)
-          }}
-          //onDoSomethingClick={}
+        <PersonaConnections
+          personaId={personaIdNumber}
+          receivedConnections={ data?.getPersona.receivedConnections }
+          initiatedConnections={ data?.getPersona.initiatedConnections }
         />
-      ))}
       </Box>
 
 
