@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Typography } from '@mui/material';
 import { useParams } from 'react-router-dom';
-import { GET_INITIATED_CONNECTION, GET_RECEIVED_CONNECTION } from '../queries/ConnectionPageQueries';
-import { useQuery } from '@apollo/client';
+import { GET_INITIATED_CONNECTION, GET_RECEIVED_CONNECTION, ADD_CONNECTION } from '../queries/ConnectionPageQueries';
+import { useQuery, useMutation } from '@apollo/client';
 import BackButton from '../components/BackButton';
-
+import Button from '@mui/material/Button';
 
 type ConnectionPageParams = {
     personaId: string,
@@ -33,16 +33,67 @@ const ConnectionPage: React.FC = () => {
     })
     
 
-    const g2 = useQuery(
+    const data2 = useQuery(
         GET_RECEIVED_CONNECTION, {
           variables: { 
             getPersonaId : connectionIdNumber,
              sourcePersonaId : personaIdNumber
           }
-    })
+    }).data
+
+    const [addInitiatedConnection] = useMutation(ADD_CONNECTION, {
+        refetchQueries: [
+          { query: GET_INITIATED_CONNECTION},
+        ],
+      });
     
-    const data2 = g2.data
-  
+      const [addReceivedConnection] = useMutation(ADD_CONNECTION, {
+        refetchQueries: [
+          { query: GET_RECEIVED_CONNECTION},
+        ],
+      });
+    
+    
+    
+      const handleInitiatedConnectionCreate = (description: string) => {
+          addInitiatedConnection({
+              variables: {
+                "input": {
+                    "addInitiatedConnectionInputs": [
+                      {
+                        "description": description,
+                        "targetPersonaId": personaIdNumber
+                      }
+                    ]
+                  },
+                  "updatePersonaId": connectionIdNumber
+              }
+          })
+      }
+      
+      const handleReceivedConnectionCreate = (description: string) => {
+        addReceivedConnection({
+            variables: {
+              "input": {
+                  "addInitiatedConnectionInputs": [
+                    {
+                      "description": description,
+                      "targetPersonaId": connectionIdNumber
+                    }
+                  ]
+                },
+                "updatePersonaId": personaIdNumber
+            }
+        })
+    }
+    
+    
+    
+    
+    
+    
+    
+    
     const initiatedPersonaName = data?.getPersona.initiatedConnections[0]?.targetPersona?.name ?? null;
     const initiatedPersonaDesc = data?.getPersona.initiatedConnections[0]?.description ?? null;
 
@@ -65,7 +116,17 @@ const ConnectionPage: React.FC = () => {
       <Box flex="1" border="1px solid gray" padding="16px">
         <Typography variant="h6">Source</Typography>
         <Box>{initiatedPersonaName}</Box>
-        <Box>{initiatedPersonaDesc}</Box>
+                  <Box>{initiatedPersonaDesc}</Box>
+                  
+
+
+        {!initiatedPersonaName && !initiatedPersonaDesc &&
+            <Button onClick={() => handleInitiatedConnectionCreate('New Description')}>
+              Create Initiated Connection
+            </Button>
+          }
+
+                  
       </Box>
 
       {/* Second Column */}

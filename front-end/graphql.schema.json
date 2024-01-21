@@ -1146,7 +1146,20 @@
           {
             "name": "initiatedConnections",
             "description": null,
-            "args": [],
+            "args": [
+              {
+                "name": "targetPersonaId",
+                "description": null,
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
             "type": {
               "kind": "NON_NULL",
               "name": null,
@@ -1186,7 +1199,20 @@
           {
             "name": "receivedConnections",
             "description": null,
-            "args": [],
+            "args": [
+              {
+                "name": "sourcePersonaId",
+                "description": null,
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
             "type": {
               "kind": "NON_NULL",
               "name": null,

@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from "@apollo/client"
 import { Box, Button, Container, TextField, Typography } from "@mui/material"
 import { useParams } from "react-router"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { PersonaUpdateInput } from "../gql/graphql"
 import { sectionPadding } from "../styles/styles"
 import { GET_PERSONA_DATA, UPDATE_PERSONA } from "../queries/PersonaPageQueries"
@@ -16,11 +16,7 @@ const PersonaPage: React.FC = () => {
   
     const { personaId } = useParams<PersonaPageParams>()
     const personaIdNumber = personaId ? parseInt(personaId, 10) : 0;
-
-   
-    const [updateInput, setUpdateInput] = useState<PersonaUpdateInput>({
-
-    })
+    const [updateInput, setUpdateInput] = useState<PersonaUpdateInput>({})
 
 
     const { loading, error, data } = useQuery(
@@ -61,7 +57,7 @@ const PersonaPage: React.FC = () => {
         }
       }
 
-  
+
 
     if (loading) return <Typography>
     Loading...
@@ -70,7 +66,6 @@ const PersonaPage: React.FC = () => {
   const isDirty = Object.keys(updateInput).length > 0
   const nameValue = updateInput.name != null ? updateInput.name : data?.getPersona.name
   const descValue = updateInput.description != null ? updateInput.description : data?.getPersona.description
-
 
   
   return <>
