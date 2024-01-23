@@ -4,6 +4,7 @@ import { gql } from '@apollo/client';
 export const GET_INITIATED_CONNECTION = gql`
 query GetInitatedConnection($getPersonaId: Int!, $targetPersonaId: Int) {
     getPersona(id: $getPersonaId) {
+      name
       initiatedConnections(targetPersonaId: $targetPersonaId) {
         description
         targetPersona {
@@ -17,6 +18,7 @@ query GetInitatedConnection($getPersonaId: Int!, $targetPersonaId: Int) {
 export const GET_RECEIVED_CONNECTION = gql`
 query GetReceivedConnection($getPersonaId: Int!, $sourcePersonaId: Int) {
   getPersona(id: $getPersonaId) {
+    name
     receivedConnections(sourcePersonaId: $sourcePersonaId) {
       description
       sourcePersona {
@@ -33,6 +35,19 @@ mutation AddConnection($input: PersonaUpdateInput!, $updatePersonaId: Int!) {
     updatePersona(input: $input, id: $updatePersonaId)
   }
 `
+
+
+export const UPDATE_CONNECTION = gql`
+mutation UpdatePersona($input: PersonaUpdateInput!, $updatePersonaId: Int!) {
+  updatePersona(input: $input, id: $updatePersonaId)
+}
+`
+
+
+
+
+
+
 
 
 // call normal for initaiated and flip the inputs for recieved....

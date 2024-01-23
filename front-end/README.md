@@ -48,8 +48,15 @@ both the above pages I think will work a little differently to the basic layout 
 
 
 
----
+### Connections NTD
 
+- Adding is all done, need to integrate update and delete
+- will likely work on delete first
 
-
-As this goes on, I would be interested in having the app "compile" the prompt like it is a regular expression. This might make it easier to build out, and would allow the prompt to automatically adjust to the relavant data being provided, like an action section can either be nothing, or if there are actions, it goes into a specific place in relation to a character. would also be interesting if we were going to do this because it would be a great way to cram more story data in a meaningful way into the prompt automatically
+#### Delete
+- There will be 3 ways to delete a connection (sorta)
+  - On the personaconnections list, you will be able to right click otherPersona name icon to delete all connections betwee the two personas
+  - on the connection card itself, the initiated and recieved halves will each have a bubble allowing the user to right click to delete the connection (or maybe just a delete and save for each side at the bottom)
+#### Update
+- need to implement a save button
+- this will really only affect description, so might be work integrating into the description bubble

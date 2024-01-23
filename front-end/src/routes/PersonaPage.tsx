@@ -78,7 +78,6 @@ const PersonaPage: React.FC = () => {
         }
       }
 
-      console.log(data2)
 
     if (loading) return <Typography>
     Loading...

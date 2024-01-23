@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Typography } from '@mui/material';
+import { Box, Typography, TextField } from '@mui/material';
 import { useParams } from 'react-router-dom';
-import { GET_INITIATED_CONNECTION, GET_RECEIVED_CONNECTION, ADD_CONNECTION } from '../queries/ConnectionPageQueries';
+import { GET_INITIATED_CONNECTION, GET_RECEIVED_CONNECTION, ADD_CONNECTION, UPDATE_CONNECTION } from '../queries/ConnectionPageQueries';
 import { useQuery, useMutation } from '@apollo/client';
 import BackButton from '../components/BackButton';
 import Button from '@mui/material/Button';
+import { sectionPadding } from '../styles/styles';
+import { PersonaUpdateInput } from '../gql/graphql';
 
 type ConnectionPageParams = {
     personaId: string,
@@ -56,6 +58,14 @@ const ConnectionPage: React.FC = () => {
           { query: GET_RECEIVED_CONNECTION},
         ],
       });
+
+
+      const [updateConnection] = useMutation(UPDATE_CONNECTION, {
+        refetchQueries: [
+          { query: GET_INITIATED_CONNECTION},
+          { query: GET_RECEIVED_CONNECTION},
+        ],
+      });
   
       
       const handleConnectionCreate = (source: number, target:number) => {
@@ -76,11 +86,50 @@ const ConnectionPage: React.FC = () => {
         refetchBoth();
     }
     
-    
-    
+    const handleConnectionUpdate = (source: number, target:number, desc: string) => {
+      updateConnection({
+          variables: {
+            "input": {
+              "modifyInitiatedConnectionInputs": [
+                {
+                  "description": desc,
+                  "targetPersonaId": target
+                }
+              ]
+            },
+            "updatePersonaId": source
+          }
+      })
+
+      refetchBoth();
+  }
+
+
+
+
+
+    const [updateInitiatedInput, setUpdateInitiatedInput] = useState<string>('');
+    const [updateReceivedInput, setUpdateReceivedInput] = useState<string>('');
 
     
+
+    const handleInitiatedFieldChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
+    event.preventDefault();
+    const { value } = event.target;
+
+    setUpdateInitiatedInput(value);
+  };
+
+  const handleReceivedFieldChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
+    event.preventDefault();
+    const { value } = event.target;
+
+  
+    setUpdateReceivedInput(value);
+  };
+
     
+    const myName = initiatedData?.getPersona.name ?? null;
     
     const initiatedPersonaName = initiatedData?.getPersona.initiatedConnections[0]?.targetPersona?.name ?? null;
     const initiatedPersonaDesc = initiatedData?.getPersona.initiatedConnections[0]?.description ?? null;
@@ -88,6 +137,21 @@ const ConnectionPage: React.FC = () => {
 
     const targetPersonaName = receivedData?.getPersona.receivedConnections[0]?.sourcePersona?.name ?? null;
     const targetPersonaDesc = receivedData?.getPersona.receivedConnections[0]?.description ?? null;
+
+
+
+
+
+  const initiatedDescValue = updateInitiatedInput !== ''
+    ? updateInitiatedInput
+    : initiatedPersonaDesc;
+
+  const receivedDescValue = updateReceivedInput !== ''
+    ? updateReceivedInput
+    : targetPersonaDesc;
+
+
+
 
   
     if (receivedLoad || initiatedLoad) return <Typography>
@@ -97,16 +161,26 @@ const ConnectionPage: React.FC = () => {
   return (
     <Box>
       <BackButton/>
-          <Typography variant="h4">Connections Page Content</Typography>
+          <Typography variant="h4">{myName} connection with {targetPersonaName}</Typography>
           
           <Box display="flex">
       {/* First Column */}
       <Box flex="1" border="1px solid gray" padding="16px">
         <Typography variant="h6">Source</Typography>
-        <Box>{initiatedPersonaName}</Box>
-                  <Box>{initiatedPersonaDesc}</Box>
-                  
 
+        <TextField
+              label="Description"
+              name="initiatedDesc"
+              variant="outlined"
+              multiline
+              minRows={5}
+              maxRows={10}
+              fullWidth
+              sx={sectionPadding}
+              value={initiatedDescValue}
+              onChange={handleInitiatedFieldChange} 
+            />
+                  
 
         {!initiatedPersonaName && !initiatedPersonaDesc &&
             <Button onClick={() => handleConnectionCreate(personaIdNumber, connectionIdNumber)}>
@@ -120,9 +194,19 @@ const ConnectionPage: React.FC = () => {
       {/* Second Column */}
 
       <Box flex="1" border="1px solid gray" padding="16px">
-        <Typography variant="h6">Target</Typography>
-        <Box>{targetPersonaName}</Box>
-                  <Box>{targetPersonaDesc}</Box>
+        <Typography variant="h6">Received</Typography>
+          <TextField
+              label="Description"
+              name="recievedDesc"
+              variant="outlined"
+              multiline
+              minRows={5}
+              maxRows={10}
+              fullWidth
+              sx={sectionPadding}
+              value={receivedDescValue}
+              onChange={handleReceivedFieldChange} 
+            />
                   
 
 
