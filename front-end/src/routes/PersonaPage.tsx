@@ -6,8 +6,7 @@ import { PersonaUpdateInput } from "../gql/graphql"
 import { sectionPadding } from "../styles/styles"
 import { GET_PERSONA_DATA, UPDATE_PERSONA, GET_ALL_PERSONAS } from "../queries/PersonaPageQueries"
 import BackButton from "../components/BackButton"
-import PersonaConnections from "../components/PersonaConnections"
-import ConnectionContactList from "../components/connections/ConnectionContactList"
+import PersonaConnections from "../components/connections/PersonaConnections"
 
 
 
@@ -22,13 +21,14 @@ const PersonaPage: React.FC = () => {
     const [updateInput, setUpdateInput] = useState<PersonaUpdateInput>({})
 
 
-    const { loading, error, data } = useQuery(
+    const { loading, data, refetch } = useQuery(
       GET_PERSONA_DATA, {
         variables: { 
           getPersonaId: personaIdNumber
         }
     })
   
+
   const storyId = data?.getPersona.story.id
 
 
@@ -46,6 +46,11 @@ const PersonaPage: React.FC = () => {
         refetchQueries: [GET_PERSONA_DATA]
       })
 
+
+      
+    const refetchData = () => {
+      refetch();
+    };
     
       const handleFieldChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
         event.preventDefault()
@@ -168,6 +173,7 @@ const PersonaPage: React.FC = () => {
       Connections
     </Typography>
         <PersonaConnections
+          refetchData={refetchData}
           personaId={personaIdNumber}
           receivedConnections={ data?.getPersona.receivedConnections }
           initiatedConnections={data?.getPersona.initiatedConnections}

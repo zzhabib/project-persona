@@ -27,8 +27,8 @@ const ConnectionPage: React.FC = () => {
     const { loading, error, data } = useQuery(
         GET_INITIATED_CONNECTION, {
           variables: { 
-            targetPersonaId: personaIdNumber,
-            getPersonaId: connectionIdNumber
+            targetPersonaId: connectionIdNumber,
+            getPersonaId: personaIdNumber
           }
     })
     
@@ -36,8 +36,8 @@ const ConnectionPage: React.FC = () => {
     const data2 = useQuery(
         GET_RECEIVED_CONNECTION, {
           variables: { 
-            getPersonaId : connectionIdNumber,
-             sourcePersonaId : personaIdNumber
+            getPersonaId : personaIdNumber,
+             sourcePersonaId : connectionIdNumber
           }
     }).data
 
@@ -62,11 +62,11 @@ const ConnectionPage: React.FC = () => {
                     "addInitiatedConnectionInputs": [
                       {
                         "description": description,
-                        "targetPersonaId": personaIdNumber
+                        "targetPersonaId": connectionIdNumber
                       }
                     ]
                   },
-                  "updatePersonaId": connectionIdNumber
+                  "updatePersonaId": personaIdNumber
               }
           })
       }
@@ -78,11 +78,11 @@ const ConnectionPage: React.FC = () => {
                   "addInitiatedConnectionInputs": [
                     {
                       "description": description,
-                      "targetPersonaId": connectionIdNumber
+                      "targetPersonaId": personaIdNumber
                     }
                   ]
                 },
-                "updatePersonaId": personaIdNumber
+                "updatePersonaId": connectionIdNumber
             }
         })
     }
@@ -130,11 +130,26 @@ const ConnectionPage: React.FC = () => {
       </Box>
 
       {/* Second Column */}
+
       <Box flex="1" border="1px solid gray" padding="16px">
-        <Typography variant="h6">Target</Typography>
+        <Typography variant="h6">Source</Typography>
         <Box>{targetPersonaName}</Box>
-        <Box>{targetPersonaDesc}</Box>
+                  <Box>{targetPersonaDesc}</Box>
+                  
+
+
+        {!targetPersonaName && !targetPersonaDesc &&
+            <Button onClick={() => handleReceivedConnectionCreate('New Description')}>
+              Create Recieved Connection
+            </Button>
+          }
+
+                  
       </Box>
+
+
+
+
     </Box>
     </Box>
   );

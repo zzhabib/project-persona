@@ -15,6 +15,7 @@ type ConnectionCardProps = {
   onClick?: React.MouseEventHandler
   onContextMenu?: (name: string, event: React.MouseEvent<HTMLDivElement>) => void;
   onDoSomethingClick?: (Id: string) => void;
+  refetchData: () => void;
 }
 
 
@@ -28,7 +29,8 @@ const ConnectionCard: React.FC<ConnectionCardProps> = ({
   otherPersonaName,
   sx,
   onClick = () => { },
-  onDoSomethingClick
+  onDoSomethingClick,
+  refetchData
 }) => {
 
 
@@ -90,7 +92,9 @@ const ConnectionCard: React.FC<ConnectionCardProps> = ({
 
 
       <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
-        <MenuItem onClick={onDoSomethingClick}>
+        <MenuItem onClick={
+          onDoSomethingClick
+        }>
           Delete
         </MenuItem>
 
