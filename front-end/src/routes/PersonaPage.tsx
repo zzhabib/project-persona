@@ -4,9 +4,12 @@ import { useParams } from "react-router"
 import { useState, useEffect } from "react"
 import { PersonaUpdateInput } from "../gql/graphql"
 import { sectionPadding } from "../styles/styles"
-import { GET_PERSONA_DATA, UPDATE_PERSONA } from "../queries/PersonaPageQueries"
+import { GET_PERSONA_DATA, UPDATE_PERSONA, GET_ALL_PERSONAS } from "../queries/PersonaPageQueries"
 import BackButton from "../components/BackButton"
 import PersonaConnections from "../components/PersonaConnections"
+import ConnectionContactList from "../components/connections/ConnectionContactList"
+
+
 
 type PersonaPageParams = {
   personaId: string
@@ -24,8 +27,21 @@ const PersonaPage: React.FC = () => {
         variables: { 
           getPersonaId: personaIdNumber
         }
-      })
+    })
+  
+  const storyId = data?.getPersona.story.id
 
+
+    const data2 =  useQuery(
+      GET_ALL_PERSONAS, {
+        variables: { 
+          getStoryId: storyId
+        }
+    }).data
+
+  
+  
+  
       const [updatePersona] = useMutation(UPDATE_PERSONA, {
         refetchQueries: [GET_PERSONA_DATA]
       })
@@ -57,7 +73,7 @@ const PersonaPage: React.FC = () => {
         }
       }
 
-
+      console.log(data2)
 
     if (loading) return <Typography>
     Loading...
@@ -151,20 +167,16 @@ const PersonaPage: React.FC = () => {
       }}>
       Connections
     </Typography>
-
         <PersonaConnections
           personaId={personaIdNumber}
           receivedConnections={ data?.getPersona.receivedConnections }
-          initiatedConnections={ data?.getPersona.initiatedConnections }
+          initiatedConnections={data?.getPersona.initiatedConnections}
+          allPersonas={data2.getStory.personas}
         />
       </Box>
 
 
-
     </Container>
-
-
-    
   </>
 }
 

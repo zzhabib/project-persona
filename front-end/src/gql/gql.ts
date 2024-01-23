@@ -21,8 +21,9 @@ const documents = {
     "\n  mutation Mutation($deleteStoryId: Int!) {\n    deleteStory(id: $deleteStoryId)\n\n  }\n": types.MutationDocument,
     " \n  query GetUsers {\n    allUsers {\n      id\n      email\n    }\n  }\n": types.GetUsersDocument,
     "\n  mutation CreateUser($email: String!) {\n    createUser(email: $email) {\n      id\n      email\n    }\n  }\n": types.CreateUserDocument,
-    "\nquery GetPersona($getPersonaId: Int!) {\n  getPersona(id: $getPersonaId) {\n    name\n    initiatedConnections {\n      targetPersona {\n        name\n        id\n      }\n    }\n    receivedConnections {\n      sourcePersona {\n        name\n        id\n      }\n    }\n  }\n}\n": types.GetPersonaDocument,
+    "\nquery GetPersona($getPersonaId: Int!) {\n  getPersona(id: $getPersonaId) {\n    name\n    story {\n      id\n    }\n    initiatedConnections {\n      targetPersona {\n        name\n        id\n      }\n    }\n    receivedConnections {\n      sourcePersona {\n        name\n        id\n      }\n    }\n  }\n}\n": types.GetPersonaDocument,
     "\nmutation UpdatePersona($input: PersonaUpdateInput!, $updatePersonaId: Int!) {\n  updatePersona(input: $input, id: $updatePersonaId)\n  \n}\n": types.UpdatePersonaDocument,
+    "\nquery GetStory($getStoryId: Int!) {\n  getStory(id: $getStoryId) {\n    personas {\n      id\n      name\n    }\n  }\n}\n": types.GetStoryDocument,
     "\n  query GetStorySession($storySessionId: Int!) {\n    getStorySession(id: $storySessionId) {\n      id\n      name\n      story {\n        id\n        title\n        description\n        personas {\n          name\n          id\n          description\n        }\n        scenes {\n          id\n          title\n        }\n      }\n    }\n  }\n": types.GetStorySessionDocument,
     "\n  query GetConversation($secondPersonaId: Int!, $firstPersonaId: Int!, $storySessionId: Int!) {\n    getConversation(secondPersonaId: $secondPersonaId, firstPersonaId: $firstPersonaId, storySessionId: $storySessionId) {\n      id\n      createdAt\n      text\n      scene {\n        id\n        title\n      }\n      sender {\n        id\n        name\n      }\n    }\n  }\n": types.GetConversationDocument,
     "\n  mutation CreateUserMessage($input: UserMessageInput!) {\n    createUserMessage(input: $input) {\n      userMessage {\n        id\n        createdAt\n        text\n        sender {\n          id\n          name\n        }\n        scene {\n          id\n          title\n        }\n      }\n      replyMessage {\n        id\n        createdAt\n        text\n        sender {\n          id\n          name\n        }\n        scene {\n          id\n          title\n        }\n      }\n    }\n  }\n": types.CreateUserMessageDocument,
@@ -88,11 +89,15 @@ export function graphql(source: "\n  mutation CreateUser($email: String!) {\n   
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\nquery GetPersona($getPersonaId: Int!) {\n  getPersona(id: $getPersonaId) {\n    name\n    initiatedConnections {\n      targetPersona {\n        name\n        id\n      }\n    }\n    receivedConnections {\n      sourcePersona {\n        name\n        id\n      }\n    }\n  }\n}\n"): (typeof documents)["\nquery GetPersona($getPersonaId: Int!) {\n  getPersona(id: $getPersonaId) {\n    name\n    initiatedConnections {\n      targetPersona {\n        name\n        id\n      }\n    }\n    receivedConnections {\n      sourcePersona {\n        name\n        id\n      }\n    }\n  }\n}\n"];
+export function graphql(source: "\nquery GetPersona($getPersonaId: Int!) {\n  getPersona(id: $getPersonaId) {\n    name\n    story {\n      id\n    }\n    initiatedConnections {\n      targetPersona {\n        name\n        id\n      }\n    }\n    receivedConnections {\n      sourcePersona {\n        name\n        id\n      }\n    }\n  }\n}\n"): (typeof documents)["\nquery GetPersona($getPersonaId: Int!) {\n  getPersona(id: $getPersonaId) {\n    name\n    story {\n      id\n    }\n    initiatedConnections {\n      targetPersona {\n        name\n        id\n      }\n    }\n    receivedConnections {\n      sourcePersona {\n        name\n        id\n      }\n    }\n  }\n}\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\nmutation UpdatePersona($input: PersonaUpdateInput!, $updatePersonaId: Int!) {\n  updatePersona(input: $input, id: $updatePersonaId)\n  \n}\n"): (typeof documents)["\nmutation UpdatePersona($input: PersonaUpdateInput!, $updatePersonaId: Int!) {\n  updatePersona(input: $input, id: $updatePersonaId)\n  \n}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\nquery GetStory($getStoryId: Int!) {\n  getStory(id: $getStoryId) {\n    personas {\n      id\n      name\n    }\n  }\n}\n"): (typeof documents)["\nquery GetStory($getStoryId: Int!) {\n  getStory(id: $getStoryId) {\n    personas {\n      id\n      name\n    }\n  }\n}\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

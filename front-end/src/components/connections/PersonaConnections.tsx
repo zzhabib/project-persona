@@ -1,24 +1,17 @@
 import React from 'react';
 import { Box } from "@mui/material";
-import ConnectionCard from "../components/ConnectionCard";
-import { cardStyle } from "../styles/styles";
+import ConnectionCard from "./ConnectionCard";
+import { cardStyle } from "../../styles/styles";
 import { useNavigate } from 'react-router';
-import CreateCard from './CreateCard';
-
-import ConnectionContactList from './connections/ConnectionContactList';
 
 
 type PersonaConnectionsProps = {
   initiatedConnections: Array<{ targetPersona: { id: number; name: string } }>;
   receivedConnections: Array<{ sourcePersona: { id: number; name: string } }>;
   personaId: number;
-  allPersonas: {
-    id: number;
-    name: string;
-  }[];
 };
 
-const PersonaConnections: React.FC<PersonaConnectionsProps> = ({ initiatedConnections, receivedConnections, personaId, allPersonas }) => {
+const PersonaConnections: React.FC<PersonaConnectionsProps> = ({ initiatedConnections, receivedConnections, personaId }) => {
     const navigate = useNavigate()
     const combineConnectionsData = () => {
     const combinedConnections: { [name: string]: { id: number; initiatedConnection: boolean; receivedConnection: boolean } } = {};
@@ -54,17 +47,8 @@ const PersonaConnections: React.FC<PersonaConnectionsProps> = ({ initiatedConnec
 
   const connectionsData = combineConnectionsData();
 
-
-
-
   return (
     <Box>
-      <ConnectionContactList
-          myPersonaId={personaId}
-          allPersonas={allPersonas}
-          connectedPersonas={connectionsData}
-          />
-
       {connectionsData.map(connection => (
         <ConnectionCard
           key={connection.name}
