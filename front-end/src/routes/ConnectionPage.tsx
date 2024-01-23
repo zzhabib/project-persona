@@ -15,96 +15,84 @@ type ConnectionPageParams = {
 
 
 const ConnectionPage: React.FC = () => {
-    const { personaId, connectionId } = useParams<ConnectionPageParams>();
+
+
+  const { personaId, connectionId } = useParams<ConnectionPageParams>();
     
 
-    const personaIdNumber = personaId ? parseInt(personaId, 10) : 0;
-    const connectionIdNumber = connectionId ? parseInt(connectionId, 10) : 0;
+  const personaIdNumber = personaId ? parseInt(personaId, 10) : 0;
+  const connectionIdNumber = connectionId ? parseInt(connectionId, 10) : 0;
 
 
 
 
-    const { loading, error, data } = useQuery(
+
+    const { loading: initiatedLoad, data: initiatedData, refetch: initiatedRefetch } = useQuery(
         GET_INITIATED_CONNECTION, {
           variables: { 
             targetPersonaId: connectionIdNumber,
             getPersonaId: personaIdNumber
           }
     })
+
+
+    const { loading: receivedLoad, data: receivedData, refetch: receivedRefetch } = useQuery(
+      GET_RECEIVED_CONNECTION, {
+        variables: { 
+          getPersonaId : personaIdNumber,
+           sourcePersonaId : connectionIdNumber
+        }
+    })
     
+  const refetchBoth = () => {
+    initiatedRefetch();
+    receivedRefetch();
+  };
+  
 
-    const data2 = useQuery(
-        GET_RECEIVED_CONNECTION, {
-          variables: { 
-            getPersonaId : personaIdNumber,
-             sourcePersonaId : connectionIdNumber
-          }
-    }).data
-
-    const [addInitiatedConnection] = useMutation(ADD_CONNECTION, {
+    const [addConnection] = useMutation(ADD_CONNECTION, {
         refetchQueries: [
           { query: GET_INITIATED_CONNECTION},
-        ],
-      });
-    
-      const [addReceivedConnection] = useMutation(ADD_CONNECTION, {
-        refetchQueries: [
           { query: GET_RECEIVED_CONNECTION},
         ],
       });
-    
-    
-      console.log(connectionIdNumber)
-      console.log(personaIdNumber)
-
-      const handleInitiatedConnectionCreate = (description: string) => {
-          addInitiatedConnection({
-              variables: {
-                "input": {
-                    "addInitiatedConnectionInputs": [
-                      {
-                        "description": description,
-                        "targetPersonaId": connectionIdNumber
-                      }
-                    ]
-                  },
-                  "updatePersonaId": personaIdNumber
-              }
-          })
-      }
+  
       
-      const handleReceivedConnectionCreate = (description: string) => {
-        addReceivedConnection({
+      const handleConnectionCreate = (source: number, target:number) => {
+        addConnection({
             variables: {
               "input": {
                   "addInitiatedConnectionInputs": [
                     {
-                      "description": description,
-                      "targetPersonaId": personaIdNumber
+                      "description": "",
+                      "targetPersonaId": target
                     }
                   ]
                 },
-                "updatePersonaId": connectionIdNumber
+                "updatePersonaId": source
             }
         })
+
+        refetchBoth();
     }
     
     
     
+
     
     
     
-    
-    
-    const initiatedPersonaName = data?.getPersona.initiatedConnections[0]?.targetPersona?.name ?? null;
-    const initiatedPersonaDesc = data?.getPersona.initiatedConnections[0]?.description ?? null;
+    const initiatedPersonaName = initiatedData?.getPersona.initiatedConnections[0]?.targetPersona?.name ?? null;
+    const initiatedPersonaDesc = initiatedData?.getPersona.initiatedConnections[0]?.description ?? null;
 
 
-    const targetPersonaName = data2?.getPersona.receivedConnections[0]?.sourcePersona?.name ?? null;
-    const targetPersonaDesc = data2?.getPersona.receivedConnections[0]?.description ?? null;
+    const targetPersonaName = receivedData?.getPersona.receivedConnections[0]?.sourcePersona?.name ?? null;
+    const targetPersonaDesc = receivedData?.getPersona.receivedConnections[0]?.description ?? null;
 
   
-
+    if (receivedLoad || initiatedLoad) return <Typography>
+    Loading...
+  </Typography>
 
   return (
     <Box>
@@ -121,7 +109,7 @@ const ConnectionPage: React.FC = () => {
 
 
         {!initiatedPersonaName && !initiatedPersonaDesc &&
-            <Button onClick={() => handleInitiatedConnectionCreate('New Description')}>
+            <Button onClick={() => handleConnectionCreate(personaIdNumber, connectionIdNumber)}>
               Create Initiated Connection
             </Button>
           }
@@ -139,7 +127,7 @@ const ConnectionPage: React.FC = () => {
 
 
         {!targetPersonaName && !targetPersonaDesc &&
-            <Button onClick={() => handleReceivedConnectionCreate('New Description')}>
+            <Button onClick={() => handleConnectionCreate(connectionIdNumber, personaIdNumber)}>
               Create Recieved Connection
             </Button>
           }
