@@ -54,7 +54,9 @@ const ConnectionPage: React.FC = () => {
       });
     
     
-    
+      console.log(connectionIdNumber)
+      console.log(personaIdNumber)
+
       const handleInitiatedConnectionCreate = (description: string) => {
           addInitiatedConnection({
               variables: {
@@ -101,9 +103,7 @@ const ConnectionPage: React.FC = () => {
     const targetPersonaName = data2?.getPersona.receivedConnections[0]?.sourcePersona?.name ?? null;
     const targetPersonaDesc = data2?.getPersona.receivedConnections[0]?.description ?? null;
 
-    
-    console.log(data2)
-
+  
 
 
   return (

@@ -126,50 +126,67 @@ receivedConnections(
       relations: {
         initiatedConnections: true
       }
-    })
-    if (!persona) throw new Error(`Persona with id '${id}' was not found.`)
-
-    //change name
+    });
+  
+    if (!persona) throw new Error(`Persona with id '${id}' was not found.`);
+  
+    // Change name
     if (input.name) {
-      persona.name = input.name
+      persona.name = input.name;
     }
-    //change description
+  
+    // Change description
     if (input.description) {
-      persona.description = input.description
+      persona.description = input.description;
     }
-
-    // Add initiated connections
+  
+    // Merge initiated connections
     if (input.addInitiatedConnectionInputs) {
-      const newConnections = input.addInitiatedConnectionInputs.map(
-        ci => {
-          const connection = new Connection()
-          connection.targetPersonaId = ci.targetPersonaId
-          connection.description = ci.description
-          return connection
+      for (const ci of input.addInitiatedConnectionInputs) {
+        const existingConnection = persona.initiatedConnections.find(c => c.targetPersonaId === ci.targetPersonaId);
+  
+        if (existingConnection) {
+          // Update existing connection
+          existingConnection.description = ci.description;
+          await existingConnection.save(); // Save the existing connection
+        } else {
+          // Create a new connection if it doesn't exist
+          const newConnection = Connection.create({
+            sourcePersonaId: id,
+            targetPersonaId: ci.targetPersonaId,
+            description: ci.description,
+          });
+          await newConnection.save(); // Save the new connection
         }
-      )
-      persona.initiatedConnections.push(...newConnections)
+      }
     }
-
+  
     // Modify initiated connections
     if (input.modifyInitiatedConnectionInputs) {
-      input.modifyInitiatedConnectionInputs.forEach(
-        ci => {
-          const connection = persona.initiatedConnections.find(c => c.targetPersonaId == ci.targetPersonaId)
-          if (!connection) throw new Error(`Persona connection from ${persona.id} to ${connection.targetPersonaId} was not found.`)
-          connection.description = ci.description
+      for (const ci of input.modifyInitiatedConnectionInputs) {
+        const connection = persona.initiatedConnections.find(c => c.targetPersonaId == ci.targetPersonaId);
+        if (connection) {
+          // Update existing connection
+          connection.description = ci.description;
+          await connection.save(); // Save the modified connection
+        } else {
+          throw new Error(`Persona connection from ${persona.id} to ${ci.targetPersonaId} was not found.`);
         }
-      )
+      }
     }
-
-    // Remove connections
+  
+    // Remove connections (optional, depending on your use case)
     if (input.removeInitiatedConnectionIds) {
-      persona.initiatedConnections = persona.initiatedConnections.filter(
-        c => !input.removeInitiatedConnectionIds.includes(c.targetPersonaId)
-      )
+      await Promise.all(
+        input.removeInitiatedConnectionIds.map(async (targetPersonaId) => {
+          const connectionToRemove = persona.initiatedConnections.find(c => c.targetPersonaId == targetPersonaId);
+          if (connectionToRemove) {
+            await connectionToRemove.remove(); // Remove the connection
+          }
+        })
+      );
     }
-
-    await persona.save();
+  
     return true;
   }
 
