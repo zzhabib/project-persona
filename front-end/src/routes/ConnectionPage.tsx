@@ -132,7 +132,7 @@ const ConnectionPage: React.FC = () => {
       {/* Second Column */}
 
       <Box flex="1" border="1px solid gray" padding="16px">
-        <Typography variant="h6">Source</Typography>
+        <Typography variant="h6">Target</Typography>
         <Box>{targetPersonaName}</Box>
                   <Box>{targetPersonaDesc}</Box>
                   
