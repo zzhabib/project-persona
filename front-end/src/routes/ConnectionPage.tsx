@@ -7,6 +7,7 @@ import BackButton from '../components/BackButton';
 import Button from '@mui/material/Button';
 import { sectionPadding } from '../styles/styles';
 import { PersonaUpdateInput } from '../gql/graphql';
+import { connect } from 'react-redux';
 
 type ConnectionPageParams = {
     personaId: string,
@@ -124,9 +125,19 @@ const ConnectionPage: React.FC = () => {
     event.preventDefault();
     const { value } = event.target;
 
-  
     setUpdateReceivedInput(value);
   };
+
+
+const handleSave = (sourceId: number, targetId: number, description: string) => {
+    handleConnectionUpdate(sourceId, targetId, description)
+}
+
+
+
+
+
+
 
     
     const myName = initiatedData?.getPersona.name ?? null;
@@ -137,9 +148,6 @@ const ConnectionPage: React.FC = () => {
 
     const targetPersonaName = receivedData?.getPersona.receivedConnections[0]?.sourcePersona?.name ?? null;
     const targetPersonaDesc = receivedData?.getPersona.receivedConnections[0]?.description ?? null;
-
-
-
 
 
   const initiatedDescValue = updateInitiatedInput !== ''
@@ -153,7 +161,14 @@ const ConnectionPage: React.FC = () => {
 
 
 
-  
+
+
+
+    const isDirtyInit = (updateInitiatedInput == initiatedPersonaDesc)
+    const isDirtyRec = Object.keys(updateReceivedInput).length > 0
+
+
+
     if (receivedLoad || initiatedLoad) return <Typography>
     Loading...
   </Typography>
@@ -168,6 +183,9 @@ const ConnectionPage: React.FC = () => {
       <Box flex="1" border="1px solid gray" padding="16px">
         <Typography variant="h6">Source</Typography>
 
+
+        {initiatedPersonaName !== null && initiatedPersonaDesc !== null && 
+        <Box>
         <TextField
               label="Description"
               name="initiatedDesc"
@@ -180,7 +198,27 @@ const ConnectionPage: React.FC = () => {
               value={initiatedDescValue}
               onChange={handleInitiatedFieldChange} 
             />
-                  
+
+
+        <Button
+        sx={{
+          height: '3em',
+          width: '8em',
+          marginTop: '1em',
+          marginRight: '1em',
+          justifySelf: 'end'
+        }}
+        variant="contained"
+        disabled={!isDirtyInit}
+        onClick={handleSave(personaIdNumber, connectionIdNumber, initiatedDescValue)}
+      >
+        SAVE
+      </Button>
+
+      </Box>
+
+
+         }
 
         {!initiatedPersonaName && !initiatedPersonaDesc &&
             <Button onClick={() => handleConnectionCreate(personaIdNumber, connectionIdNumber)}>
@@ -195,6 +233,9 @@ const ConnectionPage: React.FC = () => {
 
       <Box flex="1" border="1px solid gray" padding="16px">
         <Typography variant="h6">Received</Typography>
+
+        {targetPersonaName !== null && targetPersonaDesc !== null && (
+          <Box>
           <TextField
               label="Description"
               name="recievedDesc"
@@ -207,7 +248,25 @@ const ConnectionPage: React.FC = () => {
               value={receivedDescValue}
               onChange={handleReceivedFieldChange} 
             />
-                  
+
+        <Button
+        sx={{
+          height: '3em',
+          width: '8em',
+          marginTop: '1em',
+          marginRight: '1em',
+          justifySelf: 'end'
+        }}
+        variant="contained"
+        disabled={!isDirtyRec}
+        onClick={handleSave(connectionIdNumber, personaIdNumber, receivedDescValue)}
+      >
+        SAVE
+      </Button>
+
+      </Box>
+            
+        )}
 
 
         {!targetPersonaName && !targetPersonaDesc &&
