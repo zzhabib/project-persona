@@ -39,6 +39,8 @@ const ConnectionPage: React.FC = () => {
     })
 
 
+
+
     const { loading: receivedLoad, data: receivedData, refetch: receivedRefetch } = useQuery(
       GET_RECEIVED_CONNECTION, {
         variables: { 
@@ -47,6 +49,10 @@ const ConnectionPage: React.FC = () => {
         }
     })
     
+
+
+    
+
   const refetchBoth = () => {
     initiatedRefetch();
     receivedRefetch();
@@ -106,6 +112,26 @@ const ConnectionPage: React.FC = () => {
   }
 
 
+  const handleConnectionDelete = (source: number, target:number) => {
+    updateConnection({
+        variables: {
+          "input": {
+            "removeInitiatedConnectionIds": target
+          },
+          "updatePersonaId": source
+        }
+    })
+
+    refetchBoth();
+}
+
+
+
+
+
+
+
+
 
 
 
@@ -134,7 +160,9 @@ const handleSave = (sourceId: number, targetId: number, description: string) => 
 }
 
 
-
+const handleDelete = (sourceId: number, targetId: number) => {
+  handleConnectionDelete(sourceId, targetId)
+}
 
 
 
@@ -160,7 +188,13 @@ const handleSave = (sourceId: number, targetId: number, description: string) => 
 
 
 
-
+    const targName = useQuery(
+      GET_RECEIVED_CONNECTION, {
+        variables: { 
+          getPersonaId : connectionIdNumber,
+           sourcePersonaId : personaIdNumber
+        }
+    }).data?.getPersona.name
 
 
 
@@ -176,7 +210,7 @@ const handleSave = (sourceId: number, targetId: number, description: string) => 
   return (
     <Box>
       <BackButton/>
-          <Typography variant="h4">{myName} connection with {targetPersonaName}</Typography>
+          <Typography variant="h4">{myName} connection with {targName}</Typography>
           
           <Box display="flex">
       {/* First Column */}
@@ -210,9 +244,23 @@ const handleSave = (sourceId: number, targetId: number, description: string) => 
         }}
         variant="contained"
         disabled={!isDirtyInit}
-        onClick={handleSave(personaIdNumber, connectionIdNumber, initiatedDescValue)}
+        onClick={() => handleSave(personaIdNumber, connectionIdNumber, initiatedDescValue)}
       >
         SAVE
+      </Button>
+
+      <Button
+        sx={{
+          height: '3em',
+          width: '8em',
+          marginTop: '1em',
+          marginRight: '1em',
+          justifySelf: 'end'
+        }}
+        variant="contained"
+        onClick={() => handleDelete(personaIdNumber, connectionIdNumber)}
+      >
+        DELETE
       </Button>
 
       </Box>
@@ -259,9 +307,24 @@ const handleSave = (sourceId: number, targetId: number, description: string) => 
         }}
         variant="contained"
         disabled={!isDirtyRec}
-        onClick={handleSave(connectionIdNumber, personaIdNumber, receivedDescValue)}
+        onClick={() => handleSave(connectionIdNumber, personaIdNumber, receivedDescValue)}
       >
         SAVE
+      </Button>
+
+
+      <Button
+        sx={{
+          height: '3em',
+          width: '8em',
+          marginTop: '1em',
+          marginRight: '1em',
+          justifySelf: 'end'
+        }}
+        variant="contained"
+        onClick={() => handleDelete(connectionIdNumber, personaIdNumber)}
+      >
+        DELETE
       </Button>
 
       </Box>
