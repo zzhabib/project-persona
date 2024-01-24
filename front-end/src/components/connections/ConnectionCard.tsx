@@ -88,18 +88,6 @@ const ConnectionCard: React.FC<ConnectionCardProps> = ({
         </Typography>
       </CardContent>
       </CardActionArea>
-      
-
-
-      <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
-        <MenuItem onClick={
-          onDoSomethingClick
-        }>
-          Delete
-        </MenuItem>
-
-      </Menu>
-
     </Card>
     
     </>
