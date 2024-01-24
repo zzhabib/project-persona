@@ -198,8 +198,8 @@ const handleDelete = (sourceId: number, targetId: number) => {
 
 
 
-    const isDirtyInit = (updateInitiatedInput == initiatedPersonaDesc)
-    const isDirtyRec = Object.keys(updateReceivedInput).length > 0
+    const isDirtyInit = (updateInitiatedInput !== initiatedPersonaDesc)
+    const isDirtyRec = (updateReceivedInput !== targetPersonaDesc)
 
 
 
