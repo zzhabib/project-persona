@@ -27,7 +27,7 @@ const HomePage: React.FC = () => {
   });
 
 
-  const { loading, error, data } = useQuery(GET_USER_STORIES, {
+  const { loading, error, data, refetch } = useQuery(GET_USER_STORIES, {
     variables: { id: user!.id }
   })
 
@@ -44,16 +44,17 @@ const HomePage: React.FC = () => {
   }
 
 
-  const handleStoryDelete = (Id: number) => {
+  const handleStoryDelete = async (Id: number) => {
     console.log(`Delete attempted ` + {Id});
     console.log(Id);
 
-    const response = deleteStory({
+    await deleteStory({
       variables: { deleteStoryId: Id },
     });
 
     // Handle the response as needed
-    console.log('Story deleted successfully', response);
+    refetch();
+    
 
   };
 

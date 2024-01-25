@@ -23,7 +23,7 @@ export class User extends BaseEntity {
   email: string;
 
   @ManyToMany(() => Story, story => story.editors, {
-    cascade: true
+    cascade: false
   })
   @JoinTable()
   stories: Story[];

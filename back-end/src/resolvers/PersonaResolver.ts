@@ -196,6 +196,11 @@ receivedConnections(
 
   @Mutation(() => Boolean)
   async deletePersona(@Arg('id', () => Int) id: number) {
+
+
+    await Connection.delete({ sourcePersonaId: id });
+    await Connection.delete({ targetPersonaId: id });
+
     await Persona.delete({ id })
     return true
   }
