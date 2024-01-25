@@ -5,6 +5,7 @@ export const GET_PERSONA_DATA = gql`
 query GetPersona($getPersonaId: Int!) {
   getPersona(id: $getPersonaId) {
     name
+    description
     story {
       id
     }

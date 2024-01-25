@@ -32,7 +32,8 @@ const PersonaPage: React.FC = () => {
   const storyId = data?.getPersona.story.id
 
 
-    const data2 =  useQuery(
+
+    const data2 = useQuery(
       GET_ALL_PERSONAS, {
         variables: { 
           getStoryId: storyId
@@ -54,7 +55,7 @@ const PersonaPage: React.FC = () => {
     
       const handleFieldChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
         event.preventDefault()
-    
+        
         const { name, value } = event.target;
 
         setUpdateInput({
@@ -76,6 +77,7 @@ const PersonaPage: React.FC = () => {
         if (result.data?.updatePersona) {
           setUpdateInput({})
         }
+
       }
 
 

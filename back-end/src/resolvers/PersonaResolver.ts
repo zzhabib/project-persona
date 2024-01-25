@@ -133,11 +133,15 @@ receivedConnections(
     // Change name
     if (input.name) {
       persona.name = input.name;
+      await Persona.update({ id: persona.id }, { name: input.name })
     }
   
     // Change description
     if (input.description) {
       persona.description = input.description;
+      await Persona.update({ id: persona.id }, { description: input.description })
+
+
     }
   
     // Merge initiated connections
