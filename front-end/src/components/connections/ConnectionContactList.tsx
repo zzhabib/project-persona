@@ -3,7 +3,7 @@ import { Box, Typography, Select, MenuItem, ListItemButton, ListItemText } from 
 import { ADD_CONNECTION } from '../../queries/ConnectionPageQueries';
 import { useMutation } from '@apollo/client';
 import { Navigate, useNavigate } from 'react-router';
-import { PropaneSharp } from '@mui/icons-material';
+
 
 type ConnectionContactList = {
   myPersonaId: number;

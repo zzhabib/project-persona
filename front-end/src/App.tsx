@@ -14,6 +14,9 @@ import { store } from './store'
 import RequireAuth from './components/RequireAuth'
 import StoryPage from './routes/StoryPage'
 import Playground from './routes/Playground'
+import RolePage from './routes/RolePage'
+
+
 
 const theme = createTheme({
   palette: {
@@ -92,6 +95,15 @@ function App() {
                 <ConnectionPage />
               </RequireAuth>
             } />
+
+            <Route path="/scene/:sceneId/roles/:personaId" element={
+              <RequireAuth>
+                <RolePage />
+              </RequireAuth>
+            } />
+
+
+
               
           </Routes>
         </BrowserRouter>

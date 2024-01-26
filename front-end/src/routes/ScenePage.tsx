@@ -6,6 +6,9 @@ import { SceneUpdateInput} from "../gql/graphql"
 import { GET_SCENE_DATA, UPDATE_SCENE } from "../queries/ScenePageQueries"
 import { sectionPadding } from "../styles/styles"
 import BackButton from "../components/BackButton";
+import SceneRoles from "../components/roles/SceneRoles"
+
+
 
 type ScenePageParams = {
   sceneId: string
@@ -19,17 +22,23 @@ const ScenePage: React.FC = () => {
   const { sceneId } = useParams<ScenePageParams>()
   const sceneIdNumber = sceneId ? parseInt(sceneId, 10) : 0;
 
-  const [updateInput, setUpdateInput] = useState<SceneUpdateInput>({
-
-  })
+  const [updateInput, setUpdateInput] = useState<SceneUpdateInput>({})
  
 
-  const { loading, error, data } = useQuery(
+
+
+  const { loading, data, refetch } = useQuery(
     GET_SCENE_DATA, {
       variables: { 
         getSceneId: sceneIdNumber
       }
     })
+
+
+    const refetchData = () => {
+      refetch();
+    };
+
 
     const [updateScene] = useMutation(UPDATE_SCENE, {
       refetchQueries: [GET_SCENE_DATA]
@@ -48,6 +57,7 @@ const ScenePage: React.FC = () => {
         [name]: value
       })
     }
+
 
 
     const handleSave: React.MouseEventHandler<HTMLButtonElement> = async (event) => {
@@ -71,10 +81,13 @@ const ScenePage: React.FC = () => {
 </Typography>
 
 
-const isDirty = Object.keys(updateInput).length > 0
+
 const nameValue = updateInput.title != null ? updateInput.title : data?.getScene.title
 const descValue = updateInput.description != null ? updateInput.description : data?.getScene.description
 
+
+
+const isDirty = (nameValue != data?.getScene.title || descValue != data?.getScene.description) ? true : false
 
   return <>
             <Box
@@ -159,13 +172,23 @@ const descValue = updateInput.description != null ? updateInput.description : da
             />
       </Box>
     </Container>
-
-
-
-
-
-
-
+    <Box>
+          {/* need like a new kind of create card here that gets all other personas in story for search list*/ }
+          <Typography
+      variant="h4"
+      sx={{
+        padding: '10px',
+        textAlign: 'center'
+      }}>
+      Roles
+    </Typography>
+      <SceneRoles
+        rolePersonas={data?.getScene.roles}
+        sceneId={data?.getScene.id}
+        storyId={data?.getScene.story.id}
+        refetchData={refetchData}
+      />
+</Box>
   </>
 }
 
