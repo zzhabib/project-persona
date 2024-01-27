@@ -21,14 +21,13 @@ const SceneRoles: React.FC<SceneRolesProps> = ({ rolePersonas, sceneId, storyId,
     const navigate = useNavigate()
 
 
-    const { data, loading, error } = useQuery(
+    const { data, loading, error, refetch } = useQuery(
         GET_ALL_PERSONAS, {
           variables: { 
             getStoryId: storyId
           }
         }
     )
-
 
 
 

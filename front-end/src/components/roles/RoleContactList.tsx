@@ -51,7 +51,7 @@ const RoleContactList: React.FC<RoleContactList> = ({
 
     addRole({ variables: { input } })
     
-    refetchData()
+    refetchData();
   }
 
 
@@ -72,7 +72,7 @@ const RoleContactList: React.FC<RoleContactList> = ({
               console.log(`Adding role for Persona ID: ${selectedPersonaId} in SCENE ID: ${sceneId}`);
 
                 handleRoleCreate(selectedPersonaId, sceneId)
-
+                refetchData();
                 
                 //navigate(`/scene/${sceneId}/roles/${selectedPersonaId}`)
 
