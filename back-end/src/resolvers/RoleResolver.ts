@@ -64,6 +64,7 @@ export class RoleResolver {
   async createRole(@Arg('input', () => RoleInput) input: RoleInput): Promise<Role> {
     const role = await Role.create(input)
 
+    await role.save();
     // insert Action cross-references
     AppDataSource
       .createQueryBuilder()

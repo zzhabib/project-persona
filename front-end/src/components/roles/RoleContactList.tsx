@@ -10,10 +10,10 @@ import { Description } from '@mui/icons-material';
 type RoleContactList = {
   sceneId: number;
   storyId: number;
-  existingRolePersonas?: {
+  existingRolePersonas?: {persona : {
     id: number;
     name: string;
-  }[];
+}}[];
   allPersonas?: {
     id: number;
     name: string;
@@ -28,7 +28,7 @@ const RoleContactList: React.FC<RoleContactList> = ({
     existingRolePersonas = [],
     refetchData
 }) => {
-  const filterIds = existingRolePersonas.map((persona) => persona.id);
+  const filterIds = existingRolePersonas.map((item) => item.persona.id);
   const displayPersonas = allPersonas.filter((persona) => !filterIds.includes(persona.id));
 
 
@@ -47,7 +47,11 @@ const RoleContactList: React.FC<RoleContactList> = ({
         description: "",
         actionIds: []
     }
-    await addRole({ variables: { input }})
+
+
+    addRole({ variables: { input } })
+    
+    refetchData()
   }
 
 
@@ -67,11 +71,10 @@ const RoleContactList: React.FC<RoleContactList> = ({
               // Handle the navigation or connection logic with the selectedPersonaId
               console.log(`Adding role for Persona ID: ${selectedPersonaId} in SCENE ID: ${sceneId}`);
 
-                handleRoleCreate(sceneId, selectedPersonaId)
+                handleRoleCreate(selectedPersonaId, sceneId)
 
-                refetchData
                 
-                navigate(`/scene/${sceneId}/roles/${selectedPersonaId}`)
+                //navigate(`/scene/${sceneId}/roles/${selectedPersonaId}`)
 
             }}
           >

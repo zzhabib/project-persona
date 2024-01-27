@@ -9,7 +9,7 @@ import { GET_ALL_PERSONAS } from '../../queries/PersonaPageQueries';
 import RoleContactList from './RoleContactList';
 
 type SceneRolesProps = {
-    rolePersonas: Array< { id: number; name: string  }>;
+  rolePersonas: Array<{ persona: { id: number; name: string } }>;
     sceneId: number;
     storyId: number;
     refetchData: () => void;
@@ -32,17 +32,17 @@ const SceneRoles: React.FC<SceneRolesProps> = ({ rolePersonas, sceneId, storyId,
 
 
 
-    const [deleteRole] = useMutation(DELETE_ROLE)
+  //const [deleteRole] = useMutation(DELETE_ROLE)
 
 
-    const handleRoleDelete = async (personaId: number) => {
+  const handleRoleDelete = async (personaId: number) => {
+      console.log(personaId)
         const input = {
             personaId: personaId,
             sceneId: sceneId,
         }
-        await deleteRole({ variables: { input }})
+        await useMutation(DELETE_ROLE, { variables: { input }})
     }
-
 
 
 
@@ -69,17 +69,18 @@ const SceneRoles: React.FC<SceneRolesProps> = ({ rolePersonas, sceneId, storyId,
         existingRolePersonas={rolePersonas}
         allPersonas={allPersonas}
         refetchData={refetchData}
-          />
-
-      {rolePersonas.map(p => (
+        />
+      {rolePersonas.map((item, index) => (
         <IdentityCard
-            key={p.id}
-            name={p.name}
+            key={item.persona.id}
+          name={item.persona.name}
+        
             sx={cardStyle}
-            onClick={() => {
-                navigate(`/scene/${sceneId}/role/${p.id}`)
+          onClick={() => {
+                navigate(`/scene/${sceneId}/role/${item.persona.id}`)
             }}
-        onDoSomethingClick={() => handleRoleDelete(p.id)}
+          onDoSomethingClick={() => handleRoleDelete(item.persona.id)}
+          
         />
       ))}
     </Box>

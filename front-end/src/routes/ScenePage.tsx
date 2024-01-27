@@ -35,10 +35,7 @@ const ScenePage: React.FC = () => {
     })
 
 
-    const refetchData = () => {
-      refetch();
-    };
-
+   
 
     const [updateScene] = useMutation(UPDATE_SCENE, {
       refetchQueries: [GET_SCENE_DATA]
@@ -186,7 +183,7 @@ const isDirty = (nameValue != data?.getScene.title || descValue != data?.getScen
         rolePersonas={data?.getScene.roles}
         sceneId={data?.getScene.id}
         storyId={data?.getScene.story.id}
-        refetchData={refetchData}
+        refetchData={refetch}
       />
 </Box>
   </>
