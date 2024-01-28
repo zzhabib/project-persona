@@ -2,7 +2,7 @@
 import { Box, Button, Container, TextField, Typography } from "@mui/material"
 import BackButton from "../components/BackButton";
 import { useParams } from "react-router";
-
+import { UPDATE_ROLE, GET_ROLE_DATA } from "../queries/RolePageQueries";
 
 
 type RolePageParams = {
