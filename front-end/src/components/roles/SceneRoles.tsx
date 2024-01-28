@@ -78,7 +78,7 @@ const SceneRoles: React.FC<SceneRolesProps> = ({ rolePersonas, sceneId, storyId,
         
             sx={cardStyle}
           onClick={() => {
-                navigate(`/scene/${sceneId}/role/${item.persona.id}`)
+                navigate(`/scene/${sceneId}/roles/${item.persona.id}`)
             }}
           onDoSomethingClick={() => handleRoleDelete(item.persona.id)}
           
