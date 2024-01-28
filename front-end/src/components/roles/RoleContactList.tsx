@@ -2,9 +2,6 @@ import React from 'react';
 import { Box, Typography, Select, MenuItem, ListItemButton, ListItemText } from '@mui/material';
 import { ADD_ROLE } from '../../queries/ScenePageQueries';
 import { useMutation } from '@apollo/client';
-import { Navigate, useNavigate } from 'react-router';
-import { Description } from '@mui/icons-material';
-
 
 
 type RoleContactList = {
@@ -32,8 +29,6 @@ const RoleContactList: React.FC<RoleContactList> = ({
   const displayPersonas = allPersonas.filter((persona) => !filterIds.includes(persona.id));
 
 
-  const navigate = useNavigate()
-
 
 
   const [addRole] = useMutation(ADD_ROLE);
@@ -41,17 +36,19 @@ const RoleContactList: React.FC<RoleContactList> = ({
 
 
   const handleRoleCreate = async (personaId: number, sceneId: number) => {
-    const input = {
-        personaId: personaId,
-        sceneId: sceneId,
-        description: "",
-        actionIds: []
-    }
+    await addRole({
+      variables: {
+        input: {
+          personaId: personaId,
+          sceneId: sceneId,
+          description: "",
+          actionIds: []
+        }
+      }
+    })
 
-
-    addRole({ variables: { input } })
-    
     refetchData();
+
   }
 
 
@@ -72,9 +69,7 @@ const RoleContactList: React.FC<RoleContactList> = ({
               console.log(`Adding role for Persona ID: ${selectedPersonaId} in SCENE ID: ${sceneId}`);
 
                 handleRoleCreate(selectedPersonaId, sceneId)
-                refetchData();
-                
-                //navigate(`/scene/${sceneId}/roles/${selectedPersonaId}`)
+              
 
             }}
           >

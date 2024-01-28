@@ -1,4 +1,4 @@
-import React from 'react';
+import { React, useEffect } from 'react';
 import { Box } from "@mui/material";
 import { cardStyle } from "../../styles/styles";
 import { useNavigate } from 'react-router';
@@ -15,8 +15,6 @@ type SceneRolesProps = {
     refetchData: () => void;
 };
 
-
-
 const SceneRoles: React.FC<SceneRolesProps> = ({ rolePersonas, sceneId, storyId, refetchData }) => {
     const navigate = useNavigate()
 
@@ -31,17 +29,21 @@ const SceneRoles: React.FC<SceneRolesProps> = ({ rolePersonas, sceneId, storyId,
 
 
 
-  //const [deleteRole] = useMutation(DELETE_ROLE)
+  const [deleteRole] = useMutation(DELETE_ROLE)
 
 
   const handleRoleDelete = async (personaId: number) => {
-      console.log(personaId)
-        const input = {
-            personaId: personaId,
-            sceneId: sceneId,
+      await deleteRole({
+        variables: {
+          personaId: personaId,
+          sceneId: sceneId
         }
-        await useMutation(DELETE_ROLE, { variables: { input }})
-    }
+      })
+    
+    
+    refetchData();
+    refetch();
+  }
 
 
 
