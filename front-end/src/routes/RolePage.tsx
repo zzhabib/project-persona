@@ -127,7 +127,7 @@ const [deleteAction] = useMutation(DELETE_ACTION, {
   const handleActionDelete = (Id: number) => {
 
     //might be able to just delete it and not add to the persona
-    const response = deleteAction({
+    deleteAction({
       variables: { deleteActionId: Id },
     });
   };
