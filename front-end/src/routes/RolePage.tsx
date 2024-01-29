@@ -26,7 +26,6 @@ const RolePage: React.FC = () => {
 
 
 
-
   const [descInput, setDescInput] = useState<string>("");
 
   // get role data function call
@@ -42,6 +41,10 @@ const RolePage: React.FC = () => {
     const filteredRoles = roles ? roles.filter((role) => role.persona.id === personaIdNumber) : [];
 
     const myRole = filteredRoles[0]
+
+    
+
+
 
     const desc = myRole?.description || null;
 
@@ -133,23 +136,12 @@ const [deleteAction] = useMutation(DELETE_ACTION, {
   };
 
 
-  // isdirty/ all the stuff that will go with description 
-
-  // actions only have a name and an id, so we will not do action page, creation card should suffice
-  
-  // Plan of attack, 
-  
-  // 1. setup get role data function 
-  
-  // 2. get description data working with save button
-  
-  // 3. setup creation card for actions and map it to update role
-  
-  // 4. setup delete action button and also map it to update role  (maybe one update function and a null call)
 
 
+  if (loading) return <Typography>
+    Loading...
+  </Typography>
 
-  
 
 
 
@@ -237,7 +229,9 @@ const [deleteAction] = useMutation(DELETE_ACTION, {
             />
 
 <Box sx={{marginTop : '1em'}}>
-          {myRole.actions.map(s => {
+          {
+          
+          myRole.actions.map(s => {
               return <IdentityCard
                 key={s.id}
                 name={s.name}
