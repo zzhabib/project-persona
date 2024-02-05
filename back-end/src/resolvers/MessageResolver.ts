@@ -105,7 +105,8 @@ export class MessageResolver {
       text: aiReplyText
     })
 
-    await messageRepository.insert([userMessage, replyMessage])
+    const insertResult = await messageRepository.insert([userMessage, replyMessage])
+    console.log(insertResult)
 
     return {
       userMessage: userMessage,
@@ -142,7 +143,8 @@ export class MessageResolver {
             )
         })
       )
-      .orderBy('message.createdAt', "DESC")
+      .orderBy('message.createdAt', "ASC")
+      .limit(limit)
       .getMany();
 
     return messages
