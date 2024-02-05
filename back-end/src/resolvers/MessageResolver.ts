@@ -70,6 +70,7 @@ export class MessageResolver {
     const personaRepository = AppDataSource.getRepository(Persona)
 
     const userMessage = messageRepository.create(input)
+    userMessage.sender = await personaRepository.findOne({ where: { id: input.senderId } })
     
     const storySession = await AppDataSource
       .getRepository(StorySession)

@@ -1,10 +1,11 @@
 
 import OpenAI from 'openai';
-import { ChatCompletionMessageParam, ChatCompletionTool } from 'openai/resources';
+import { ChatCompletionMessage, ChatCompletionMessageParam, ChatCompletionTool } from 'openai/resources';
 import { Story } from './entity/edit/Story';
 import { Scene } from './entity/edit/Scene';
 import { Persona } from './entity/edit/Persona';
 import { Message } from './entity/play/Message';
+import { assert } from 'console';
 const openai = new OpenAI();
 
 export type AiMessageRequest = {
@@ -13,6 +14,10 @@ export type AiMessageRequest = {
   to_persona: Persona,
   from_persona: Persona,
   message_context: Message[]
+}
+
+type MessageResult = {
+  replies: string[]
 }
 
 const tools: ChatCompletionTool[] = [
@@ -64,24 +69,67 @@ function createSystemMessages(messageReq: AiMessageRequest): ChatCompletionMessa
   return messages
 }
 
-export async function getAiReply(messageReq: AiMessageRequest): Promise<string> {
-  console.log("Assembling call to OpenAI")
-  const response = await openai.chat.completions.create({
-    model: "gpt-4-0125-preview",
-    messages: createSystemMessages(messageReq),
-    tools: tools
-  })
-  console.log(response)
+function handleResponseMessage(message: ChatCompletionMessage): MessageResult {
+  if (!message.tool_calls) {
+    throw new Error("Please use the send_message tool to send a message to the other persona.")
+  }
 
-  const responseMessage = response.choices[0].message
-  let replyText = "[no reply message]"
-
-  responseMessage.tool_calls?.forEach((toolCall) => {
-    console.log(toolCall)
+  const replies: string[] = message.tool_calls.map((toolCall) => {
     if (toolCall.function?.name === "send_message") {
-      // replyText = toolCall.function.arguments
+      try {
+        const args = JSON.parse(toolCall.function.arguments)
+        assert(args.message_text)
+        return args.message_text
+      } catch (e) {
+        throw new Error("Please use the valid format for the send_message tool.")
+      }
     }
   })
 
-  return replyText
+  return {
+    replies: replies
+  }
+}
+
+export async function getAiReply(messageReq: AiMessageRequest): Promise<string> {
+  console.log("Assembling call to OpenAI")
+  const messages = createSystemMessages(messageReq)
+  
+  let replyText = "[no reply message]"
+
+  let messageResult: MessageResult
+  let tries = 0
+
+  while (tries < 5) {
+    const response = await openai.chat.completions.create({
+      model: "gpt-4-0125-preview",
+      messages: messages,
+      tools: tools
+    })
+    const responseMessage = response.choices[0].message
+    messages.push(responseMessage)
+    console.log(JSON.stringify(responseMessage))
+
+    try {
+      messageResult = handleResponseMessage(responseMessage)
+      break
+    } catch (e) {
+      messages.push({
+        role: "system",
+        content: e.message
+      })
+    }
+
+    tries += 1
+  }
+
+  if (!messageResult) {
+    throw new Error("Failed to get a valid response from the OpenAI")
+  }
+
+  if (messageResult.replies.length > 0) {
+    replyText = messageResult.replies.join("\n")
+  }
+
+  return messageResult.replies[0]
 }
