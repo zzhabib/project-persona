@@ -94,6 +94,7 @@ function handleResponseMessage(message: ChatCompletionMessage): MessageResult {
 export async function getAiReply(messageReq: AiMessageRequest): Promise<string> {
   console.log("Assembling call to OpenAI")
   const messages = createSystemMessages(messageReq)
+  console.log("Message context: ", messages)
   
   let replyText = "[no reply message]"
 

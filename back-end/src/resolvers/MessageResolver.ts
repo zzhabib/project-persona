@@ -68,9 +68,6 @@ export class MessageResolver {
     const storyRepository = AppDataSource.getRepository(Story)
     const sceneRepository = AppDataSource.getRepository(Scene)
     const personaRepository = AppDataSource.getRepository(Persona)
-
-    const userMessage = messageRepository.create(input)
-    userMessage.sender = await personaRepository.findOne({ where: { id: input.senderId } })
     
     const storySession = await AppDataSource
       .getRepository(StorySession)
@@ -83,16 +80,23 @@ export class MessageResolver {
     const recipientPersona = await personaRepository.findOne({ where: { id: input.recipientId } })
     const senderPersona = await personaRepository.findOne({ where: { id: input.senderId } })
 
+    const userMessage = messageRepository.create(input)
+    userMessage.sender = senderPersona
+
+    const conversation = await this.getConversation(input.storySessionId, input.senderId, input.recipientId, 10)
+    conversation.forEach((message) => {
+      message.sender = message.senderId == input.senderId ? senderPersona : recipientPersona
+    })
+    conversation.push(userMessage)
+
     const aiReplyText = await getAiReply({
       story: storySession.story,
       scene: scene,
       to_persona: senderPersona,
       from_persona: recipientPersona,
-      message_context: [userMessage] // todo, grab the last 10 or so messages in the conversation
+      message_context: conversation // todo, grab the last 10 or so messages in the conversation
     })
-    console.log("AI Reply: " + aiReplyText)
 
-    // Todo: replace this with an actual response from ChatGPT
     const replyMessage = messageRepository.create({
       storySessionId: input.storySessionId,
       sceneId: input.sceneId,
@@ -114,7 +118,8 @@ export class MessageResolver {
   async getConversation(
     @Arg('storySessionId', () => Int) storySessionId: number, /**The user's session */
     @Arg('firstPersonaId', () => Int) firstPersonaId: number,
-    @Arg('secondPersonaId', () => Int) secondPersonaId: number
+    @Arg('secondPersonaId', () => Int) secondPersonaId: number,
+    @Arg('limit', () => Int, { nullable: true }) limit: number = 10, /**The number of messages to return */
   ): Promise<Message[]> {
  
     const messages = await AppDataSource
