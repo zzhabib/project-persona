@@ -68,7 +68,7 @@ export async function getAiReply(messageReq: AiMessageRequest): Promise<string> 
   console.log("Assembling call to OpenAI")
   const response = await openai.chat.completions.create({
     model: "gpt-4-0125-preview",
-    messages: [],
+    messages: createSystemMessages(messageReq),
     tools: tools
   })
   console.log(response)

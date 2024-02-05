@@ -1,4 +1,4 @@
-import { ApolloServer } from "@apollo/server"
+import { ApolloServer, ApolloServerPlugin } from "@apollo/server"
 import { startStandaloneServer } from "@apollo/server/standalone";
 import { buildSchema } from "type-graphql"
 import { AppDataSource } from "./data-source";
@@ -14,6 +14,16 @@ import { StorySessionResolver } from "./resolvers/StorySessionResolver";
 import { MessageResolver } from "./resolvers/MessageResolver";
 
 dotenv.config();
+
+const errorLoggingPlugin: ApolloServerPlugin = {
+  async requestDidStart(requestContext) {
+    return {
+      async didEncounterErrors(context) {
+        console.error(context.errors);
+      },
+    };
+  },
+};
 
 (async () => {
   await AppDataSource.initialize()
@@ -35,7 +45,8 @@ dotenv.config();
   const server = new ApolloServer({
     schema: schema,
     introspection: true,
-    csrfPrevention: true
+    csrfPrevention: true,
+    plugins: [errorLoggingPlugin]
   })
 
   const port = parseInt(<string>process.env.PORT, 10) || 3000
@@ -44,5 +55,4 @@ dotenv.config();
     listen: { port: port },
   });
   console.log(`Server ready at: ${url}`);
-  //RunPrompt();
 })();
