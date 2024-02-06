@@ -235,6 +235,7 @@ export type Query = {
 
 export type QueryGetConversationArgs = {
   firstPersonaId: Scalars['Int']['input'];
+  limit?: InputMaybe<Scalars['Int']['input']>;
   secondPersonaId: Scalars['Int']['input'];
   storySessionId: Scalars['Int']['input'];
 };

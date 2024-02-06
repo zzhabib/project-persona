@@ -8,6 +8,7 @@ import { Brackets } from "typeorm";
 import { getAiReply } from "../ai";
 import { StorySession } from "../entity/play/StorySession";
 import { Story } from "../entity/edit/Story";
+import { Connection } from "../entity/edit/Connection";
 
 @InputType()
 class UserMessageInput {
@@ -66,6 +67,7 @@ export class MessageResolver {
     const messageRepository = AppDataSource.getRepository(Message)
     const sessionRepository = AppDataSource.getRepository(StorySession)
     const storyRepository = AppDataSource.getRepository(Story)
+    const connectionRepository = AppDataSource.getRepository(Connection)
     const sceneRepository = AppDataSource.getRepository(Scene)
     const personaRepository = AppDataSource.getRepository(Persona)
     
@@ -79,6 +81,17 @@ export class MessageResolver {
     const scene = await sceneRepository.findOne({ where: { id: input.sceneId } })
     const recipientPersona = await personaRepository.findOne({ where: { id: input.recipientId } })
     const senderPersona = await personaRepository.findOne({ where: { id: input.senderId } })
+    
+    const connection = await connectionRepository.findOne({
+      where: {
+        sourcePersonaId: input.recipientId,
+        targetPersonaId: input.senderId,
+      },
+      relations: {
+        sourcePersona: true,
+        targetPersona: true
+      }
+    })
 
     const userMessage = messageRepository.create(input)
     userMessage.sender = senderPersona
@@ -94,7 +107,8 @@ export class MessageResolver {
       scene: scene,
       to_persona: senderPersona,
       from_persona: recipientPersona,
-      message_context: conversation // todo, grab the last 10 or so messages in the conversation
+      connection: connection,
+      message_context: conversation
     })
 
     const replyMessage = messageRepository.create({

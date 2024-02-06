@@ -6,6 +6,7 @@ import { Scene } from './entity/edit/Scene';
 import { Persona } from './entity/edit/Persona';
 import { Message } from './entity/play/Message';
 import { assert } from 'console';
+import { Connection } from './entity/edit/Connection';
 const openai = new OpenAI();
 
 export type AiMessageRequest = {
@@ -13,6 +14,7 @@ export type AiMessageRequest = {
   scene: Scene,
   to_persona: Persona,
   from_persona: Persona,
+  connection?: Connection,
   message_context: Message[]
 }
 
@@ -40,33 +42,48 @@ const tools: ChatCompletionTool[] = [
   }
 ]
 
-function createSystemMessages(messageReq: AiMessageRequest): ChatCompletionMessageParam[] {
-  const messages: ChatCompletionMessageParam[] = []
+function formatStoryInfo(story: Story): string {
+  return `Story: ${story.title}
+  ${story.description}\n`
+}
 
+function formatSceneInfo(scene: Scene): string {
+  return `Scene: ${scene.title}
+  ${scene.description}\n`
+}
+
+function formatPersonaInfo(persona: Persona): string {
+  return `Name: ${persona.name}
+  Description: ${persona.description}\n`
+}
+
+function formatConnectionInfo(connection: Connection): string {
+  return `Your connection with ${connection.targetPersona.name}:
+  ${connection.description}\n`
+}
+
+function createSystemMessages(messageReq: AiMessageRequest): ChatCompletionMessageParam[] {
   const conversationText = messageReq.message_context.map((message) => {
     return `${message.sender.name}: ${message.text}`
   }).join("\n")
 
-  messages.push({
-    role: "system",
-    content: `You are now playing as ${messageReq.from_persona.name} in the story ${messageReq.story.title}.
-    You are in the scene ${messageReq.scene.title}.
-    You are talking to ${messageReq.to_persona.name}.
-    Here is a description of the story ${messageReq.story.title}: ${messageReq.story.description}
-    Here is a description of the scene ${messageReq.scene.title}: ${messageReq.scene.description}
-    The character you are talking to:
-    Name: ${messageReq.to_persona.name}
-    Description: ${messageReq.to_persona.description}
-    The character you are talking as:
-    Name: ${messageReq.from_persona.name}
-    Description: ${messageReq.from_persona.description}
-    Your role is to play as ${messageReq.from_persona.name} and make choices that will affect the story.
-    
-    Here is the conversation so far:
-    ${conversationText}`
-  })
+  let msgText = `Your role is to play as a character in the following story and make choices that will affect the story.`
 
-  return messages
+  msgText += formatStoryInfo(messageReq.story)
+  msgText += formatSceneInfo(messageReq.scene)
+  msgText += `Your character:
+    ${formatPersonaInfo(messageReq.from_persona)}\n`
+  msgText += `The character you are talking to:
+    ${formatPersonaInfo(messageReq.to_persona)}
+    ${messageReq.connection ? formatConnectionInfo(messageReq.connection) : ""}`
+  
+  msgText += `Here is the conversation so far:
+  ${conversationText}`
+
+  return [{
+    role: "system",
+    content: msgText
+  }]
 }
 
 function handleResponseMessage(message: ChatCompletionMessage): MessageResult {
