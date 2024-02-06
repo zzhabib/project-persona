@@ -7,6 +7,7 @@ import { Persona } from './entity/edit/Persona';
 import { Message } from './entity/play/Message';
 import { assert } from 'console';
 import { Connection } from './entity/edit/Connection';
+import { Role } from './entity/edit/Role';
 const openai = new OpenAI();
 
 export type AiMessageRequest = {
@@ -47,13 +48,27 @@ function formatStoryInfo(story: Story): string {
   ${story.description}\n`
 }
 
+function formatRoleInfo(role: Role): string {
+  assert(role.persona, "Role must have a persona.")
+  assert(role.actions, "Role must have actions.")
+  return `(${role.persona.name}, ID: ${role.personaId}): ${role.description}
+  Actions: [${role.actions.map((action) => `'${action.name}'`).join(", ")}]\n`
+}
+
 function formatSceneInfo(scene: Scene): string {
-  return `Scene: ${scene.title}
+  let sceneText = `Scene: ${scene.title}
   ${scene.description}\n`
+
+  if (scene.roles) {
+    sceneText += `Roles:
+    ${scene.roles.map(formatRoleInfo)}\n`
+  }
+
+  return sceneText
 }
 
 function formatPersonaInfo(persona: Persona): string {
-  return `Name: ${persona.name}
+  return `Name: ${persona.name}, ID: ${persona.id}
   Description: ${persona.description}\n`
 }
 

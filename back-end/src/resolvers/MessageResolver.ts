@@ -78,7 +78,16 @@ export class MessageResolver {
       .innerJoinAndSelect("storySession.story", "story")
       .getOne()
     
-    const scene = await sceneRepository.findOne({ where: { id: input.sceneId } })
+    const scene = await sceneRepository.findOne({
+      where: { id: input.sceneId },
+      relations: {
+        roles: {
+          persona: true,
+          actions: true
+        }
+      }
+    })
+
     const recipientPersona = await personaRepository.findOne({ where: { id: input.recipientId } })
     const senderPersona = await personaRepository.findOne({ where: { id: input.senderId } })
     
