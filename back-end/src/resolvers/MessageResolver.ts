@@ -166,11 +166,11 @@ export class MessageResolver {
             )
         })
       )
-      .orderBy('message.createdAt', "ASC")
+      .orderBy('message.createdAt', "DESC")
       .limit(limit)
       .getMany();
 
-    return messages
+    return messages.reverse()
   }
 
   /**Given a persona, get the other personas that they have conversations with */

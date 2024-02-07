@@ -78,10 +78,6 @@ function formatConnectionInfo(connection: Connection): string {
 }
 
 function createSystemMessages(messageReq: AiMessageRequest): ChatCompletionMessageParam[] {
-  const conversationText = messageReq.message_context.map((message) => {
-    return `${message.sender.name}: ${message.text}`
-  }).join("\n")
-
   let msgText = `Your role is to play as a character in the following story and make choices that will affect the story.`
 
   msgText += formatStoryInfo(messageReq.story)
@@ -91,6 +87,10 @@ function createSystemMessages(messageReq: AiMessageRequest): ChatCompletionMessa
   msgText += `The character you are talking to:
     ${formatPersonaInfo(messageReq.to_persona)}
     ${messageReq.connection ? formatConnectionInfo(messageReq.connection) : ""}`
+  
+  const conversationText = messageReq.message_context.map(
+    (message) => `${message.senderId === messageReq.from_persona.id ? `You` : message.sender.name}: ${message.text}`
+  ).join("\n")
   
   msgText += `Here is the conversation so far:
   ${conversationText}`
