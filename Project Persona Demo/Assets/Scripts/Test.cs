@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using DefaultNamespace;
 using GraphQL;
 using GraphQL.Client.Http;
@@ -29,8 +30,8 @@ public class Test : UnityEngine.MonoBehaviour
             "
         };
 
-        var response = await graphQLClient.SendQueryAsync<GraphQLResponse<TestQueryResult>>(request);
-        var result = response.Data.Data;
+        var response = await graphQLClient.SendQueryAsync<TestQueryResult>(request);
+        var result = response.Data;
         
         Debug.Log("Received Query Response");
 
