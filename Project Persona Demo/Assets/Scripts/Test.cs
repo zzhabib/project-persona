@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class Test : UnityEngine.MonoBehaviour
 {
-    private GraphQLHttpClient graphQLClient = new GraphQLHttpClient("https://localhost:4000", new NewtonsoftJsonSerializer());
+    private GraphQLHttpClient graphQLClient = new GraphQLHttpClient("http://localhost:4000", new NewtonsoftJsonSerializer());
     
     private void Start()
     {
