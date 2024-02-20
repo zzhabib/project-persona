@@ -6,5 +6,6 @@ namespace Persona
     public class PersonaProvider : MonoBehaviour
     {
         public User User;
+        public Story Story;
     }
 }

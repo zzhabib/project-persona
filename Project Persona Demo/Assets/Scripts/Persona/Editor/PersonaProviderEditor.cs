@@ -15,22 +15,32 @@ namespace Persona.Editor
     public class PersonaProviderEditor : UnityEditor.Editor
     {
         private PersonaProvider _personaProvider;
-        private bool isLoaded = false;
 
         private List<User> users = new List<User>();
+        private bool usersLoaded = false;
+        
+        private List<Story> stories = new List<Story>();
+        private bool storiesLoaded = false;
 
         private int SelectedUserId
         {
-            get { return _personaProvider.User?.Id ?? 0; }
+            get { return _personaProvider.User?.Id ?? -1; }
         }
 
-        private IEnumerable<string> storyOptions = new List<string>();
-        private int selectedStoryIndex = 0;
+        private int SelectedStoryId
+        {
+            get { return _personaProvider.Story?.Id ?? -1; }
+        }
 
         public void OnEnable()
         {
             _personaProvider = (PersonaProvider)target;
             EditorCoroutineUtility.StartCoroutine(FetchUsers(), this);
+
+            if (SelectedUserId != -1)
+            {
+                EditorCoroutineUtility.StartCoroutine(FetchStories(), this);
+            }
         }
 
         IEnumerator FetchUsers()
@@ -41,12 +51,12 @@ namespace Persona.Editor
             try
             {
                 users = task.Result.ToList();
-                isLoaded = true;
+                usersLoaded = true;
             }
             catch (System.Exception ex)
             {
                 Debug.LogError($"Failed to load user options: {ex.Message}");
-                isLoaded = false;
+                usersLoaded = false;
             }
 
             Repaint(); // Ensure the UI is updated
@@ -54,27 +64,39 @@ namespace Persona.Editor
 
         IEnumerator FetchStories()
         {
-            Debug.Log("Fetch Stories");
+            var task = UserQueries.GetUserData(SelectedUserId);
+            yield return new WaitUntil(() => task.IsCompleted);
 
-            yield return null;
-
+            stories = task.Result.Stories.ToList();
+            storiesLoaded = true;
+            
             Repaint();
         }
 
         public override void OnInspectorGUI()
         {
-            if (!isLoaded)
+            if (!usersLoaded)
             {
                 EditorGUILayout.LabelField("Loading user options...");
                 return;
             }
 
-            int selectedIndex = users.FindIndex(u => u.Id == SelectedUserId);
-            int newIndex = EditorGUILayout.Popup("User", selectedIndex, users.Select(u => u.Email).ToArray());
-            if (newIndex != selectedIndex)
+            int selectedUserIdx = users.FindIndex(u => u.Id == SelectedUserId);
+            int newUserIdx = EditorGUILayout.Popup("User", selectedUserIdx, users.Select(u => u.Email).ToArray());
+            if (newUserIdx != selectedUserIdx)
             {
-                _personaProvider.User = users[newIndex];
+                _personaProvider.User = users[newUserIdx];
                 EditorCoroutineUtility.StartCoroutine(FetchStories(), this);
+            }
+
+            if (storiesLoaded)
+            {
+                int selectedStoryIdx = stories.FindIndex(s => s.Id == SelectedStoryId);
+                int newStoryIdx = EditorGUILayout.Popup("Story", selectedStoryIdx, stories.Select(s => s.Title).ToArray());
+                if (newStoryIdx != selectedStoryIdx)
+                {
+                    _personaProvider.Story = stories[newStoryIdx];
+                }
             }
         }
     }
