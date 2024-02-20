@@ -16,12 +16,15 @@ namespace Persona.Editor
         private IEnumerable<string> userOptions = new List<string>();
         private bool isLoaded = false;
 
+        private int selectedUserIndex = 0;
+
+
         public void OnEnable()
         {
-            EditorCoroutineUtility.StartCoroutine(FetchData(), this);
+            EditorCoroutineUtility.StartCoroutine(FetchUsers(), this);
         }
 
-        IEnumerator FetchData()
+        IEnumerator FetchUsers()
         {
             var task = UserQueries.GetAllUsers();
             yield return new WaitUntil(() => task.IsCompleted);
@@ -40,6 +43,13 @@ namespace Persona.Editor
             Repaint(); // Ensure the UI is updated
         }
 
+        IEnumerator FetchStories()
+        {
+            yield break;
+
+            Repaint();
+        }
+
         public override void OnInspectorGUI()
         {
             if (!isLoaded)
@@ -48,9 +58,12 @@ namespace Persona.Editor
                 return;
             }
 
-            // Example of creating a dropdown list with the loaded user options
-            int selectedIndex = EditorGUILayout.Popup("User", 0, userOptions.ToArray());
-            // Handle the selected index as needed
+            int newIndex = EditorGUILayout.Popup("User", selectedUserIndex, userOptions.ToArray());
+            if (newIndex != selectedUserIndex)
+            {
+                selectedUserIndex = newIndex;
+                EditorCoroutineUtility.StartCoroutine(FetchStories(), this);
+            }
         }
     }
 }
