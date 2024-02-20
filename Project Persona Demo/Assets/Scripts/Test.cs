@@ -1,9 +1,9 @@
 using System;
 using System.Linq;
-using DefaultNamespace;
 using GraphQL;
 using GraphQL.Client.Http;
 using GraphQL.Client.Serializer.Newtonsoft;
+using Persona;
 using UnityEngine;
 
 public class Test : UnityEngine.MonoBehaviour
