@@ -22,6 +22,9 @@ namespace Persona.Editor
         private List<Story> stories = new List<Story>();
         private bool storiesLoaded = false;
 
+        private List<Scene> scenes = new List<Scene>();
+        private bool scenesLoaded = false;
+
         private int SelectedUserId
         {
             get { return _personaProvider.User?.Id ?? -1; }
@@ -32,15 +35,17 @@ namespace Persona.Editor
             get { return _personaProvider.Story?.Id ?? -1; }
         }
 
+        private int SelectedSceneId
+        {
+            get { return _personaProvider.Scene?.Id ?? -1; }
+        }
+
         public void OnEnable()
         {
             _personaProvider = (PersonaProvider)target;
             EditorCoroutineUtility.StartCoroutine(FetchUsers(), this);
-
-            if (SelectedUserId != -1)
-            {
-                EditorCoroutineUtility.StartCoroutine(FetchStories(), this);
-            }
+            EditorCoroutineUtility.StartCoroutine(FetchStories(), this);
+            EditorCoroutineUtility.StartCoroutine(FetchScenes(), this);
         }
 
         IEnumerator FetchUsers()
@@ -64,12 +69,27 @@ namespace Persona.Editor
 
         IEnumerator FetchStories()
         {
+            if (SelectedUserId == -1) yield break;
+            
             var task = UserQueries.GetUserData(SelectedUserId);
             yield return new WaitUntil(() => task.IsCompleted);
 
             stories = task.Result.Stories.ToList();
             storiesLoaded = true;
             
+            Repaint();
+        }
+
+        IEnumerator FetchScenes()
+        {
+            if (SelectedStoryId == -1) yield break;
+            
+            var task = StoryQueries.GetStoryData(SelectedStoryId);
+            yield return new WaitUntil(() => task.IsCompleted);
+
+            scenes = task.Result.Scenes.ToList();
+            scenesLoaded = true;
+
             Repaint();
         }
 
@@ -85,8 +105,11 @@ namespace Persona.Editor
             int newUserIdx = EditorGUILayout.Popup("User", selectedUserIdx, users.Select(u => u.Email).ToArray());
             if (newUserIdx != selectedUserIdx)
             {
+                Undo.RecordObject(_personaProvider, "Change User");
                 _personaProvider.User = users[newUserIdx];
+                EditorUtility.SetDirty(_personaProvider);
                 EditorCoroutineUtility.StartCoroutine(FetchStories(), this);
+                EditorCoroutineUtility.StartCoroutine(FetchScenes(), this);
             }
 
             if (storiesLoaded)
@@ -95,7 +118,22 @@ namespace Persona.Editor
                 int newStoryIdx = EditorGUILayout.Popup("Story", selectedStoryIdx, stories.Select(s => s.Title).ToArray());
                 if (newStoryIdx != selectedStoryIdx)
                 {
+                    Undo.RecordObject(_personaProvider, "Change Story");
                     _personaProvider.Story = stories[newStoryIdx];
+                    EditorUtility.SetDirty(_personaProvider);
+                    EditorCoroutineUtility.StartCoroutine(FetchScenes(), this);
+                }
+            }
+
+            if (scenesLoaded)
+            {
+                int sceneIdx = scenes.FindIndex(s => s.Id == SelectedSceneId);
+                int newSceneIdx = EditorGUILayout.Popup("Scene", sceneIdx, scenes.Select(s => s.ToString()).ToArray());
+                if (newSceneIdx != sceneIdx)
+                {
+                    Undo.RecordObject(_personaProvider, "Change Scene");
+                    _personaProvider.Scene = scenes[newSceneIdx];
+                    EditorUtility.SetDirty(_personaProvider);
                 }
             }
         }

@@ -7,5 +7,6 @@ namespace Persona
     {
         public User User;
         public Story Story;
+        public Scene Scene;
     }
 }

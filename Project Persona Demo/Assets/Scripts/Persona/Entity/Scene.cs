@@ -1,18 +1,17 @@
 using System;
-using System.Collections.Generic;
 
 namespace Persona.Entity
 {
     [Serializable]
-    public class User
+    public class Scene
     {
         public int Id = -1;
-        public string Email;
-        public IEnumerable<Story> Stories;
+        public string Title;
+        public string Description;
 
         public override string ToString()
         {
-            return Email;
+            return Title;
         }
     }
 }
