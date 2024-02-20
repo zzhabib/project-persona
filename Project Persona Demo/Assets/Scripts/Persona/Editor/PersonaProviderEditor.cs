@@ -14,17 +14,22 @@ namespace Persona.Editor
     [CustomEditor(typeof(PersonaProvider))]
     public class PersonaProviderEditor : UnityEditor.Editor
     {
+        private PersonaProvider _personaProvider;
         private bool isLoaded = false;
 
         private List<User> users = new List<User>();
-        private int selectedUserId = 0;
+
+        private int SelectedUserId
+        {
+            get { return _personaProvider.User?.Id ?? 0; }
+        }
 
         private IEnumerable<string> storyOptions = new List<string>();
         private int selectedStoryIndex = 0;
 
         public void OnEnable()
         {
-            selectedUserId = EditorPrefs.GetInt("SelectedUserId", 0);
+            _personaProvider = (PersonaProvider)target;
             EditorCoroutineUtility.StartCoroutine(FetchUsers(), this);
         }
 
@@ -64,14 +69,11 @@ namespace Persona.Editor
                 return;
             }
 
-            // var userNames = users.Select(u => u.ToString()).ToList();
-            int selectedIndex = users.FindIndex(u => u.Id == selectedUserId);
+            int selectedIndex = users.FindIndex(u => u.Id == SelectedUserId);
             int newIndex = EditorGUILayout.Popup("User", selectedIndex, users.Select(u => u.Email).ToArray());
             if (newIndex != selectedIndex)
             {
-                var personaProvider = (PersonaProvider) target;
-                personaProvider.User = users[selectedUserId];
-                selectedUserId = newIndex;
+                _personaProvider.User = users[newIndex];
                 EditorCoroutineUtility.StartCoroutine(FetchStories(), this);
             }
         }
