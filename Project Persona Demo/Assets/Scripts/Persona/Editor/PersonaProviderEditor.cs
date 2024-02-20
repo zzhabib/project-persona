@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Persona.Entity;
 using Persona.Query;
 using Unity.EditorCoroutines.Editor;
 using UnityEditor;
@@ -13,14 +14,17 @@ namespace Persona.Editor
     [CustomEditor(typeof(PersonaProvider))]
     public class PersonaProviderEditor : UnityEditor.Editor
     {
-        private IEnumerable<string> userOptions = new List<string>();
         private bool isLoaded = false;
 
-        private int selectedUserIndex = 0;
+        private List<User> users = new List<User>();
+        private int selectedUserId = 0;
 
+        private IEnumerable<string> storyOptions = new List<string>();
+        private int selectedStoryIndex = 0;
 
         public void OnEnable()
         {
+            selectedUserId = EditorPrefs.GetInt("SelectedUserId", 0);
             EditorCoroutineUtility.StartCoroutine(FetchUsers(), this);
         }
 
@@ -31,7 +35,7 @@ namespace Persona.Editor
 
             try
             {
-                userOptions = task.Result.Select(u => u.ToString());
+                users = task.Result.ToList();
                 isLoaded = true;
             }
             catch (System.Exception ex)
@@ -45,7 +49,9 @@ namespace Persona.Editor
 
         IEnumerator FetchStories()
         {
-            yield break;
+            Debug.Log("Fetch Stories");
+
+            yield return null;
 
             Repaint();
         }
@@ -58,10 +64,14 @@ namespace Persona.Editor
                 return;
             }
 
-            int newIndex = EditorGUILayout.Popup("User", selectedUserIndex, userOptions.ToArray());
-            if (newIndex != selectedUserIndex)
+            // var userNames = users.Select(u => u.ToString()).ToList();
+            int selectedIndex = users.FindIndex(u => u.Id == selectedUserId);
+            int newIndex = EditorGUILayout.Popup("User", selectedIndex, users.Select(u => u.Email).ToArray());
+            if (newIndex != selectedIndex)
             {
-                selectedUserIndex = newIndex;
+                var personaProvider = (PersonaProvider) target;
+                personaProvider.User = users[selectedUserId];
+                selectedUserId = newIndex;
                 EditorCoroutineUtility.StartCoroutine(FetchStories(), this);
             }
         }
