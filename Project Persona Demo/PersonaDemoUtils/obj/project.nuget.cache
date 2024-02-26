@@ -1,0 +1,14 @@
+{
+  "version": 2,
+  "dgSpecHash": "TBsuVXT27CU14Dv4t1lm9YymT0usbhY0O6LovWEkx9NKBaWdI/A7mQ+jU1GbE/avjwwPgHUgN7oTTIwzGnimOQ==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\zachh\\Documents\\GitHub\\project-persona\\Project Persona Demo\\PersonaDemoUtils\\PersonaDemoUtils.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\zachh\\.nuget\\packages\\graphql.client\\6.0.2\\graphql.client.6.0.2.nupkg.sha512",
+    "C:\\Users\\zachh\\.nuget\\packages\\graphql.client.abstractions\\6.0.2\\graphql.client.abstractions.6.0.2.nupkg.sha512",
+    "C:\\Users\\zachh\\.nuget\\packages\\graphql.client.abstractions.websocket\\6.0.2\\graphql.client.abstractions.websocket.6.0.2.nupkg.sha512",
+    "C:\\Users\\zachh\\.nuget\\packages\\graphql.primitives\\6.0.2\\graphql.primitives.6.0.2.nupkg.sha512",
+    "C:\\Users\\zachh\\.nuget\\packages\\system.reactive\\6.0.0\\system.reactive.6.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}

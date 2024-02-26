@@ -1,4 +1,0 @@
-repository "Project Persona Demo@justin_am@cloud"
-  path "/"
-    br "/main"
-    co "/main"

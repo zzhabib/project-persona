@@ -1,0 +1,13 @@
+C:\Users\zachh\Documents\GitHub\project-persona\Project Persona Demo\PersonaDemoUtils\bin\Debug\net8.0\PersonaDemoUtils.deps.json
+C:\Users\zachh\Documents\GitHub\project-persona\Project Persona Demo\PersonaDemoUtils\bin\Debug\net8.0\PersonaDemoUtils.dll
+C:\Users\zachh\Documents\GitHub\project-persona\Project Persona Demo\PersonaDemoUtils\bin\Debug\net8.0\PersonaDemoUtils.pdb
+C:\Users\zachh\Documents\GitHub\project-persona\Project Persona Demo\PersonaDemoUtils\obj\Debug\net8.0\PersonaDemoUtils.csproj.AssemblyReference.cache
+C:\Users\zachh\Documents\GitHub\project-persona\Project Persona Demo\PersonaDemoUtils\obj\Debug\net8.0\PersonaDemoUtils.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\zachh\Documents\GitHub\project-persona\Project Persona Demo\PersonaDemoUtils\obj\Debug\net8.0\PersonaDemoUtils.AssemblyInfoInputs.cache
+C:\Users\zachh\Documents\GitHub\project-persona\Project Persona Demo\PersonaDemoUtils\obj\Debug\net8.0\PersonaDemoUtils.AssemblyInfo.cs
+C:\Users\zachh\Documents\GitHub\project-persona\Project Persona Demo\PersonaDemoUtils\obj\Debug\net8.0\PersonaDemoUtils.csproj.CoreCompileInputs.cache
+C:\Users\zachh\Documents\GitHub\project-persona\Project Persona Demo\PersonaDemoUtils\obj\Debug\net8.0\PersonaDemoUtils.sourcelink.json
+C:\Users\zachh\Documents\GitHub\project-persona\Project Persona Demo\PersonaDemoUtils\obj\Debug\net8.0\PersonaDemoUtils.dll
+C:\Users\zachh\Documents\GitHub\project-persona\Project Persona Demo\PersonaDemoUtils\obj\Debug\net8.0\refint\PersonaDemoUtils.dll
+C:\Users\zachh\Documents\GitHub\project-persona\Project Persona Demo\PersonaDemoUtils\obj\Debug\net8.0\PersonaDemoUtils.pdb
+C:\Users\zachh\Documents\GitHub\project-persona\Project Persona Demo\PersonaDemoUtils\obj\Debug\net8.0\ref\PersonaDemoUtils.dll
