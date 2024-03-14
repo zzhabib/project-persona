@@ -10,6 +10,7 @@ namespace Persona.Entity
         public string Title;
         public string Description;
         public IEnumerable<Scene> Scenes;
+        public IEnumerable<Persona> Personas;
 
         public override string ToString()
         {

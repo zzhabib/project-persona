@@ -86,10 +86,10 @@ namespace Persona.Editor
             
             var task = StoryQueries.GetStoryData(SelectedStoryId);
             yield return new WaitUntil(() => task.IsCompleted);
-
+        
             scenes = task.Result.Scenes.ToList();
             scenesLoaded = true;
-
+        
             Repaint();
         }
 
@@ -120,8 +120,12 @@ namespace Persona.Editor
                 {
                     Undo.RecordObject(_personaProvider, "Change Story");
                     _personaProvider.Story = stories[newStoryIdx];
-                    EditorUtility.SetDirty(_personaProvider);
                     EditorCoroutineUtility.StartCoroutine(FetchScenes(), this);
+                    StoryQueries.GetStoryData(stories[newStoryIdx].Id).ContinueWith(t =>
+                    {
+                        _personaProvider.Story = t.Result;
+                        EditorUtility.SetDirty(_personaProvider);
+                    });
                 }
             }
 
