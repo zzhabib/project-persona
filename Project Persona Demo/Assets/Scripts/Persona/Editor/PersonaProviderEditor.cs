@@ -107,9 +107,18 @@ namespace Persona.Editor
             {
                 Undo.RecordObject(_personaProvider, "Change User");
                 _personaProvider.User = users[newUserIdx];
-                EditorUtility.SetDirty(_personaProvider);
                 EditorCoroutineUtility.StartCoroutine(FetchStories(), this);
                 EditorCoroutineUtility.StartCoroutine(FetchScenes(), this);
+                UserQueries.GetUserData(users[newUserIdx].Id).ContinueWith(t =>
+                {
+                    _personaProvider.User = t.Result;
+                    // Debug.Log(_personaProvider.User.StorySessions);
+                    foreach (var userStorySession in _personaProvider.User.StorySessions)
+                    {
+                        Debug.Log(userStorySession);
+                    }
+                    EditorUtility.SetDirty(_personaProvider);
+                });
             }
 
             if (storiesLoaded)

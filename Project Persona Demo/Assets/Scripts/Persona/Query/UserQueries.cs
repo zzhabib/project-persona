@@ -48,6 +48,15 @@ namespace Persona.Query
                                   title
                                   description
                                 }
+                                storySessions {
+                                  id
+                                  name
+                                  story {
+                                    title
+                                    description
+                                    id
+                                  }
+                                }
                               }
                             }
                         ",

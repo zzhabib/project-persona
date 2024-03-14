@@ -23,5 +23,7 @@ namespace Persona
                 Destroy(gameObject);
             }
         }
+        
+        
     }
 }
