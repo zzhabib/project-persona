@@ -8,8 +8,8 @@ namespace Persona.Entity
     {
         public int Id = -1;
         public string Email;
-        public IEnumerable<Story> Stories;
-        public IEnumerable<StorySession> StorySessions;
+        public List<Story> Stories;
+        public List<StorySession> StorySessions;
 
         public override string ToString()
         {

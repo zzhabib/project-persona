@@ -111,13 +111,18 @@ namespace Persona.Editor
                 EditorCoroutineUtility.StartCoroutine(FetchScenes(), this);
                 UserQueries.GetUserData(users[newUserIdx].Id).ContinueWith(t =>
                 {
-                    _personaProvider.User = t.Result;
-                    // Debug.Log(_personaProvider.User.StorySessions);
-                    foreach (var userStorySession in _personaProvider.User.StorySessions)
+                    EditorApplication.CallbackFunction callback = null;
+                    callback = () =>
                     {
-                        Debug.Log(userStorySession);
-                    }
-                    EditorUtility.SetDirty(_personaProvider);
+                        _personaProvider.User = t.Result;
+                        foreach (var userStorySession in _personaProvider.User.StorySessions)
+                        {
+                            Debug.Log(userStorySession);
+                        }
+                        EditorUtility.SetDirty(_personaProvider);
+                        EditorApplication.update -= callback;
+                    };
+                    EditorApplication.update += callback;
                 });
             }
 
