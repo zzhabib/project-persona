@@ -5,7 +5,7 @@ import './index.css'
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 
 const client = new ApolloClient({
-  uri: 'http://localhost:4000/',
+  uri: import.meta.env.VITE_API_URL,
   cache: new InMemoryCache(),
 });
 
