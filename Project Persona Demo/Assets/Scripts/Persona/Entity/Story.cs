@@ -9,7 +9,8 @@ namespace Persona.Entity
         public int Id = -1;
         public string Title;
         public string Description;
-        public IEnumerable<Scene> Scenes;
+        public List<Scene> Scenes;
+        public List<Persona> Personas;
 
         public override string ToString()
         {

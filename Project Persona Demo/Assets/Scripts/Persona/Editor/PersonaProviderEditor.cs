@@ -86,10 +86,10 @@ namespace Persona.Editor
             
             var task = StoryQueries.GetStoryData(SelectedStoryId);
             yield return new WaitUntil(() => task.IsCompleted);
-
+        
             scenes = task.Result.Scenes.ToList();
             scenesLoaded = true;
-
+        
             Repaint();
         }
 
@@ -107,9 +107,23 @@ namespace Persona.Editor
             {
                 Undo.RecordObject(_personaProvider, "Change User");
                 _personaProvider.User = users[newUserIdx];
-                EditorUtility.SetDirty(_personaProvider);
                 EditorCoroutineUtility.StartCoroutine(FetchStories(), this);
                 EditorCoroutineUtility.StartCoroutine(FetchScenes(), this);
+                UserQueries.GetUserData(users[newUserIdx].Id).ContinueWith(t =>
+                {
+                    EditorApplication.CallbackFunction callback = null;
+                    callback = () =>
+                    {
+                        _personaProvider.User = t.Result;
+                        foreach (var userStorySession in _personaProvider.User.StorySessions)
+                        {
+                            Debug.Log(userStorySession);
+                        }
+                        EditorUtility.SetDirty(_personaProvider);
+                        EditorApplication.update -= callback;
+                    };
+                    EditorApplication.update += callback;
+                });
             }
 
             if (storiesLoaded)
@@ -120,8 +134,12 @@ namespace Persona.Editor
                 {
                     Undo.RecordObject(_personaProvider, "Change Story");
                     _personaProvider.Story = stories[newStoryIdx];
-                    EditorUtility.SetDirty(_personaProvider);
                     EditorCoroutineUtility.StartCoroutine(FetchScenes(), this);
+                    StoryQueries.GetStoryData(stories[newStoryIdx].Id).ContinueWith(t =>
+                    {
+                        _personaProvider.Story = t.Result;
+                        EditorUtility.SetDirty(_personaProvider);
+                    });
                 }
             }
 

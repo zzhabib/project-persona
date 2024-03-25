@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using GraphQL;
 using Persona.Entity;
@@ -26,6 +27,11 @@ namespace Persona.Query
                                   title
                                   description
                                 }
+                                personas {
+                                  id
+                                  name
+                                  description
+                                }
                               }
                             }
                         ",
@@ -42,6 +48,12 @@ namespace Persona.Query
         private class GetStoryResult
         {
             public Story GetStory;
+        }
+
+        public static async Task<IEnumerable<Entity.Persona>> GetStoryPersonas(int storyId)
+        {
+            var story = await GetStoryData(storyId);
+            return story.Personas;
         }
     }
 }

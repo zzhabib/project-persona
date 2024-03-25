@@ -48,6 +48,15 @@ namespace Persona.Query
                                   title
                                   description
                                 }
+                                storySessions {
+                                  id
+                                  name
+                                  story {
+                                    title
+                                    description
+                                    id
+                                  }
+                                }
                               }
                             }
                         ",
@@ -64,6 +73,49 @@ namespace Persona.Query
         public class GetUserQueryResult
         {
             public User GetUser;
+        }
+
+        public static async Task<Message> CreateUserMessage(int storySessionId, int sceneId, int senderPersonaId,
+            int recipientPersonaId, string text)
+        {
+            var request = new GraphQLRequest
+            {
+                Query = @"
+                    mutation CreateUserMessage($input: UserMessageInput!) {
+                      createUserMessage(input: $input) {
+                        replyMessage {
+                          id
+                          createdAt
+                          text
+                        }
+                      }
+                    }
+                ",
+                Variables = new
+                {
+                    input = new
+                    {
+                        storySessionId = storySessionId,
+                        sceneId = sceneId,
+                        senderId = senderPersonaId,
+                        recipientId = recipientPersonaId,
+                        text = text,
+                    }
+                }
+            };
+
+            var response = await PersonaEnvironment.Client.SendMutationAsync<CreateUserMessageResult>(request);
+            return response.Data.CreateUserMessage.ReplyMessage;
+        }
+
+        private class CreateUserMessageResult
+        {
+            public CreateUserMessageReply CreateUserMessage { get; set; }
+        }
+
+        public class CreateUserMessageReply
+        {
+            public Message ReplyMessage { get; set; }
         }
     }
 }
