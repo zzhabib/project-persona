@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -521,58 +521,41 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   User:
     Id: 1
-    Email: john@example.com
+    Email: Zach
     Stories:
     - Id: 1
-      Title: Cool Story Bro
-      Description: Cool Description
-      Scenes: []
-      Personas: []
-    - Id: 2
-      Title: Story 2
-      Description: 
-      Scenes: []
-      Personas: []
-    - Id: 3
-      Title: Story 3
-      Description: 
+      Title: Test Story
+      Description: This is a test story
       Scenes: []
       Personas: []
     StorySessions:
-    - Id: 3
-      Name: Test session
+    - Id: 1
+      Name: test session 1
       story:
         Id: 1
-        Title: Cool Story Bro
-        Description: Cool Description
+        Title: Test Story
+        Description: This is a test story
         Scenes: []
         Personas: []
   Story:
     Id: 1
-    Title: Cool Story Bro
-    Description: Cool Description
+    Title: Test Story
+    Description: This is a test story
     Scenes:
     - Id: 1
-      Title: Opening Scene
-      Description: hello worldlolol
-    - Id: 2
-      Title: New Scene
+      Title: Intro Scene
       Description: 
     Personas:
     - Id: 1
-      Name: John
-      Description: 
-    - Id: 3
-      Name: Bob
-      Description: 
+      Name: Bob Builder
+      Description: Bob likes to build
     - Id: 2
-      Name: Alice
-      Description: Alice likes ice cream. She gets really excited any time someone
-        mentions Ice Cream to her.
+      Name: Devin Destroyer
+      Description: Devin likes to destroy things
   Scene:
     Id: 1
-    Title: Opening Scene
-    Description: hello worldlolol
+    Title: Intro Scene
+    Description: 
   StorySession:
     Id: -1
     Name: 
@@ -630,8 +613,8 @@ MonoBehaviour:
   PersonaProvider: {fileID: 963194231}
   persona:
     Id: 1
-    Name: John
-    Description: 
+    Name: Bob Builder
+    Description: Bob likes to build
   MessageCreated:
     m_PersistentCalls:
       m_Calls: []
