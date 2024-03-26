@@ -15,14 +15,12 @@ type ConnectionContactList = {
     id: number;
     name: string;
   }[];
-  refetchData: () => void;
 };
 
 const ConnectionContactList: React.FC<ConnectionContactList> = ({
   myPersonaId,
   allPersonas,
   connectedPersonas = [],
-  refetchData
 }) => {
   const fromPersonaId = myPersonaId.toString();
   const otherPersonas = allPersonas.filter((persona) => persona.id !== parseInt(fromPersonaId));
@@ -73,8 +71,6 @@ const ConnectionContactList: React.FC<ConnectionContactList> = ({
               console.log(`Connecting with Persona ID: ${selectedPersonaId}`);
 
                 handleInitiatedConnectionCreate(myPersonaId, selectedPersonaId)
-
-                refetchData
 
                 navigate(`/persona/${myPersonaId}/connections/${selectedPersonaId}`)
             }}

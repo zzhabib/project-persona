@@ -10,7 +10,7 @@ type StoryCardProps = {
   },
   onClick: React.MouseEventHandler
   onContextMenu?: (name: string, event: React.MouseEvent<HTMLDivElement>) => void;
-  onDoSomethingClick?: (Id: string) => void;
+  onDoSomethingClick?: React.MouseEventHandler<HTMLLIElement>;
 }
 
 function StoryCard(props: StoryCardProps): JSX.Element {

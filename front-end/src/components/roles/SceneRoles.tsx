@@ -1,4 +1,4 @@
-import { React, useEffect } from 'react';
+import React from 'react';
 import { Box } from "@mui/material";
 import { cardStyle } from "../../styles/styles";
 import { useNavigate } from 'react-router';

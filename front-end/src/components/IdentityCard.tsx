@@ -10,7 +10,7 @@ type IdentityCardProps = {
   sx?: SxProps<Theme>,
   onClick?: React.MouseEventHandler
   onContextMenu?: (name: string, event: React.MouseEvent<HTMLDivElement>) => void;
-  onDoSomethingClick?: (Id: string) => void;
+  onDoSomethingClick?: React.MouseEventHandler<HTMLLIElement>;
 }
 
 
