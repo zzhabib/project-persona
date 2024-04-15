@@ -9,35 +9,44 @@ using UnityEngine.Events;
 using TMPro;
 using UnityEngine.InputSystem;
 
+
+
+using static System.Net.Mime.MediaTypeNames;
+using UnityEngine.Windows;
+
 public class playerInteract : MonoBehaviour
 {
-    public InputField inputField; // Reference to the InputField
-    
+    public InputField inputField; // Reference to the InputField  
     public GameObject dialogueBox;
     public TMP_Text dialogueText;
-
- 
     public PlayerInput playerInput;
-
-   
-
-
     private bool isInteracting = false;
     private UnityAction<string> onSubmitListener;
+
+    [SerializeField] public TTSManager ttsManager;
+   
+
 
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E) && !isInteracting)
+        if (UnityEngine.Input.GetKeyDown(KeyCode.E) && !isInteracting)
         {
             StartInteraction();
         }
     }
 
+
+
+
+
+
+
+
     private void StartInteraction()
     {
         playerInput.enabled = false; // Disable Character Controller
-
+       
 
         float interactRange = 2f;
         Collider[] colliderArray = Physics.OverlapSphere(transform.position, interactRange);
@@ -51,6 +60,15 @@ public class playerInteract : MonoBehaviour
             }
         }
     }
+
+
+
+
+
+
+
+
+
 
     private void BeginInputInteraction(string idStr)
     {
@@ -84,6 +102,16 @@ public class playerInteract : MonoBehaviour
 
             var resp = await Persona.Query.UserQueries.CreateUserMessage(storySessionId, sceneId, senderPersonaId, recipientPersonaId, inputText);
             UnityEngine.Debug.Log("Message sent: " + resp.Text);
+
+            if (ttsManager != null)
+            {
+                ttsManager.SynthesizeAndPlay(resp.Text, TTSModel.TTS_1, TTSVoice.Fable, 1f);
+            }
+            else
+            {
+                Debug.Log("failed to find ttsManager");
+            }
+
             GetDialogue(resp.Text);
 
         }
