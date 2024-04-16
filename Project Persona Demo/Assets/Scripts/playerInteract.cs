@@ -93,11 +93,11 @@ public class playerInteract : MonoBehaviour
 
         if (inputText != "")
         {
-            int storySessionId = 1;
-            int sceneId = 1;
-            int senderPersonaId = 1;
+            int storySessionId = 3; // Nathan's story
+            int sceneId = 3;
+            int senderPersonaId = 6;
 
-           
+
             int recipientPersonaId = int.Parse(idStr);//
 
             var resp = await Persona.Query.UserQueries.CreateUserMessage(storySessionId, sceneId, senderPersonaId, recipientPersonaId, inputText);
