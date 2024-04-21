@@ -13,15 +13,19 @@ using UnityEngine.InputSystem;
 
 using static System.Net.Mime.MediaTypeNames;
 using UnityEngine.Windows;
+using UnityEditor.ShaderGraph.Serialization;
 
 public class playerInteract : MonoBehaviour
 {
-    public InputField inputField; // Reference to the InputField  
-    public GameObject dialogueBox;
-    public TMP_Text dialogueText;
+
     public PlayerInput playerInput;
     private bool isInteracting = false;
     private UnityAction<string> onSubmitListener;
+
+    public AudioRecord audioRecorder;
+    public AudioManager audioManager;
+    private bool IsRecording = false;
+    public SpeechToText speechToText;
 
     [SerializeField] public TTSManager ttsManager;
    
@@ -30,14 +34,55 @@ public class playerInteract : MonoBehaviour
 
     private void Update()
     {
-        if (UnityEngine.Input.GetKeyDown(KeyCode.E) && !isInteracting)
+        if (UnityEngine.Input.GetKeyDown(KeyCode.E))
         {
-            StartInteraction();
+            IsRecording= true;
+            audioRecorder.StartRecording();
+
+
+        }
+        if (UnityEngine.Input.GetKeyUp(KeyCode.E))
+        {
+            if (IsRecording)
+            {
+                IsRecording= false;
+
+                audioRecorder.StopRecording();
+
+                StartInteraction();            
+
+            }
+
+        }
+
+
+    }
+
+    public class MyJsonObject
+    {
+        [SerializeField]
+        private string _text; // Field name different from the property name
+
+        public string text
+        {
+            get { return _text; }
+            set { _text = value; }
         }
     }
 
+    private async Task<string> GetText(AudioClip clip)
+    {
+        string val = await speechToText.SendToWhisperAPI(clip);
+        Debug.Log(val);
 
 
+        MyJsonObject jsonObject = JsonUtility.FromJson<MyJsonObject>(val);
+
+        // Access the property inside the JSON object
+        string myProperty = jsonObject.text;
+        return val;
+
+    }
 
 
 
@@ -65,31 +110,21 @@ public class playerInteract : MonoBehaviour
 
 
 
-
-
-
-
-
-    private void BeginInputInteraction(string idStr)
+    private async void BeginInputInteraction(string idStr)
     {
-        //PlayerMovement.canMove = false; // Disable player movement
-        inputField.gameObject.SetActive(true);
-        inputField.ActivateInputField();
-        inputField.Select();
+    
 
-        onSubmitListener = (data) => EndInputInteraction(data, idStr);
-        inputField.onSubmit.AddListener(onSubmitListener); // Listen for submit event
+
+        string data = await GetText(audioRecorder.GetRecordedClip());
+        EndInputInteraction(data, idStr);
+
+
+
         isInteracting = true;
     }
 
     private async void EndInputInteraction(string inputText, string idStr)
     {
-
-
-        inputField.onSubmit.RemoveListener(onSubmitListener); // Remove listener
-        inputField.text = "";
-        inputField.gameObject.SetActive(false);
-
 
         if (inputText != "")
         {
@@ -111,39 +146,11 @@ public class playerInteract : MonoBehaviour
             {
                 Debug.Log("failed to find ttsManager");
             }
-
-            GetDialogue(resp.Text);
-
         }
 
 
         playerInput.enabled = true; // Enable Character Controller
         isInteracting = false;
     }
-
-
-    public void GetDialogue(string dialogue)
-    {
-        dialogueText.text = dialogue;
-        dialogueBox.SetActive(true);
-
-        StartCoroutine(WaitAndHideDialogue(5)); // Start coroutine to wait for 5 seconds
-    }
-
-    private IEnumerator WaitAndHideDialogue(float waitTime)
-    {
-        yield return new WaitForSeconds(waitTime); // Wait for waitTime seconds
-
-        dialogueText.text = ""; // Clear the dialogue text
-        dialogueBox.SetActive(false); // Hide the dialogue box
-    }
-
-
-
-
-
-
-
-
 
 }
